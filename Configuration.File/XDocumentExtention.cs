@@ -36,20 +36,22 @@ namespace Configuration
 		/// <param name="elName">element name</param>
 		public static void SaveElement<T>(this XDocument doc, T obj, string elName) where T : class
 		{
-
 			if (doc == null)
 				throw new ArgumentNullException("XML document");
 			if (elName == null)
 				throw new ArgumentNullException("element name");
 			
 			XmlSerializer xs = new XmlSerializer(typeof(T), new XmlRootAttribute(elName));
-			XElement el = new XElement(XNamespace.None + elName);
+			
+			XDocument sdoc = new XDocument();
 			
 			XmlSerializerNamespaces sn = new XmlSerializerNamespaces(new XmlQualifiedName[] { new XmlQualifiedName(string.Empty) }); // create empty xml namespace
-			xs.Serialize(el.CreateWriter(), obj, sn);
-			
-			Console.WriteLine("el:`{0}'", el);
-
+			xs.Serialize(sdoc.CreateWriter(), obj, sn);
+			XElement sEl = sdoc.Root;
+			sEl.Attribute("xmlns").Remove();
+			foreach(var el in doc.Root.Elements(sEl.Name))
+				el.Remove();
+			doc.Root.Add(sEl);
 		}
 	}
 }

@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configuration", "Configurat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configuration.File", "Configuration.File\Configuration.File.csproj", "{56314D29-25C8-497D-82AB-A50E036BC750}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configuration.File.Test", "Configuration.File.Test\Configuration.File.Test.csproj", "{89ADFE86-9E8E-4916-BB8F-F3D9B8042B8F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{56314D29-25C8-497D-82AB-A50E036BC750}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56314D29-25C8-497D-82AB-A50E036BC750}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56314D29-25C8-497D-82AB-A50E036BC750}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89ADFE86-9E8E-4916-BB8F-F3D9B8042B8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89ADFE86-9E8E-4916-BB8F-F3D9B8042B8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89ADFE86-9E8E-4916-BB8F-F3D9B8042B8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89ADFE86-9E8E-4916-BB8F-F3D9B8042B8F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Configuration\Configuration.csproj
