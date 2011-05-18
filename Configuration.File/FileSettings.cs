@@ -87,8 +87,10 @@ namespace Configuration
 		/// </summary>
 		public void Save()
 		{
-			//lock (_sync)
-			//	_doc.Save(Path.Combine(_path, _file));
+			string content;
+			lock (_sync)
+				content = _doc.ToString();
+			System.IO.File.WriteAllText(_filePath, content);
 		}
 	}
 }
