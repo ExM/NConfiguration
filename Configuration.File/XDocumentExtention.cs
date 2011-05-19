@@ -26,8 +26,9 @@ namespace Configuration
 			XElement el = doc.Root.Element(XNamespace.None + elName);
 			if (el == null)
 				return null;
-			XmlReader xr = el.CreateReader();
-			return (T)xs.Deserialize(xr);
+
+			using(XmlReader xr = el.CreateReader())
+				return (T)xs.Deserialize(xr);
 		}
 		/// <summary>
 		/// replace element
@@ -38,20 +39,30 @@ namespace Configuration
 		{
 			if (doc == null)
 				throw new ArgumentNullException("XML document");
+
+			XElement section = Serialize<T>(obj, elName);
+
+			foreach (var el in doc.Root.Elements(section.Name))
+				el.Remove();
+			doc.Root.Add(section);
+		}
+
+		public static XElement Serialize<T>(T obj, string elName) where T : class
+		{
 			if (elName == null)
 				throw new ArgumentNullException("element name");
-			
+
 			XmlSerializer xs = new XmlSerializer(typeof(T), new XmlRootAttribute(elName));
-			
-			XDocument sdoc = new XDocument();
-			
+			XDocument doc = new XDocument();
 			XmlSerializerNamespaces sn = new XmlSerializerNamespaces(new XmlQualifiedName[] { new XmlQualifiedName(string.Empty) }); // create empty xml namespace
-			xs.Serialize(sdoc.CreateWriter(), obj, sn);
-			XElement sEl = sdoc.Root;
-			sEl.Attribute("xmlns").Remove();
-			foreach(var el in doc.Root.Elements(sEl.Name))
-				el.Remove();
-			doc.Root.Add(sEl);
+			using (XmlWriter xw = doc.CreateWriter())
+				xs.Serialize(xw, obj, sn);
+			XElement result = doc.Root;
+			XAttribute xmlnsAt = result.Attribute("xmlns");
+			if (xmlnsAt != null)
+				xmlnsAt.Remove();
+
+			return result;
 		}
 	}
 }
