@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 namespace Configuration
 {
 	/// <summary>
-	/// класс конфигурации приложения
+	/// settings loaded from a file
 	/// </summary>
 	public class FileSettings : IAppSettings
 	{
@@ -15,6 +15,10 @@ namespace Configuration
 		private object _sync = new object();
 		private XDocument _doc;
 
+		/// <summary>
+		/// settings loaded from a file
+		/// </summary>
+		/// <param name="fileName">file name</param>
 		public FileSettings(string fileName)
 		{
 			_filePath = Path.GetFullPath(fileName);
@@ -22,6 +26,9 @@ namespace Configuration
 				_doc = XDocument.Load(s);
 		}
 		
+		/// <summary>
+		/// full path to configuration file
+		/// </summary>
 		public string FullPath
 		{
 			get
@@ -83,7 +90,7 @@ namespace Configuration
 		}
 
 		/// <summary>
-		/// сохранение файла конфигурации
+		/// save current configuration to file
 		/// </summary>
 		public void Save()
 		{

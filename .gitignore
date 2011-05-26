@@ -3,3 +3,4 @@
 *.pidb
 */obj/*
 */bin/*
+bin/*

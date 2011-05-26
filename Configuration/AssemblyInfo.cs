@@ -7,9 +7,9 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTitle("Configuration")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("ExM")]
 [assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCopyright(@"LGPLv3 Copyright © 2011 (git://github.com/ExM/Configuration.git)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
