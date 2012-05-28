@@ -37,6 +37,11 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="IAppSettings.cs" />
     <Compile Include="EmptyResult.cs" />
+    <Compile Include="ConfigValue.cs" />
+    <Compile Include="ConfigDocument.cs" />
+    <Compile Include="ConfigElement.cs" />
+    <Compile Include="ConfigArray.cs" />
+    <Compile Include="ConfigString.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
