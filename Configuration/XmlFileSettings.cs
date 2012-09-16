@@ -26,7 +26,7 @@ namespace Configuration
 		/// <summary>
 		/// load section
 		/// </summary>
-		public T Load<T>(string sectionName) where T : class
+		public T TryLoad<T>(string sectionName) where T : class
 		{
 			if(sectionName == null)
 				throw new ArgumentNullException("sectionName");
@@ -34,7 +34,7 @@ namespace Configuration
 			XmlSerializer xs = new XmlSerializer(typeof(T), new XmlRootAttribute(sectionName));
 			XElement el = _doc.Root.Element(XNamespace.None + sectionName);
 			if(el == null)
-				throw new SectionNotFoundException(sectionName);
+				return null;
 			
 			using(XmlReader xr = el.CreateReader())
 				return (T)xs.Deserialize(xr);

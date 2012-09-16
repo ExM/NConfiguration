@@ -7,10 +7,13 @@ namespace Configuration
 	public interface IAppSettings
 	{
 		/// <summary>
-		/// creates an instance of the settings of this type
+		/// Trying to load the configuration.
 		/// </summary>
-		/// <typeparam name="T">setting type</typeparam>
-		/// <param name="sectionName">section name</param>
-		T Load<T>(string sectionName) where T : class;
+		/// <returns>
+		/// Instance of the configuration, or null if no section name
+		/// </returns>
+		/// <param name='sectionName'>instance of application settings</param>
+		/// <typeparam name='T'>type of configuration</typeparam>
+		T TryLoad<T>(string sectionName) where T : class;
 	}
 }

@@ -38,6 +38,20 @@ namespace Configuration
 		}
 		
 		/// <summary>
+		/// Load the load the configuration object.
+		/// </summary>
+		/// <param name='settings'>instance of application settings</param>
+		/// <param name='sectionName'>Section name.</param>
+		/// <typeparam name='T'>type of configuration</typeparam>
+		public static T Load<T>(this IAppSettings settings, string sectionName) where T : class
+		{
+			var result = settings.TryLoad<T>(sectionName);
+			if(result == null)
+				throw new SectionNotFoundException(sectionName);
+			return result;
+		}
+		
+		/// <summary>
 		/// Trying to load the configuration.
 		/// Resolve the section name in XmlRootAttribute..
 		/// </summary>
@@ -64,17 +78,10 @@ namespace Configuration
 		/// <typeparam name='T'>type of configuration</typeparam>
 		public static T TryLoad<T>(this IAppSettings settings, string sectionName, bool createDefaultInstance) where T : class
 		{
-			try
-			{
-				return settings.Load<T>(sectionName);
-			}
-			catch(SectionNotFoundException)
-			{
-				if(createDefaultInstance)
-					return Activator.CreateInstance<T>();
-				else
-					return null;
-			}
+			var result = settings.TryLoad<T>(sectionName);
+			if(result == null && createDefaultInstance)
+				result = Activator.CreateInstance<T>();
+			return result;
 		}
 	}
 }
