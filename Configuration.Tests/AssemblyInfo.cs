@@ -4,12 +4,12 @@ using System.Runtime.CompilerServices;
 // Information about this assembly is defined by the following attributes. 
 // Change them to the values specific to your project.
 
-[assembly: AssemblyTitle("Configuration.File.Test")]
+[assembly: AssemblyTitle("Configuration.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("ExM")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright(@"LGPLv3 Copyright © 2011 (git://github.com/ExM/Configuration.git)")]
+[assembly: AssemblyCopyright("exm")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -9,7 +9,6 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Configuration</RootNamespace>
     <AssemblyName>Configuration</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,16 +31,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="IAppSettings.cs" />
     <Compile Include="EmptyResult.cs" />
-    <Compile Include="ConfigValue.cs" />
-    <Compile Include="ConfigDocument.cs" />
-    <Compile Include="ConfigElement.cs" />
-    <Compile Include="ConfigArray.cs" />
-    <Compile Include="ConfigString.cs" />
+    <Compile Include="XmlFile\FileSettings.cs" />
+    <Compile Include="XmlFile\XDocumentExtention.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="XmlFile\" />
+  </ItemGroup>
 </Project>

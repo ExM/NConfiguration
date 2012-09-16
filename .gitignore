@@ -1,6 +1,8 @@
+*~
 *.suo
 *.userprefs
 *.pidb
 */obj/*
 */bin/*
 bin/*
+test-results
