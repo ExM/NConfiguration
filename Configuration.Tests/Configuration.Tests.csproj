@@ -38,11 +38,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyClass.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="ConfigFileTest.cs" />
     <Compile Include="MyXmlConfig.cs" />
-    <Compile Include="XDocumentTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

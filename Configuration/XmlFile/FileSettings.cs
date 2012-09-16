@@ -11,8 +11,6 @@ namespace Configuration
 	/// </summary>
 	public class FileSettings : IAppSettings
 	{
-		private readonly string _filePath;
-		private object _sync = new object();
 		private XDocument _doc;
 
 		/// <summary>
@@ -21,22 +19,10 @@ namespace Configuration
 		/// <param name="fileName">file name</param>
 		public FileSettings(string fileName)
 		{
-			_filePath = Path.GetFullPath(fileName);
-			using(var s = System.IO.File.OpenText(_filePath))
+			using(var s = System.IO.File.OpenText(fileName))
 				_doc = XDocument.Load(s);
 		}
 		
-		/// <summary>
-		/// full path to configuration file
-		/// </summary>
-		public string FullPath
-		{
-			get
-			{
-				return _filePath;
-			}
-		}
-
 		public static string GetSectionName<T>()
 			where T : class
 		{
@@ -54,50 +40,19 @@ namespace Configuration
 		/// </summary>
 		public T Load<T>(EmptyResult mode, string sectionName = null) where T : class
 		{
-			lock (_sync)
-			{
-				if(sectionName == null)
-					sectionName = GetSectionName<T>();
-				T result = _doc.LoadElement<T>(sectionName);
-				if(result != null)
-					return result;
+			if(sectionName == null)
+				sectionName = GetSectionName<T>();
+			T result = _doc.LoadElement<T>(sectionName);
+			if(result != null)
+				return result;
 				
-				if(mode == EmptyResult.Default)
-				{
-					result = Activator.CreateInstance<T>();
-					Save<T>(result, sectionName);
-					return result;
-				}
+			if(mode == EmptyResult.Default)
+				return Activator.CreateInstance<T>();
 				
-				if(mode == EmptyResult.Null)
-					return null;
+			if(mode == EmptyResult.Null)
+				return null;
 
-				throw new InvalidOperationException(string.Format("section `{0}' not found", sectionName));
-			}
-		}
-
-		/// <summary>
-		/// replace section
-		/// </summary>
-		public void Save<T>(T instance, string sectionName = null) where T : class
-		{
-			lock (_sync)
-			{
-				if (sectionName == null)
-					sectionName = GetSectionName<T>();
-				_doc.SaveElement<T>(instance, sectionName);
-			}
-		}
-
-		/// <summary>
-		/// save current configuration to file
-		/// </summary>
-		public void Save()
-		{
-			string content;
-			lock (_sync)
-				content = _doc.ToString();
-			System.IO.File.WriteAllText(_filePath, content);
+			throw new InvalidOperationException(string.Format("section `{0}' not found", sectionName));
 		}
 	}
 }
