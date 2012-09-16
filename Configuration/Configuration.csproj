@@ -28,6 +28,7 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <DocumentationFile>..\bin\Configuration.XML</DocumentationFile>
+    <GenerateDocumentation>true</GenerateDocumentation>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -38,12 +39,9 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="IAppSettings.cs" />
-    <Compile Include="EmptyResult.cs" />
-    <Compile Include="XmlFile\FileSettings.cs" />
-    <Compile Include="XmlFile\XDocumentExtention.cs" />
+    <Compile Include="AppSettingExtensions.cs" />
+    <Compile Include="SectionNotFoundException.cs" />
+    <Compile Include="XmlFileSettings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Folder Include="XmlFile\" />
-  </ItemGroup>
 </Project>

@@ -8,7 +8,7 @@ namespace Configuration
 	public class MyXmlConfig
 	{
 		[XmlAttribute]
-		public string AttrField = null;
+		public string AttrField = "default";
 
 		[XmlElement]
 		public string ElemField = null;
