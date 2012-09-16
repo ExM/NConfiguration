@@ -42,6 +42,8 @@
     <Compile Include="AppSettingExtensions.cs" />
     <Compile Include="SectionNotFoundException.cs" />
     <Compile Include="XmlFileSettings.cs" />
+    <Compile Include="MultiSettings.cs" />
+    <Compile Include="ICombineFactory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
