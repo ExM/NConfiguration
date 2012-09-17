@@ -41,10 +41,18 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="MyXmlConfig.cs" />
     <Compile Include="XmlFileSettingsTests.cs" />
+    <Compile Include="MultiSettings\MultiSettingsTests.cs" />
+    <Compile Include="MultiSettings\ReplacedConfig.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="testConfig1.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="testMA_e.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="testMA_n.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -53,5 +61,8 @@
       <Project>{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}</Project>
       <Name>Configuration</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MultiSettings\" />
   </ItemGroup>
 </Project>

@@ -40,10 +40,12 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="IAppSettings.cs" />
     <Compile Include="AppSettingExtensions.cs" />
+    <Compile Include="MultiSettings\ICombinable.cs" />
     <Compile Include="SectionNotFoundException.cs" />
     <Compile Include="XmlFileSettings.cs" />
-    <Compile Include="MultiSettings.cs" />
-    <Compile Include="ICombineFactory.cs" />
+    <Compile Include="MultiSettings\MultiSettings.cs" />
+    <Compile Include="MultiSettings\ICombineFactory.cs" />
+    <Compile Include="MultiSettings\CombineFactory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
