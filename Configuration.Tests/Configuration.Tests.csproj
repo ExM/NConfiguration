@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="XmlSystemSettingsTests.cs" />
     <Compile Include="MultiSettings\CombineConfig.cs" />
     <Compile Include="MultiSettings\MultiSettingsCombineTests.cs" />
     <Compile Include="MyXmlConfig.cs" />
@@ -49,6 +50,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="testConfig1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

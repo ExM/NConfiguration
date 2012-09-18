@@ -1,28 +1,28 @@
 using System;
-using System.Xml;
+using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace Configuration
 {
-	/// <summary>
-	/// settings loaded from a file
-	/// </summary>
-	public class XmlFileSettings : IAppSettings
+	public class XmlSystemSettings : IAppSettings
 	{
-		private XDocument _doc;
+		private XDocument _doc = null;
 
-		/// <summary>
-		/// settings loaded from a file
-		/// </summary>
-		/// <param name="fileName">file name</param>
-		public XmlFileSettings(string fileName)
+		public XmlSystemSettings(string sectionName)
 		{
-			using(var s = System.IO.File.OpenText(fileName))
-				_doc = XDocument.Load(s);
+			var section = ConfigurationManager.GetSection(sectionName) as PlainXmlSection;
+			if(section == null)
+				throw new InvalidOperationException(string.Format("section `{0}' not found", sectionName));
+
+			_doc = section.PlainXml;
 		}
-		
+
 		/// <summary>
 		/// Trying to load the configuration.
 		/// </summary>
@@ -40,10 +40,9 @@ namespace Configuration
 			var el = _doc.Root.Element(XNamespace.None + sectionName);
 			if(el == null)
 				return null;
-			
+
 			using(XmlReader xr = el.CreateReader())
 				return (T)xs.Deserialize(xr);
 		}
 	}
 }
-
