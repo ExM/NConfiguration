@@ -3,14 +3,14 @@ using NUnit.Framework;
 namespace Configuration
 {
 	[TestFixture]
-	public class XmlFileSettingsTests
+	public class XmlFileSettingsTests : TestBase
 	{
 		private IAppSettings _settings;
 		
 		[TestFixtureSetUp]
 		public void SetUp()
 		{
-			_settings = new XmlFileSettings("testConfig1.xml");
+			_settings = GetXmlSettings("Config1");
 		}
 		
 		[Test]

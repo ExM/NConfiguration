@@ -1,4 +1,4 @@
-﻿
+
 namespace Configuration
 {
 	/// <summary>

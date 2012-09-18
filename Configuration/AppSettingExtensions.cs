@@ -47,7 +47,7 @@ namespace Configuration
 		{
 			var result = settings.TryLoad<T>(sectionName);
 			if(result == null)
-				throw new SectionNotFoundException(sectionName);
+				throw new SectionNotFoundException(sectionName, typeof(T));
 			return result;
 		}
 		

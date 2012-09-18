@@ -9,11 +9,10 @@ namespace Configuration
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Configuration.SectionNotFoundException"/> class.
 		/// </summary>
-		/// <param name='sectionName'>
-		/// Section name.
-		/// </param>
-		public SectionNotFoundException(string sectionName)
-			:base(string.Format("section `{0}' not found", sectionName))
+		/// <param name='sectionName'>section name</param>
+		/// <param name='configType'>configuration type</param>
+		public SectionNotFoundException(string sectionName, Type configType)
+			: base(string.Format("configuration section `{0}' (type {1}) not found", sectionName, configType.FullName))
 		{
 		}
 	}
