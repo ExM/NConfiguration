@@ -50,16 +50,22 @@
     <Compile Include="XmlSystemSettings\PlainXmlSection.cs" />
     <Compile Include="XmlSystemSettings\XmlSystemSettings.cs" />
     <Compile Include="XmlLinqConversionExtensions.cs" />
-    <Compile Include="Protected\XmlCryptedSettings.cs" />
     <Compile Include="ConfigSections\IncludeConfig.cs" />
     <Compile Include="ConfigSections\IncludeFileConfig.cs" />
     <Compile Include="ConfigSections\SearchMode.cs" />
     <Compile Include="ConfigSections\IncludeMode.cs" />
     <Compile Include="XmlSettings.cs" />
+    <Compile Include="IXmlSettings.cs" />
+    <Compile Include="SystemXmlDeserializer.cs" />
+    <Compile Include="Protected\XmlCryptoWrapper.cs" />
+    <Compile Include="Building\AppSettings.cs" />
+    <Compile Include="Building\Builder.cs" />
+    <Compile Include="Protected\IXmlCryptoProviders.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Protected\" />
     <Folder Include="ConfigSections\" />
+    <Folder Include="Building\" />
   </ItemGroup>
 </Project>

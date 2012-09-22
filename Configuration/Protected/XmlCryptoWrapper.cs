@@ -7,23 +7,27 @@ using System.Configuration;
 
 namespace Configuration
 {
-	public class XmlCryptedSettings : XmlSettings
+	public class XmlCryptoWrapper : IXmlSettings
 	{
-		private Func<string, ProtectedConfigurationProvider> _providerFactory;
+		private IXmlSettings _settings;
+		private IXmlCryptoProviders _xmlCryptoProviders;
 
-		public XmlCryptedSettings(XDocument doc, Func<string, ProtectedConfigurationProvider> providerFactory)
-			:base(doc)
+		public XmlCryptoWrapper(IXmlSettings settings, IXmlCryptoProviders xmlCryptoProviders)
 		{
-			_providerFactory = providerFactory;
+			if(settings == null)
+				throw new ArgumentNullException("settings");
+			_settings = settings;
+			
+			if(xmlCryptoProviders == null)
+				throw new ArgumentNullException("xmlCryptoProviders");
+			_xmlCryptoProviders = xmlCryptoProviders;
 		}
-		
-		public override T TryLoad<T>(string sectionName)
+
+		public XElement GetSection(string name)
 		{
-			var el = GetSectionElement(sectionName);
-			el = Decrypt(el);
-			return Deserialize<T>(el);
+			return Decrypt(_settings.GetSection(name));
 		}
-		
+
 		private XElement Decrypt(XElement el)
 		{
 			if(el == null)
@@ -33,7 +37,7 @@ namespace Configuration
 			if(attr == null)
 				return el;
 			
-			var provider = _providerFactory(attr.Value);
+			var provider = _xmlCryptoProviders.GetProvider(attr.Value);
 			if(provider == null)
 				throw new InvalidOperationException(string.Format("protection provider `{0}' not found", attr.Value));
 

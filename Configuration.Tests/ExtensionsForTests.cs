@@ -7,7 +7,7 @@ namespace Configuration
 	{
 		public static IAppSettings ToXmlSettings(this string text)
 		{
-			return new XmlStringSettings(text);
+			return new SystemXmlDeserializer(new XmlStringSettings(text));
 		}
 	}
 }
