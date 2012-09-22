@@ -19,13 +19,6 @@ namespace Configuration
 			
 			prev.F = next.F ?? prev.F;
 
-			//Console.WriteLine("prev:{0} next:{1}", prev.F, next.F);
-
-			//if(next.F != null)
-			//	prev.F = next.F;
-
-			
-
 			return prev;
 		}
 	}

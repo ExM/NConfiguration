@@ -43,34 +43,18 @@
     <Compile Include="MultiSettings\CombineConfig.cs" />
     <Compile Include="MultiSettings\MultiSettingsCombineTests.cs" />
     <Compile Include="MyXmlConfig.cs" />
-    <Compile Include="TestBase.cs" />
     <Compile Include="XmlFileSettingsTests.cs" />
     <Compile Include="MultiSettings\MultiSettingsReplaceTests.cs" />
     <Compile Include="MultiSettings\ReplacedConfig.cs" />
     <Compile Include="Including\IncludeSectionTests.cs" />
     <Compile Include="XmlStringSettings.cs" />
     <Compile Include="ExtensionsForTests.cs" />
+    <Compile Include="MultiSettings\MultiSettingsBase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="App.config" />
     <None Include="testConfig1.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="testACfg_FB.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="testEmpty.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="testACfg.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="testACfg_FA.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -3,7 +3,7 @@ using NUnit.Framework;
 namespace Configuration
 {
 	[TestFixture]
-	public class XmlSystemSettingsTests : TestBase
+	public class XmlSystemSettingsTests
 	{
 		[Test]
 		public void ReadForDefaultName()

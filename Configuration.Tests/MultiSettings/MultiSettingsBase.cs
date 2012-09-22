@@ -7,15 +7,17 @@ using System.IO;
 
 namespace Configuration
 {
-	public class TestBase
+	public class MultiSettingsBase
 	{
 		private Dictionary<string, IAppSettings> _nameXmlSettingsMap = new Dictionary<string, IAppSettings>();
 
 		[TestFixtureSetUp]
 		public void SetUp()
 		{
-			foreach(var name in new string[] { "ACfg", "ACfg_FA", "ACfg_FB", "Empty", "Config1" })
-				_nameXmlSettingsMap.Add(name, new XmlFileSettings("test" + name + ".xml"));
+			_nameXmlSettingsMap.Add("ACfg", @"<Config><ACfg /></Config>".ToXmlSettings());
+			_nameXmlSettingsMap.Add("ACfg_FA", @"<Config><ACfg F='A' /></Config>".ToXmlSettings());
+			_nameXmlSettingsMap.Add("ACfg_FB", @"<Config><ACfg F='B' /></Config>".ToXmlSettings());
+			_nameXmlSettingsMap.Add("Empty", @"<Config></Config>".ToXmlSettings());
 		}
 
 		public IAppSettings GetXmlSettings(string name)

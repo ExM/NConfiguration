@@ -6,7 +6,7 @@ using System.Linq;
 namespace Configuration.Including
 {
 	[TestFixture]
-	public class ConfigSectionTests: TestBase
+	public class ConfigSectionTests
 	{
 		[Test]
 		public void Empty()

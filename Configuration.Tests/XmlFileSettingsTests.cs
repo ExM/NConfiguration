@@ -7,12 +7,20 @@ using System.Configuration;
 namespace Configuration
 {
 	[TestFixture]
-	public class XmlFileSettingsTests : TestBase
+	public class XmlFileSettingsTests
 	{
+		private IAppSettings _settings;
+		
+		[TestFixtureSetUp]
+		public void SetUp()
+		{
+			_settings = new XmlFileSettings("testConfig1.xml");
+		}
+		
 		[Test]
 		public void ReadForDefaultName()
 		{
-			var cfg = GetXmlSettings("Config1").Load<MyXmlConfig>();
+			var cfg = _settings.Load<MyXmlConfig>();
 			
 			Assert.AreEqual("attr field text", cfg.AttrField);
 			Assert.AreEqual("elem field text", cfg.ElemField);
@@ -21,13 +29,13 @@ namespace Configuration
 		[Test, ExpectedException(typeof(SectionNotFoundException))]
 		public void SectionNotFound()
 		{
-			GetXmlSettings("Config1").Load<MyXmlConfig>("MyCfg3");
+			_settings.Load<MyXmlConfig>("MyCfg3");
 		}
 		
 		[Test]
 		public void ReadDefaultSection()
 		{
-			var cfg = GetXmlSettings("Config1").TryLoad<MyXmlConfig>("MyCfg3", true);
+			var cfg = _settings.TryLoad<MyXmlConfig>("MyCfg3", true);
 			Assert.IsNotNull(cfg);
 			Assert.AreEqual("default", cfg.AttrField);
 		}
@@ -35,14 +43,14 @@ namespace Configuration
 		[Test]
 		public void ReadNullSection()
 		{
-			var cfg = GetXmlSettings("Config1").TryLoad<MyXmlConfig>("MyCfg3", false);
+			var cfg = _settings.TryLoad<MyXmlConfig>("MyCfg3", false);
 			Assert.IsNull(cfg);
 		}
 		
 		[Test]
 		public void ReadForSpecifiedName()
 		{
-			var cfg = GetXmlSettings("Config1").Load<MyXmlConfig>("MyCfg2");
+			var cfg = _settings.Load<MyXmlConfig>("MyCfg2");
 			
 			Assert.AreEqual("2", cfg.AttrField);
 		}

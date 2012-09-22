@@ -3,7 +3,7 @@ using NUnit.Framework;
 namespace Configuration
 {
 	[TestFixture]
-	public class MultiSettingsReplaceTests: TestBase
+	public class MultiSettingsReplaceTests: MultiSettingsBase
 	{
 		[Test]
 		public void ForwardReplace()
