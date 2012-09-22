@@ -1,5 +1,9 @@
 using System;
 using NUnit.Framework;
+using System.Collections.Specialized;
+using System.Configuration;
+
+
 namespace Configuration
 {
 	[TestFixture]

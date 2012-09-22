@@ -7,37 +7,28 @@ using System.Configuration;
 
 namespace Configuration
 {
-	public class XmlCryptedSettings : IAppSettings
+	public class XmlCryptedSettings : XmlSettings
 	{
-		private XDocument _doc;
 		private Func<string, ProtectedConfigurationProvider> _providerFactory;
 
-		public XmlCryptedSettings(string fileName, Func<string, ProtectedConfigurationProvider> providerFactory)
+		public XmlCryptedSettings(XDocument doc, Func<string, ProtectedConfigurationProvider> providerFactory)
+			:base(doc)
 		{
-			using(var s = System.IO.File.OpenText(fileName))
-				_doc = XDocument.Load(s);
-			
 			_providerFactory = providerFactory;
 		}
 		
-		public T TryLoad<T>(string sectionName) where T : class
+		public override T TryLoad<T>(string sectionName)
 		{
-			if(sectionName == null)
-				throw new ArgumentNullException("sectionName");
-
-			var xs = new XmlSerializer(typeof(T), new XmlRootAttribute(sectionName));
-			var el = _doc.Root.Element(XNamespace.None + sectionName);
-			if(el == null)
-				return null;
-			
+			var el = GetSectionElement(sectionName);
 			el = Decrypt(el);
-			
-			using(XmlReader xr = el.CreateReader())
-				return (T)xs.Deserialize(xr);
+			return Deserialize<T>(el);
 		}
 		
 		private XElement Decrypt(XElement el)
 		{
+			if(el == null)
+				return null;
+			
 			var attr = el.Attribute("configProtectionProvider");
 			if(attr == null)
 				return el;

@@ -51,9 +51,15 @@
     <Compile Include="XmlSystemSettings\XmlSystemSettings.cs" />
     <Compile Include="XmlLinqConversionExtensions.cs" />
     <Compile Include="Protected\XmlCryptedSettings.cs" />
+    <Compile Include="ConfigSections\IncludeConfig.cs" />
+    <Compile Include="ConfigSections\IncludeFileConfig.cs" />
+    <Compile Include="ConfigSections\SearchMode.cs" />
+    <Compile Include="ConfigSections\IncludeMode.cs" />
+    <Compile Include="XmlSettings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Protected\" />
+    <Folder Include="ConfigSections\" />
   </ItemGroup>
 </Project>

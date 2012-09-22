@@ -47,6 +47,9 @@
     <Compile Include="XmlFileSettingsTests.cs" />
     <Compile Include="MultiSettings\MultiSettingsReplaceTests.cs" />
     <Compile Include="MultiSettings\ReplacedConfig.cs" />
+    <Compile Include="Including\IncludeSectionTests.cs" />
+    <Compile Include="XmlStringSettings.cs" />
+    <Compile Include="ExtensionsForTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -62,12 +65,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Configuration\Configuration.csproj">
-      <Project>{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}</Project>
-      <Name>Configuration</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="testACfg.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -76,5 +73,14 @@
     <None Include="testACfg_FA.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Including\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Configuration\Configuration.csproj">
+      <Project>{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}</Project>
+      <Name>Configuration</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

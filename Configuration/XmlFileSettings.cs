@@ -9,40 +9,28 @@ namespace Configuration
 	/// <summary>
 	/// settings loaded from a file
 	/// </summary>
-	public class XmlFileSettings : IAppSettings
+	public class XmlFileSettings : XmlSettings
 	{
-		private XDocument _doc;
-
 		/// <summary>
 		/// settings loaded from a file
 		/// </summary>
 		/// <param name="fileName">file name</param>
 		public XmlFileSettings(string fileName)
+			: base(LoadFromFile(fileName))
 		{
-			using(var s = System.IO.File.OpenText(fileName))
-				_doc = XDocument.Load(s);
 		}
 		
-		/// <summary>
-		/// Trying to load the configuration.
-		/// </summary>
-		/// <returns>
-		/// Instance of the configuration, or null if no section name
-		/// </returns>
-		/// <param name='sectionName'>instance of application settings</param>
-		/// <typeparam name='T'>type of configuration</typeparam>
-		public T TryLoad<T>(string sectionName) where T : class
+		private static XDocument LoadFromFile(string fileName)
 		{
-			if(sectionName == null)
-				throw new ArgumentNullException("sectionName");
-
-			var xs = new XmlSerializer(typeof(T), new XmlRootAttribute(sectionName));
-			var el = _doc.Root.Element(XNamespace.None + sectionName);
-			if(el == null)
-				return null;
-			
-			using(XmlReader xr = el.CreateReader())
-				return (T)xs.Deserialize(xr);
+			try
+			{
+				using(var s = System.IO.File.OpenRead(fileName))
+					return XDocument.Load(s);
+			}
+			catch(SystemException ex)
+			{
+				throw new ApplicationException(string.Format("Unable to load file `{0}'", fileName), ex);
+			}
 		}
 	}
 }

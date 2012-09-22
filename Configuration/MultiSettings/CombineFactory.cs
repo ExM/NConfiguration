@@ -22,7 +22,7 @@ namespace Configuration
 			get { return new CombineFactory(false); }
 		}
 		
-		public Func<T, T, T> GetCombinator<T>() where T: class
+		public virtual Func<T, T, T> GetCombinator<T>() where T: class
 		{
 			bool isCombinable = typeof(T).GetInterfaces().Any(x =>
 				x.IsGenericType &&
