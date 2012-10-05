@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Configuration;
 using System.Collections.Specialized;
+using Configuration.ConfigSections;
+using System.Xml;
 
 namespace Configuration.Protected
 {
@@ -15,12 +17,44 @@ namespace Configuration.Protected
 		{
 		}
 
+		public void Clear()
+		{
+			_map.Clear();
+		}
+
 		public void SetProvider(string name, ProtectedConfigurationProvider provider)
 		{
 			if (_map.ContainsKey(name))
 				_map[name] = provider;
 			else
 				_map.Add(name, provider);
+		}
+
+		public void SetProvider(NameValueCollection parameters)
+		{
+			string name = parameters["name"];
+			if(string.IsNullOrWhiteSpace(name))
+				throw new ArgumentNullException("name", "missing parameter");
+			parameters.Remove("name");
+			string type = parameters["type"];
+			if(string.IsNullOrWhiteSpace(type))
+				throw new ArgumentNullException("type", "missing parameter");
+			parameters.Remove("type");
+
+			ResolveProvider(name, type, parameters);
+		}
+
+		private void ResolveProvider(string name, string type, NameValueCollection parameters)
+		{
+			Type providerType = Type.GetType(type, true);
+
+			var provider = Activator.CreateInstance(providerType) as ProtectedConfigurationProvider;
+			if(provider == null)
+				throw new FormatException(string.Format("instance of type `{0}' can not be cast to ProtectedConfigurationProvider", providerType.FullName));
+
+			provider.Initialize(name, parameters);
+
+			SetProvider(name, provider);
 		}
 
 		public ProtectedConfigurationProvider GetProvider(string name)
@@ -49,21 +83,32 @@ namespace Configuration.Protected
 			}
 		}
 
-		public static XmlCryptoProviders LoadFromConfigProtectedData()
+		public void LoadFromAppSettings(IAppSettings settings)
 		{
-			XmlCryptoProviders result = new XmlCryptoProviders();
-
-			foreach (var settings in ConfigProtectedDataProviders)
+			var cfg = settings.Load<ConfigProtectedData>();
+			
+			foreach(XmlElement el in cfg.Providers.ChildNodes)
 			{
-				Type providerType = Type.GetType(settings.Type, true);
+				if(el.Name == "clear")
+				{
+					Clear();
+					continue;
+				}
 
-				var provider = Activator.CreateInstance(providerType) as ProtectedConfigurationProvider;
-				provider.Initialize(settings.Name, settings.Parameters);
+				if(el.Name == "add")
+				{
+					SetProvider(el.Attributes.ToNameValueCollection());
+					continue;
+				}
 
-				result.SetProvider(settings.Name, provider);
+				throw new InvalidOperationException(string.Format("unexpected element `{0}'", el.Name));
 			}
+		}
 
-			return result;
+		public void LoadFromConfigProtectedData()
+		{
+			foreach (var settings in ConfigProtectedDataProviders)
+				ResolveProvider(settings.Name, settings.Type, settings.Parameters);
 		}
 	}
 }

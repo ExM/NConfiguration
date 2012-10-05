@@ -1,3 +1,4 @@
+using System.Collections.Specialized;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -48,6 +49,14 @@ namespace Configuration
 		public static XElement ToXElement(this XmlElement xmlelement)
 		{
 			return XElement.Load(xmlelement.CreateNavigator().ReadSubtree());
+		}
+
+		public static NameValueCollection ToNameValueCollection(this XmlAttributeCollection attrs)
+		{
+			var result = new NameValueCollection();
+			foreach(XmlAttribute attr in attrs)
+				result.Add(attr.Name, attr.Value);
+			return result;
 		}
 	}
 }

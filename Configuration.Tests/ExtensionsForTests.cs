@@ -9,6 +9,21 @@ namespace Configuration
 		{
 			return new SystemXmlDeserializer(new XmlStringSettings(text));
 		}
+
+		public static IAppSettings ToXmlSettings(this string text, IXmlCryptoProviders providers)
+		{
+			IXmlSettings xmlSettings = new XmlStringSettings(text);
+			xmlSettings = new XmlCryptoWrapper(xmlSettings, providers);
+			return new SystemXmlDeserializer(xmlSettings);
+		}
+
+		public static XmlElement ToXmlElement(this string xml)
+		{
+			var doc = new XmlDocument();
+			doc.LoadXml(xml);
+			return doc.DocumentElement;
+		}
+
 	}
 }
 

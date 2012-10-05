@@ -42,6 +42,7 @@
     <Compile Include="IAppSettings.cs" />
     <Compile Include="AppSettingExtensions.cs" />
     <Compile Include="MultiSettings\ICombinable.cs" />
+    <Compile Include="ConfigSections\ConfigProtectedData.cs" />
     <Compile Include="Protected\XmlCryptoProviders.cs" />
     <Compile Include="SectionNotFoundException.cs" />
     <Compile Include="XmlFileSettings.cs" />

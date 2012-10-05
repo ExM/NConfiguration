@@ -28,6 +28,8 @@ namespace Configuration
 			return Decrypt(_settings.GetSection(name));
 		}
 
+		private static XNamespace cryptDataNS = XNamespace.Get("http://www.w3.org/2001/04/xmlenc#");
+
 		private XElement Decrypt(XElement el)
 		{
 			if(el == null)
@@ -41,7 +43,7 @@ namespace Configuration
 			if(provider == null)
 				throw new InvalidOperationException(string.Format("protection provider `{0}' not found", attr.Value));
 
-			var encData = el.Element("EncryptedData");
+			var encData = el.Element(cryptDataNS + "EncryptedData");
 			if(encData == null)
 				throw new FormatException(string.Format("element `EncryptedData' not found in element `{0}'", el.Name));
 
