@@ -27,7 +27,8 @@ namespace Configuration
 			rootAttr.Namespace = element.Name.NamespaceName;
 			
 			var xs = new XmlSerializer(typeof(T), rootAttr);
-			
+
+		
 			using(XmlReader xr = element.CreateReader())
 				return (T)xs.Deserialize(xr);
 		}

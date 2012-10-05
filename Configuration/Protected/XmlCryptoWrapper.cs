@@ -39,7 +39,7 @@ namespace Configuration
 			if(attr == null)
 				return el;
 			
-			var provider = _xmlCryptoProviders.GetProvider(attr.Value);
+			var provider = _xmlCryptoProviders.Get(attr.Value);
 			if(provider == null)
 				throw new InvalidOperationException(string.Format("protection provider `{0}' not found", attr.Value));
 

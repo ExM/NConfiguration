@@ -14,7 +14,7 @@ namespace Configuration
 		[Test]
 		public void LoadProviderSettingsFromConfigProtectedData()
 		{
-			var providerSettings = XmlCryptoProviders.ConfigProtectedDataProviders.ToArray();
+			var providerSettings = XmlCryptoProvidersLoader.ConfigProtectedDataProviders.ToArray();
 			Assert.AreEqual(2, providerSettings.Length);
 			Assert.AreEqual("RsaProvider", providerSettings[0].Name);
 			Assert.AreEqual("DpapiProvider", providerSettings[1].Name);
@@ -23,11 +23,10 @@ namespace Configuration
 		[Test]
 		public void LoadFromConfigProtectedData()
 		{
-			var providers = new XmlCryptoProviders();
-			providers.LoadFromConfigProtectedData();
+			var providers = XmlCryptoProvidersLoader.FromConfigProtectedData().Providers;
 			
-			Assert.IsNotNull(providers.GetProvider("RsaProvider"));
-			Assert.IsNotNull(providers.GetProvider("DpapiProvider"));
+			Assert.IsNotNull(providers.Get("RsaProvider"));
+			Assert.IsNotNull(providers.Get("DpapiProvider"));
 		}
 		
 		[Test]
@@ -45,11 +44,10 @@ namespace Configuration
 </configProtectedData>
 </Config>".ToXmlSettings();
 
-			var providers = new XmlCryptoProviders();
-			providers.LoadFromAppSettings(settings);
-
-			Assert.IsNotNull(providers.GetProvider("RsaProvider"));
-			Assert.IsNotNull(providers.GetProvider("DpapiProvider"));
+			var providers = XmlCryptoProvidersLoader.FromAppSettings(settings).Providers;
+			
+			Assert.IsNotNull(providers.Get("RsaProvider"));
+			Assert.IsNotNull(providers.Get("DpapiProvider"));
 
 			//KeyManager.Create();
 			KeyManager.Delete();
@@ -71,10 +69,9 @@ namespace Configuration
 
 			KeyManager.Create();
 
-			var providers = new XmlCryptoProviders();
-			providers.LoadFromAppSettings(settings);
+			var providers = XmlCryptoProvidersLoader.FromAppSettings(settings).Providers;
 
-			var provider = providers.GetProvider("RsaTestProvider");
+			var provider = providers.Get("RsaTestProvider");
 
 			var el = "<MyXmlCfg AttrField='SecureMessage'/>".ToXmlElement();
 			

@@ -6,7 +6,10 @@ namespace Configuration
 {
 	public interface IXmlCryptoProviders
 	{
-		ProtectedConfigurationProvider GetProvider(string name);
+		ProtectedConfigurationProvider Get(string name);
+		void Set(string name, ProtectedConfigurationProvider provider);
+		void Clear();
+		bool Remove(string name);
 	}
 }
 
