@@ -2,6 +2,7 @@
 using System;
 using System.Configuration;
 using Configuration.Xml.Protected;
+using Configuration.Xml;
 
 namespace Configuration.Building
 {

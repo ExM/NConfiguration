@@ -1,6 +1,6 @@
 using System.Xml.Linq;
 
-namespace Configuration
+namespace Configuration.Xml
 {
 	/// <summary>
 	/// store application settings in XML elements

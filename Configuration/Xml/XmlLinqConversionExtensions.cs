@@ -2,7 +2,7 @@ using System.Collections.Specialized;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Configuration
+namespace Configuration.Xml
 {
 	/// <summary>
 	/// Provides extension methods for simple conversion between System.Xml and System.Xml.Linq classes.

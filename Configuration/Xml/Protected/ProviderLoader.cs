@@ -64,6 +64,12 @@ namespace Configuration.Xml.Protected
 			return this;
 		}
 
+		public ProviderLoader NoClearing()
+		{
+			Clearing += (s, e) => { e.Canceled = true; };
+			return this;
+		}
+
 		public ProviderLoader SubscribeClearing(EventHandler<CancelableEventArgs> handler)
 		{
 			Clearing += handler;
