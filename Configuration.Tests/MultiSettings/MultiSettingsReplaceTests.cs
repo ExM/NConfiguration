@@ -8,7 +8,7 @@ namespace Configuration
 		[Test]
 		public void ForwardReplace()
 		{
-			var s = new MultiSettings(CombineFactory.Forward);
+			var s = new MultiSettings();
 			
 			s.Add(GetXmlSettings("ACfg_FA"));
 			s.Add(GetXmlSettings("ACfg"));
@@ -19,20 +19,6 @@ namespace Configuration
 			Assert.IsNull(cfg.F);
 		}
 		
-		[Test]
-		public void BackwardReplace()
-		{
-			var s = new MultiSettings(CombineFactory.Backward);
-
-			s.Add(GetXmlSettings("ACfg_FA"));
-			s.Add(GetXmlSettings("ACfg"));
-			
-			
-			var cfg = s.TryLoad<ReplacedConfig>("ACfg");
-			Assert.IsNotNull(cfg);
-			Assert.AreEqual("A", cfg.F);
-		}
-
 		[TestCase(null, "ACfg_FA", "ACfg")]
 		[TestCase("A", "ACfg", "ACfg_FA")]
 		[TestCase(null, "Empty", "Empty", "ACfg")]
@@ -63,7 +49,7 @@ namespace Configuration
 		[TestCase("A", "ACfg_FA", "ACfg_FA", "ACfg_FA")]
 		public void Replace(string expected, params string[] confFiles)
 		{
-			var s = new MultiSettings(CombineFactory.Forward);
+			var s = new MultiSettings();
 
 			foreach(var name in confFiles)
 				s.Add(GetXmlSettings(name));
@@ -76,7 +62,7 @@ namespace Configuration
 		[Test]
 		public void ReplaceNull()
 		{
-			var s = new MultiSettings(CombineFactory.Forward);
+			var s = new MultiSettings();
 
 			for(int i =0; i<3 ; i++)
 				s.Add(GetXmlSettings("Empty"));

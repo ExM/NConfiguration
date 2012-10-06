@@ -6,11 +6,11 @@ using System.Xml.Serialization;
 using System.Configuration;
 using System.Collections.Specialized;
 
-namespace Configuration.Xml.Protected
+namespace Configuration.Xml.Joining
 {
-	public class CancelableEventArgs : EventArgs
+	public class XmlLoadingEventArgs : CancelableEventArgs
 	{
-		public bool Canceled { get; set; }
+		public IXmlSettings Settings { get; set; }
 	}
 }
 

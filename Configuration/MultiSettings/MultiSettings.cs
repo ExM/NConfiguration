@@ -13,7 +13,7 @@ namespace Configuration
 		private ICombineFactory _combineFactory;
 
 		public MultiSettings()
-			: this(new CombineFactory(true))
+			: this(new CombineFactory())
 		{
 		}
 

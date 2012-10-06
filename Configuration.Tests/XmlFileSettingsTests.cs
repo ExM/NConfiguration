@@ -2,7 +2,7 @@ using System;
 using NUnit.Framework;
 using System.Collections.Specialized;
 using System.Configuration;
-using Configuration.Building;
+using Configuration.Xml.Joining;
 
 namespace Configuration
 {
@@ -14,7 +14,7 @@ namespace Configuration
 		[TestFixtureSetUp]
 		public void SetUp()
 		{
-			_settings = AppSettings.Load().XmlFile("testConfig1.xml").Settings;
+			_settings = SettingsLoader.FromXmlFile("testConfig1.xml").Settings;
 		}
 		
 		[Test]

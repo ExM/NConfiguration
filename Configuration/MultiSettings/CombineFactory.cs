@@ -5,21 +5,8 @@ namespace Configuration
 {
 	public class CombineFactory: ICombineFactory
 	{
-		private readonly bool _isForward;
-		
-		public CombineFactory(bool isForward)
+		public CombineFactory()
 		{
-			_isForward = isForward;
-		}
-		
-		public static ICombineFactory Forward
-		{
-			get { return new CombineFactory(true); }
-		}
-		
-		public static ICombineFactory Backward
-		{
-			get { return new CombineFactory(false); }
 		}
 		
 		public virtual Func<T, T, T> GetCombinator<T>() where T: class
@@ -42,7 +29,7 @@ namespace Configuration
 			}
 			else
 			{
-				var type = (_isForward ? typeof(ForwardCombinator<>) : typeof(BackwardCombinator<>)).MakeGenericType(typeof(T));
+				var type = typeof(ForwardCombinator<>).MakeGenericType(typeof(T));
 				var combinator = (ICombinable<T>)Activator.CreateInstance(type);
 				return combinator.Combine;
 			}
@@ -61,14 +48,6 @@ namespace Configuration
 					return next;
 				prev.Combine(next);
 				return prev;
-			}
-		}
-		
-		private class BackwardCombinator<T> : ICombinable<T> where T : class
-		{
-			public T Combine(T prev, T next)
-			{
-				return prev ?? next;
 			}
 		}
 		
