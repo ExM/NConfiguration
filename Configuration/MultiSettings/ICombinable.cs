@@ -9,4 +9,9 @@ namespace Configuration
 	{
 		T Combine(T prev, T next);
 	}
+
+	public interface ICombinable
+	{
+		void Combine(object other);
+	}
 }

@@ -17,22 +17,6 @@ namespace Configuration.Xml
 			_settings = settings;
 		}
 		
-		protected T Deserialize<T>(XElement element) where T : class
-		{
-			if(element == null)
-				return null;
-			
-			var rootAttr = new XmlRootAttribute();
-			rootAttr.ElementName = element.Name.LocalName;
-			rootAttr.Namespace = element.Name.NamespaceName;
-			
-			var xs = new XmlSerializer(typeof(T), rootAttr);
-
-		
-			using(XmlReader xr = element.CreateReader())
-				return (T)xs.Deserialize(xr);
-		}
-		
 		/// <summary>
 		/// Trying to load the configuration.
 		/// </summary>
@@ -43,7 +27,14 @@ namespace Configuration.Xml
 		/// <typeparam name='T'>type of configuration</typeparam>
 		public T TryLoad<T>(string sectionName) where T : class
 		{
-			return Deserialize<T>(_settings.GetSection(sectionName));
+			var section = _settings.GetSection(sectionName);
+			if(section == null)
+				return null;
+
+			if (typeof(T) == typeof(XElement))
+				return (T)(object)XElement.Parse(section.ToString());
+
+			return section.Deserialize<T>();
 		}
 	}
 }

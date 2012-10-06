@@ -43,6 +43,7 @@
     <Compile Include="AppSettingExtensions.cs" />
     <Compile Include="MultiSettings\ICombinable.cs" />
     <Compile Include="ConfigSections\ConfigProtectedData.cs" />
+    <Compile Include="Xml\MultiSettings\SettingsLoader.cs" />
     <Compile Include="Xml\Protected\CancelableEventArgs.cs" />
     <Compile Include="Xml\Protected\ProviderLoadingEventArgs.cs" />
     <Compile Include="Xml\Protected\ProviderLoader.cs" />

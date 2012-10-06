@@ -3,7 +3,7 @@ using NUnit.Framework;
 namespace Configuration
 {
 	[TestFixture]
-	public class MultiSettingsCombineTests: MultiSettingsBase
+	public class MultiSettingsFullCombineTests: MultiSettingsBase
 	{
 		[Test]
 		public void ForwardReplace()
@@ -14,7 +14,7 @@ namespace Configuration
 			s.Add(GetXmlSettings("ACfg"));
 
 
-			var cfg = s.TryLoad<CombineConfig>("ACfg");
+			var cfg = s.TryLoad<FullCombineConfig>("ACfg");
 			Assert.IsNotNull(cfg);
 			Assert.AreEqual("A", cfg.F);
 		}
@@ -28,7 +28,7 @@ namespace Configuration
 			s.Add(GetXmlSettings("ACfg"));
 
 
-			var cfg = s.TryLoad<CombineConfig>("ACfg");
+			var cfg = s.TryLoad<FullCombineConfig>("ACfg");
 			Assert.IsNotNull(cfg);
 			Assert.AreEqual("A", cfg.F);
 		}
@@ -106,7 +106,7 @@ namespace Configuration
 			foreach(var name in confFiles)
 				s.Add(GetXmlSettings(name));
 
-			var cfg = s.TryLoad<CombineConfig>("ACfg");
+			var cfg = s.TryLoad<FullCombineConfig>("ACfg");
 			Assert.IsNotNull(cfg);
 			Assert.AreEqual(expected, cfg.F);
 		}
@@ -119,7 +119,7 @@ namespace Configuration
 			for(int i =0; i<3 ; i++)
 				s.Add(GetXmlSettings("Empty"));
 
-			var cfg = s.TryLoad<CombineConfig>("ACfg");
+			var cfg = s.TryLoad<FullCombineConfig>("ACfg");
 			Assert.IsNull(cfg);
 		}
 	}

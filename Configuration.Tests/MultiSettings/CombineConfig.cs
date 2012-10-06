@@ -4,22 +4,22 @@ using System.Collections.Generic;
 
 namespace Configuration
 {
-	public class CombineConfig : ICombinable<CombineConfig>
+	public class CombineConfig : ICombinable
 	{
 		[XmlAttribute]
 		public string F = null;
 
-		public CombineConfig Combine(CombineConfig prev, CombineConfig next)
+		public void Combine(object other)
 		{
-			if(prev == null)
-				return next;
+			Combine(other as CombineConfig);
+		}
 
-			if(next == null)
-				return prev;
-			
-			prev.F = next.F ?? prev.F;
+		public void Combine(CombineConfig other)
+		{
+			if (other == null)
+				return;
 
-			return prev;
+			F = other.F ?? F;
 		}
 	}
 }

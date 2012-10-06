@@ -12,6 +12,11 @@ namespace Configuration
 		private LinkedList<IAppSettings> _list = new LinkedList<IAppSettings>();
 		private ICombineFactory _combineFactory;
 
+		public MultiSettings()
+			: this(new CombineFactory(true))
+		{
+		}
+
 		public MultiSettings(ICombineFactory combineFactory)
 		{
 			if(combineFactory == null)

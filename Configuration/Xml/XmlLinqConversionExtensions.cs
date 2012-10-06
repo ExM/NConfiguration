@@ -1,6 +1,7 @@
 using System.Collections.Specialized;
 using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace Configuration.Xml
 {
@@ -49,6 +50,21 @@ namespace Configuration.Xml
 		public static XElement ToXElement(this XmlElement xmlelement)
 		{
 			return XElement.Load(xmlelement.CreateNavigator().ReadSubtree());
+		}
+
+		public static T Deserialize<T>(this XElement element) where T : class
+		{
+			if(element == null)
+				return null;
+
+			var rootAttr = new XmlRootAttribute();
+			rootAttr.ElementName = element.Name.LocalName;
+			rootAttr.Namespace = element.Name.NamespaceName;
+			
+			var xs = new XmlSerializer(typeof(T), rootAttr);
+		
+			using(XmlReader xr = element.CreateReader())
+				return (T)xs.Deserialize(xr);
 		}
 
 		public static NameValueCollection ToNameValueCollection(this XmlAttributeCollection attrs)
