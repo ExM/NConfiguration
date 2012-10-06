@@ -1,6 +1,7 @@
 
 using System;
 using System.Configuration;
+using Configuration.Xml.Protected;
 
 namespace Configuration.Building
 {
@@ -12,7 +13,7 @@ namespace Configuration.Building
 		
 		public IAppSettings Settings { get; set;}
 		
-		public IXmlCryptoProviders XmlCryptoProviders { get; set;}
+		public IProviderCollection XmlCryptoProviders { get; set;}
 		
 		public Builder XmlFile(string fileName)
 		{
@@ -21,7 +22,7 @@ namespace Configuration.Building
 			
 			IXmlSettings xmlSettings = new XmlFileSettings(fileName);
 			if(XmlCryptoProviders != null)
-				xmlSettings = new XmlCryptoWrapper(xmlSettings, XmlCryptoProviders);
+				xmlSettings = new Wrapper(xmlSettings, XmlCryptoProviders);
 			
 			Settings = new SystemXmlDeserializer(xmlSettings);
 			
@@ -35,7 +36,7 @@ namespace Configuration.Building
 			
 			IXmlSettings xmlSettings = new XmlSystemSettings(sectionName);
 			if(XmlCryptoProviders != null)
-				xmlSettings = new XmlCryptoWrapper(xmlSettings, XmlCryptoProviders);
+				xmlSettings = new Wrapper(xmlSettings, XmlCryptoProviders);
 			
 			Settings = new SystemXmlDeserializer(xmlSettings);
 			

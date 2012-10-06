@@ -43,8 +43,10 @@
     <Compile Include="AppSettingExtensions.cs" />
     <Compile Include="MultiSettings\ICombinable.cs" />
     <Compile Include="ConfigSections\ConfigProtectedData.cs" />
-    <Compile Include="Protected\XmlCryptoProvidersLoader.cs" />
-    <Compile Include="Protected\XmlCryptoProviders.cs" />
+    <Compile Include="Xml\Protected\CancelableEventArgs.cs" />
+    <Compile Include="Xml\Protected\ProviderLoadingEventArgs.cs" />
+    <Compile Include="Xml\Protected\ProviderLoader.cs" />
+    <Compile Include="Xml\Protected\ProviderCollection.cs" />
     <Compile Include="SectionNotFoundException.cs" />
     <Compile Include="XmlFileSettings.cs" />
     <Compile Include="MultiSettings\MultiSettings.cs" />
@@ -60,10 +62,10 @@
     <Compile Include="XmlSettings.cs" />
     <Compile Include="IXmlSettings.cs" />
     <Compile Include="SystemXmlDeserializer.cs" />
-    <Compile Include="Protected\XmlCryptoWrapper.cs" />
+    <Compile Include="Xml\Protected\Wrapper.cs" />
     <Compile Include="Building\AppSettings.cs" />
     <Compile Include="Building\Builder.cs" />
-    <Compile Include="Protected\IXmlCryptoProviders.cs" />
+    <Compile Include="Xml\Protected\IProviderCollection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup />

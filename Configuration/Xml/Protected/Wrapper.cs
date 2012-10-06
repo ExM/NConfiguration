@@ -5,22 +5,22 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using System.Configuration;
 
-namespace Configuration
+namespace Configuration.Xml.Protected
 {
-	public class XmlCryptoWrapper : IXmlSettings
+	public class Wrapper : IXmlSettings
 	{
 		private IXmlSettings _settings;
-		private IXmlCryptoProviders _xmlCryptoProviders;
+		private IProviderCollection _providers;
 
-		public XmlCryptoWrapper(IXmlSettings settings, IXmlCryptoProviders xmlCryptoProviders)
+		public Wrapper(IXmlSettings settings, IProviderCollection providers)
 		{
 			if(settings == null)
 				throw new ArgumentNullException("settings");
 			_settings = settings;
-			
-			if(xmlCryptoProviders == null)
-				throw new ArgumentNullException("xmlCryptoProviders");
-			_xmlCryptoProviders = xmlCryptoProviders;
+
+			if (providers == null)
+				throw new ArgumentNullException("providers");
+			_providers = providers;
 		}
 
 		public XElement GetSection(string name)
@@ -38,8 +38,8 @@ namespace Configuration
 			var attr = el.Attribute("configProtectionProvider");
 			if(attr == null)
 				return el;
-			
-			var provider = _xmlCryptoProviders.Get(attr.Value);
+
+			var provider = _providers.Get(attr.Value);
 			if(provider == null)
 				throw new InvalidOperationException(string.Format("protection provider `{0}' not found", attr.Value));
 

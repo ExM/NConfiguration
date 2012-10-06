@@ -7,13 +7,13 @@ using System.Collections.Specialized;
 using Configuration.ConfigSections;
 using System.Xml;
 
-namespace Configuration.Protected
+namespace Configuration.Xml.Protected
 {
-	public class XmlCryptoProviders : IXmlCryptoProviders
+	public class ProviderCollection : IProviderCollection
 	{
 		private Dictionary<string, ProtectedConfigurationProvider> _map = new Dictionary<string, ProtectedConfigurationProvider>();
 
-		public XmlCryptoProviders()
+		public ProviderCollection()
 		{
 		}
 

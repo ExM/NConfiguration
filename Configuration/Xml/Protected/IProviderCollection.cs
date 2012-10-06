@@ -1,10 +1,9 @@
 using System;
 using System.Configuration;
 
-
-namespace Configuration
+namespace Configuration.Xml.Protected
 {
-	public interface IXmlCryptoProviders
+	public interface IProviderCollection
 	{
 		ProtectedConfigurationProvider Get(string name);
 		void Set(string name, ProtectedConfigurationProvider provider);

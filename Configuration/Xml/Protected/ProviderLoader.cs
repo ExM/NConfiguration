@@ -7,23 +7,23 @@ using System.Collections.Specialized;
 using Configuration.ConfigSections;
 using System.Xml;
 
-namespace Configuration.Protected
+namespace Configuration.Xml.Protected
 {
-	public class XmlCryptoProvidersLoader
+	public class ProviderLoader
 	{
-		private IXmlCryptoProviders _providers;
+		private IProviderCollection _providers;
 
-		public XmlCryptoProvidersLoader()
-			:this(new XmlCryptoProviders())
+		public ProviderLoader()
+			: this(new ProviderCollection())
 		{
 		}
 
-		public XmlCryptoProvidersLoader(IXmlCryptoProviders providers)
+		public ProviderLoader(IProviderCollection providers)
 		{
 			_providers = providers;
 		}
 
-		public IXmlCryptoProviders Providers
+		public IProviderCollection Providers
 		{
 			get { return _providers; }
 		}
@@ -44,15 +44,56 @@ namespace Configuration.Protected
 
 		private void Resolve(string name, string type, NameValueCollection parameters)
 		{
+			if (OnLoading(name, type, parameters))
+				return;
+
 			Type providerType = Type.GetType(type, true);
 
 			var provider = Activator.CreateInstance(providerType) as ProtectedConfigurationProvider;
-			if(provider == null)
+			if (provider == null)
 				throw new FormatException(string.Format("instance of type `{0}' can not be cast to ProtectedConfigurationProvider", providerType.FullName));
 
 			provider.Initialize(name, parameters);
 
 			_providers.Set(name, provider);
+		}
+
+		public ProviderLoader SubscribeLoading(EventHandler<ProviderLoadingEventArgs> handler)
+		{
+			Loading += handler;
+			return this;
+		}
+
+		public ProviderLoader SubscribeClearing(EventHandler<CancelableEventArgs> handler)
+		{
+			Clearing += handler;
+			return this;
+		}
+
+		public event EventHandler<CancelableEventArgs> Clearing;
+		
+		private bool OnClearing()
+		{
+			var copy = Clearing;
+			if (copy == null)
+				return false;
+
+			var args = new CancelableEventArgs() { Canceled = false };
+			copy(this, args);
+			return args.Canceled;
+		}
+
+		public event EventHandler<ProviderLoadingEventArgs> Loading;
+
+		private bool OnLoading(string name, string type, NameValueCollection parameters)
+		{
+			var copy = Loading;
+			if (copy == null)
+				return false;
+
+			var args = new ProviderLoadingEventArgs() { Canceled = false, Name = name, Type = type, Parameters = parameters };
+			copy(this, args);
+			return args.Canceled;
 		}
 
 		public static IEnumerable<ProviderSettings> ConfigProtectedDataProviders
@@ -72,12 +113,12 @@ namespace Configuration.Protected
 			}
 		}
 
-		public static XmlCryptoProvidersLoader FromAppSettings(IAppSettings settings)
+		public static ProviderLoader FromAppSettings(IAppSettings settings)
 		{
-			return new XmlCryptoProvidersLoader().LoadAppSettings(settings);
+			return new ProviderLoader().LoadAppSettings(settings);
 		}
 
-		public XmlCryptoProvidersLoader LoadAppSettings(IAppSettings settings)
+		public ProviderLoader LoadAppSettings(IAppSettings settings)
 		{
 			var cfg = settings.Load<ConfigProtectedData>();
 			
@@ -85,6 +126,9 @@ namespace Configuration.Protected
 			{
 				if(el.Name == "clear")
 				{
+					if (OnClearing())
+						continue;
+
 					_providers.Clear();
 					continue;
 				}
@@ -101,12 +145,12 @@ namespace Configuration.Protected
 			return this;
 		}
 
-		public static XmlCryptoProvidersLoader FromConfigProtectedData()
+		public static ProviderLoader FromConfigProtectedData()
 		{
-			return new XmlCryptoProvidersLoader().LoadConfigProtectedData();
+			return new ProviderLoader().LoadConfigProtectedData();
 		}
 
-		public XmlCryptoProvidersLoader LoadConfigProtectedData()
+		public ProviderLoader LoadConfigProtectedData()
 		{
 			foreach (var settings in ConfigProtectedDataProviders)
 				Resolve(settings.Name, settings.Type, settings.Parameters);

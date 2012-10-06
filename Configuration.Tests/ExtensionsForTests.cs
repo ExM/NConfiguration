@@ -1,5 +1,6 @@
 using System.Xml;
 using System.Xml.Linq;
+using Configuration.Xml.Protected;
 
 namespace Configuration
 {
@@ -10,10 +11,10 @@ namespace Configuration
 			return new SystemXmlDeserializer(new XmlStringSettings(text));
 		}
 
-		public static IAppSettings ToXmlSettings(this string text, IXmlCryptoProviders providers)
+		public static IAppSettings ToXmlSettings(this string text, IProviderCollection providers)
 		{
 			IXmlSettings xmlSettings = new XmlStringSettings(text);
-			xmlSettings = new XmlCryptoWrapper(xmlSettings, providers);
+			xmlSettings = new Wrapper(xmlSettings, providers);
 			return new SystemXmlDeserializer(xmlSettings);
 		}
 
