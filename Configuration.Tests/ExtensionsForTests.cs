@@ -9,14 +9,14 @@ namespace Configuration
 	{
 		public static IAppSettings ToXmlSettings(this string text)
 		{
-			return new SystemXmlDeserializer(new XmlStringSettings(text));
+			return new XmlStringSettings(text);
 		}
 
 		public static IAppSettings ToXmlSettings(this string text, IProviderCollection providers)
 		{
-			IXmlSettings xmlSettings = new XmlStringSettings(text);
-			xmlSettings = new Wrapper(xmlSettings, providers);
-			return new SystemXmlDeserializer(xmlSettings);
+			var settings = new XmlStringSettings(text);
+			settings.SetProviderCollection(providers);
+			return settings;
 		}
 
 		public static XmlElement ToXmlElement(this string xml)
@@ -25,7 +25,6 @@ namespace Configuration
 			doc.LoadXml(xml);
 			return doc.DocumentElement;
 		}
-
 	}
 }
 

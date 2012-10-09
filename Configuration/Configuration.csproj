@@ -39,19 +39,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="IRelativePathOwner.cs" />
     <Compile Include="IAppSettings.cs" />
     <Compile Include="AppSettingExtensions.cs" />
+    <Compile Include="Xml\XmlFileSettings.cs" />
+    <Compile Include="Xml\Protected\IXmlEncryptable.cs" />
     <Compile Include="MultiSettings\ICombinable.cs" />
     <Compile Include="ConfigSections\ConfigProtectedData.cs" />
     <Compile Include="Xml\Joining\LoadedEventArgs.cs" />
-    <Compile Include="Xml\Joining\XmlLoadingEventArgs.cs" />
     <Compile Include="Xml\Joining\SettingsLoader.cs" />
     <Compile Include="CancelableEventArgs.cs" />
     <Compile Include="Xml\Protected\ProviderLoadingEventArgs.cs" />
     <Compile Include="Xml\Protected\ProviderLoader.cs" />
     <Compile Include="Xml\Protected\ProviderCollection.cs" />
     <Compile Include="SectionNotFoundException.cs" />
-    <Compile Include="Xml\XmlFileSettings.cs" />
     <Compile Include="MultiSettings\MultiSettings.cs" />
     <Compile Include="MultiSettings\ICombineFactory.cs" />
     <Compile Include="MultiSettings\CombineFactory.cs" />
@@ -63,9 +64,6 @@
     <Compile Include="ConfigSections\SearchMode.cs" />
     <Compile Include="ConfigSections\IncludeMode.cs" />
     <Compile Include="Xml\XmlSettings.cs" />
-    <Compile Include="Xml\IXmlSettings.cs" />
-    <Compile Include="Xml\SystemXmlDeserializer.cs" />
-    <Compile Include="Xml\Protected\Wrapper.cs" />
     <Compile Include="Xml\Protected\IProviderCollection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

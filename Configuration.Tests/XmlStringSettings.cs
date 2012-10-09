@@ -10,8 +10,8 @@ namespace Configuration
 	public class XmlStringSettings : XmlSettings
 	{
 		public XmlStringSettings(string text)
-			: base(XDocument.Parse(text))
 		{
+			Root = XDocument.Parse(text).Root;
 		}
 	}
 }

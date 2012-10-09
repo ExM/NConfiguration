@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using Configuration.ConfigSections;
 
 namespace Configuration.Xml.Joining
 {
@@ -31,20 +32,6 @@ namespace Configuration.Xml.Joining
 			get { return _settings; }
 		}
 
-		public event EventHandler<XmlLoadingEventArgs> XmlLoading;
-
-		private bool OnXmlLoading(ref IXmlSettings settings)
-		{
-			var copy = XmlLoading;
-			if (copy == null)
-				return false;
-
-			var args = new XmlLoadingEventArgs() { Canceled = false, Settings = settings };
-			copy(this, args);
-			settings = args.Settings;
-			return args.Canceled;
-		}
-
 		public event EventHandler<LoadedEventArgs> Loaded;
 
 		private void OnLoaded(IAppSettings settings)
@@ -69,13 +56,6 @@ namespace Configuration.Xml.Joining
 			return this;
 		}
 
-		public SettingsLoader LoadSettings(IXmlSettings xmlSettings)
-		{
-			if (OnXmlLoading(ref xmlSettings))
-				return this;
-			return LoadSettings(new SystemXmlDeserializer(xmlSettings));
-		}
-
 		public SettingsLoader LoadXmlFile(string fileName)
 		{
 			return LoadSettings(new XmlFileSettings(fileName));
@@ -89,6 +69,37 @@ namespace Configuration.Xml.Joining
 		public SettingsLoader LoadConfigSection(string sectionName)
 		{
 			return LoadSettings(new XmlSystemSettings(sectionName));
+		}
+
+		public SettingsLoader IncludeIn(IAppSettings settings)
+		{
+			var incCfg = settings.TryLoad<IncludeConfig>(false);
+			if(incCfg == null)
+				return this;
+
+			var rpo = settings as IRelativePathOwner;
+
+
+			foreach(var fCfg in incCfg.FileConfigs)
+				if (Path.IsPathRooted(fCfg.Path))
+					LoadSettingsByXmlFile(fCfg.Path, fCfg.Required);
+				else
+				{
+					if (rpo == null)
+						throw new InvalidOperationException("can not be searched for a relative path because the settings do not provide an absolute path");
+					//TODO
+
+				}
+
+			return this;
+		}
+
+		private void LoadSettingsByXmlFile(string fileName, bool required)
+		{
+			if (!File.Exists(fileName) && !required)
+				return;
+
+			LoadSettings(new XmlFileSettings(fileName));
 		}
 	}
 }

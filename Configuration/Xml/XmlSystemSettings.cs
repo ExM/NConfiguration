@@ -10,26 +10,35 @@ using System.Xml.Serialization;
 
 namespace Configuration.Xml
 {
-	public class XmlSystemSettings : XmlSettings
+	public class XmlSystemSettings : XmlSettings, IRelativePathOwner
 	{
+		private readonly string _directory;
+
 		public XmlSystemSettings(string sectionName)
-			:base(LoadFromSystemConfig(sectionName))
 		{
-		}
-		
-		private static XDocument LoadFromSystemConfig(string sectionName)
-		{
+			var confFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+			confFile = Path.GetFullPath(confFile);
+			_directory = Path.GetDirectoryName(confFile);
+
 			try
 			{
 				var section = ConfigurationManager.GetSection(sectionName) as PlainXmlSection;
-				if(section == null)
+				if(section == null || section.PlainXml == null)
 					throw new FormatException("section not found");
 
-				return section.PlainXml;
+				Root = section.PlainXml.Root;
 			}
 			catch(SystemException ex)
 			{
 				throw new ApplicationException(string.Format("Unable to system section `{0}'", sectionName), ex);
+			}
+		}
+
+		public string RelativePath
+		{
+			get
+			{
+				return _directory;
 			}
 		}
 	}
