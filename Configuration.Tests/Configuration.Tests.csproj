@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="XmlDeserializerTests.cs" />
     <Compile Include="KeyManager.cs" />
     <Compile Include="MultiSettings\CombineConfig.cs" />
     <Compile Include="MultiSettings\MultiSettingsCombineTests.cs" />
@@ -63,6 +64,7 @@
     </None>
     <None Include="testConfig1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup />
