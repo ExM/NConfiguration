@@ -42,13 +42,17 @@
     <Compile Include="IRelativePathOwner.cs" />
     <Compile Include="IAppSettings.cs" />
     <Compile Include="AppSettingExtensions.cs" />
+    <Compile Include="Joining\SettingsLoader.cs" />
+    <Compile Include="Xml\IncludeInXmlLoader.cs" />
+    <Compile Include="Xml\IncludeXmlElementEventArgs.cs" />
+    <Compile Include="Xml\SettingsLoaderExtensions.cs" />
     <Compile Include="Xml\XmlDeserializer.cs" />
     <Compile Include="Xml\XmlFileSettings.cs" />
     <Compile Include="Xml\Protected\IXmlEncryptable.cs" />
     <Compile Include="MultiSettings\ICombinable.cs" />
-    <Compile Include="ConfigSections\ConfigProtectedData.cs" />
-    <Compile Include="Xml\Joining\LoadedEventArgs.cs" />
-    <Compile Include="Xml\Joining\SettingsLoader.cs" />
+    <Compile Include="Xml\ConfigSections\ConfigProtectedData.cs" />
+    <Compile Include="Joining\LoadedEventArgs.cs" />
+    <Compile Include="Xml\XmlFileSettingsLoader.cs" />
     <Compile Include="CancelableEventArgs.cs" />
     <Compile Include="Xml\Protected\ProviderLoadingEventArgs.cs" />
     <Compile Include="Xml\Protected\ProviderLoader.cs" />
@@ -60,10 +64,10 @@
     <Compile Include="Xml\PlainXmlSection.cs" />
     <Compile Include="Xml\XmlSystemSettings.cs" />
     <Compile Include="Xml\XmlLinqConversionExtensions.cs" />
-    <Compile Include="ConfigSections\IncludeConfig.cs" />
-    <Compile Include="ConfigSections\IncludeFileConfig.cs" />
-    <Compile Include="ConfigSections\SearchMode.cs" />
-    <Compile Include="ConfigSections\IncludeMode.cs" />
+    <Compile Include="Xml\ConfigSections\IncludeConfig.cs" />
+    <Compile Include="Xml\ConfigSections\IncludeFileConfig.cs" />
+    <Compile Include="Joining\SearchMode.cs" />
+    <Compile Include="Joining\IncludeMode.cs" />
     <Compile Include="Xml\XmlSettings.cs" />
     <Compile Include="Xml\Protected\IProviderCollection.cs" />
   </ItemGroup>

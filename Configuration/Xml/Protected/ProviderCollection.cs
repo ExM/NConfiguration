@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Configuration;
 using System.Collections.Specialized;
-using Configuration.ConfigSections;
 using System.Xml;
 
 namespace Configuration.Xml.Protected

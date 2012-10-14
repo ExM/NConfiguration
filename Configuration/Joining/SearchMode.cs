@@ -2,7 +2,7 @@ using System;
 using System.Xml.Serialization;
 
 
-namespace Configuration.ConfigSections
+namespace Configuration.Joining
 {
 	public enum SearchMode
 	{

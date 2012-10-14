@@ -6,11 +6,16 @@ using System.Xml.Serialization;
 using System.Configuration;
 using System.Collections.Specialized;
 
-namespace Configuration.Xml.Joining
+namespace Configuration.Joining
 {
 	public class LoadedEventArgs : EventArgs
 	{
-		public IAppSettings Settings { get; set; }
+		public IAppSettings Settings { get; private set; }
+
+		public LoadedEventArgs(IAppSettings settings)
+		{
+			Settings = settings;
+		}
 	}
 }
 

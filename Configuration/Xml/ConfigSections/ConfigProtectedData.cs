@@ -4,7 +4,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 
-namespace Configuration.ConfigSections
+namespace Configuration.Xml.ConfigSections
 {
 	[XmlRoot("configProtectedData")]
 	public class ConfigProtectedData

@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
 using Configuration.Xml.Joining;
+using Configuration.Xml;
 
 namespace Configuration
 {
@@ -10,7 +11,7 @@ namespace Configuration
 		[Test]
 		public void ReadForDefaultName()
 		{
-			var cfg = SettingsLoader.FromConfigSection("ExtConfigure").Settings.Load<MyXmlConfig>();
+			var cfg = new XmlSystemSettings("ExtConfigure").Load<MyXmlConfig>();
 			
 			Assert.AreEqual("attr field text", cfg.AttrField);
 			Assert.AreEqual("elem field text", cfg.ElemField);

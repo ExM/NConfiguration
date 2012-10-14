@@ -1,8 +1,9 @@
 using System;
 using System.Xml.Serialization;
+using Configuration.Joining;
 
 
-namespace Configuration.ConfigSections
+namespace Configuration.Xml.ConfigSections
 {
 	public class IncludeFileConfig
 	{
