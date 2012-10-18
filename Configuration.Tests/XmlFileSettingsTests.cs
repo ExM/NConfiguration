@@ -3,6 +3,7 @@ using NUnit.Framework;
 using System.Collections.Specialized;
 using System.Configuration;
 using Configuration.Xml;
+using System.IO;
 
 namespace Configuration
 {
@@ -53,6 +54,21 @@ namespace Configuration
 			var cfg = _settings.Load<MyXmlConfig>("MyCfg2");
 			
 			Assert.AreEqual("2", cfg.AttrField);
+		}
+
+		[Test]
+		public void RealPath()
+		{
+			Assert.IsTrue(File.Exists("testConfig1.xml"), "require file `testConfig1.xml'");
+			try
+			{
+				var realPath = XmlFileSettings.RealFilePath("TeStCoNfIg1.XmL");
+				Assert.AreEqual("testConfig1.xml", Path.GetFileName(realPath));
+			}
+			catch(FileNotFoundException)
+			{
+				Assert.Pass(); // case sensitive file system
+			}
 		}
 	}
 }

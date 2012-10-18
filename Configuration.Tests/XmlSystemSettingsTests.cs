@@ -1,7 +1,5 @@
-using System;
-using NUnit.Framework;
-using Configuration.Xml.Joining;
 using Configuration.Xml;
+using NUnit.Framework;
 
 namespace Configuration
 {
