@@ -25,7 +25,7 @@ namespace Configuration
 			var xs1 = XmlDeserializer<MyXmlConfig>.GetSerializer("test");
 			
 			GC.Collect();
-			GC.WaitForFullGCComplete();
+			GC.WaitForPendingFinalizers();
 
 			var xs2 = XmlDeserializer<MyXmlConfig>.GetSerializer("test");
 

@@ -90,20 +90,83 @@ namespace Configuration
 			Assert.IsNotNull(providers.Get("RsaProvider"));
 			Assert.IsNotNull(providers.Get("DpapiProvider"));
 		}
+		
+		private const string CryptoProvidersSettings = @"
+<Config>
+	<configProtectedData>
+		<providers>
+			<add name='RsaTestProvider'
+				type='System.Configuration.RsaProtectedConfigurationProvider, System.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'
+				keyContainerName='MyTestKeys' useMachineContainer='true' />
+		</providers>
+	</configProtectedData>
+</Config>";
+		
+		private const string EncryptedCfg = @"
+<Config>
+	<MyXmlCfg configProtectionProvider='RsaTestProvider'>
+		<EncryptedData Type='http://www.w3.org/2001/04/xmlenc#Element' xmlns='http://www.w3.org/2001/04/xmlenc#'>
+			<EncryptionMethod Algorithm='http://www.w3.org/2001/04/xmlenc#aes256-cbc' />
+			<KeyInfo xmlns='http://www.w3.org/2000/09/xmldsig#'>
+				<EncryptedKey xmlns='http://www.w3.org/2001/04/xmlenc#'>
+					<EncryptionMethod Algorithm='http://www.w3.org/2001/04/xmlenc#rsa-1_5' />
+					<KeyInfo xmlns='http://www.w3.org/2000/09/xmldsig#'>
+						<KeyName>Rsa Key</KeyName>
+					</KeyInfo>
+					<CipherData>
+						<CipherValue>
+bm79LAyiP68B2YTs/CIL35Hpw6uVWvrs93Rm0XBVeFVXcZkmldgNpryUiJ6pnYWbVfAGWKe8tNAUkTq
+hXNRC/C6rnBTXQgmgF4bh7JrIvWuWQBzV6ahKfAsuHTvSOMBlgYivNiGlXZdTCD6SaGorKa0zPyoELC
+38jlEjaBoGLwuKzVW30JnVWMDtOuNb84I+t4UyYfhiMQHL1rGXgD6bZ66c/ulkhuiJ1m0GIi9/x3WqR
+92bL7eFg6E3ZbD3eNOcgMAJjQ8DrrPFc12zwF0Bwolhs1/3aV4tP6rlTCTIdkR8adWlyWjFLSDiNiNK
+D7/WOjEvRO0Bjoy9Ykc7nwrHgQ==
+						</CipherValue>
+					</CipherData>
+				</EncryptedKey>
+			</KeyInfo>
+			<CipherData>
+				<CipherValue>
+rudDpM9BHMQ29cQ6Vbcsf7aOvCs+6QPg5lPxQvP/qWao70BgZOFrTCiOXEEnnoidTjuahy50eHdTVc9
+iaWGZaw==
+				</CipherValue>
+			</CipherData>
+		</EncryptedData>
+	</MyXmlCfg>
+</Config>
+";
 
 		[Test]
-		public void EncryptDecryptSection()
+		public void DecryptSection()
 		{
-			var settings = @"<Config>
-<configProtectedData defaultProvider='SampleProvider'>
-	<providers>
-		<clear/>
-		<add name='RsaTestProvider'
-			type='System.Configuration.RsaProtectedConfigurationProvider, System.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'
-			keyContainerName='MyTestKeys' useMachineContainer='true' />
-	</providers>
-</configProtectedData>
-</Config>".ToXmlSettings();
+			var settings = CryptoProvidersSettings.ToXmlSettings();
+
+			KeyManager.Create();
+
+			var providers = ProviderLoader.FromAppSettings(settings).Providers;
+			var cryptedsettings = EncryptedCfg.ToXmlSettings(providers);
+
+			var cfg = cryptedsettings.Load<MyXmlConfig>();
+
+			Assert.AreEqual("SecureMessage", cfg.AttrField);
+			Assert.IsNull(cfg.ElemField);
+
+			KeyManager.Delete();
+		}
+		
+		[Test]
+		public void DecryptFail()
+		{
+			var settings = CryptoProvidersSettings.ToXmlSettings();
+			var providers = ProviderLoader.FromAppSettings(settings).Providers;
+			var cryptedsettings = EncryptedCfg.ToXmlSettings(providers);
+
+			Assert.Throws<CryptographicException>(() => cryptedsettings.Load<MyXmlConfig>());
+		}
+
+		[Test]
+		public void EncryptSection()
+		{
+			var settings = CryptoProvidersSettings.ToXmlSettings();
 
 			KeyManager.Create();
 
@@ -118,13 +181,12 @@ namespace Configuration
 			Assert.IsFalse(encryptedXml.Contains("SecureMessage"));
 			Assert.IsTrue(encryptedXml.Contains("EncryptedData"));
 			
-			KeyManager.Delete();
+			providers = ProviderLoader.FromAppSettings(settings).Providers;
+			var cryptedsettings = string.Format(
+				@"<Config><MyXmlCfg configProtectionProvider='RsaTestProvider'>{0}</MyXmlCfg></Config>",
+				encryptedXml
+			).ToXmlSettings(providers);
 			
-			var cryptedsettings = string.Format(@"<Config><MyXmlCfg configProtectionProvider='RsaTestProvider'>{0}</MyXmlCfg></Config>", encryptedXml).ToXmlSettings(providers);
-
-			Assert.Throws<ConfigurationErrorsException>(() => cryptedsettings.Load<MyXmlConfig>());
-
-			KeyManager.Create();
 
 			var cfg = cryptedsettings.Load<MyXmlConfig>();
 

@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using Configuration.Xml.Protected;
+using System.Security.Cryptography;
 
 namespace Configuration.Xml
 {
@@ -45,7 +46,19 @@ namespace Configuration.Xml
 			if(encData == null)
 				throw new FormatException(string.Format("element `EncryptedData' not found in element `{0}'", el.Name));
 
-			return ((XmlElement)provider.Decrypt(encData.ToXmlElement())).ToXElement();
+			var xmlEncData = encData.ToXmlElement();
+			XmlElement xmlData;
+			
+			try
+			{
+				xmlData = (XmlElement)provider.Decrypt(xmlEncData);
+			}
+			catch(SystemException sex)
+			{
+				throw new CryptographicException(string.Format("can't decrypt the configuration section `{0}'", encData.Name), sex);
+			}
+			
+			return xmlData.ToXElement();
 		}
 		
 		public void SetProviderCollection(IProviderCollection collection)
