@@ -14,7 +14,7 @@ namespace Configuration.Xml
 	public class XmlFileSettings : XmlSettings, IRelativePathOwner
 	{
 		private readonly string _directory;
-		private readonly string _fullFileName;
+		private readonly string _identity;
 		/// <summary>
 		/// settings loaded from a file
 		/// </summary>
@@ -28,34 +28,25 @@ namespace Configuration.Xml
 				using(var s = System.IO.File.OpenRead(fileName))
 					Root = XDocument.Load(s).Root;
 
-				_fullFileName = RealFilePath(fileName);
-				_directory = Path.GetDirectoryName(_fullFileName);
+				var idAttr = Root.Attribute("Identity");
+				if (idAttr != null && !string.IsNullOrWhiteSpace(idAttr.Value))
+					_identity = idAttr.Value;
+				else
+					_identity= fileName;
+				
+				_directory = Path.GetDirectoryName(fileName);
 			}
 			catch(SystemException ex)
 			{
 				throw new ApplicationException(string.Format("Unable to load file `{0}'", fileName), ex);
 			}
 		}
-
-		public static string RealFilePath(string userDefinedPath)
-		{
-			if (!Path.IsPathRooted(userDefinedPath))
-				userDefinedPath = Path.GetFullPath(userDefinedPath);
-
-			var path = Path.GetDirectoryName(userDefinedPath);
-			var file = Path.GetFileName(userDefinedPath);
-
-			var result = Directory.GetFiles(path, file, SearchOption.TopDirectoryOnly).FirstOrDefault();
-			if (result == null)
-				throw new FileNotFoundException("file not found", userDefinedPath);
-			return result;
-		}
-
+		
 		public override string Identity
 		{
 			get
 			{
-				return _fullFileName;
+				return _identity;
 			}
 		}
 

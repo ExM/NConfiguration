@@ -55,21 +55,6 @@ namespace Configuration
 			
 			Assert.AreEqual("2", cfg.AttrField);
 		}
-
-		[Test]
-		public void RealPath()
-		{
-			Assert.IsTrue(File.Exists("testConfig1.xml"), "require file `testConfig1.xml'");
-			try
-			{
-				var realPath = XmlFileSettings.RealFilePath("TeStCoNfIg1.XmL");
-				Assert.AreEqual("testConfig1.xml", Path.GetFileName(realPath));
-			}
-			catch(FileNotFoundException)
-			{
-				Assert.Pass(); // case sensitive file system
-			}
-		}
 	}
 }
 
