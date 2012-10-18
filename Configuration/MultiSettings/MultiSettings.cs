@@ -59,6 +59,14 @@ namespace Configuration
 			
 			return result;
 		}
+
+		public string Identity
+		{
+			get
+			{
+				return GetHashCode().ToString();
+			}
+		}
 	}
 }
 

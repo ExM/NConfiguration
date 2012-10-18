@@ -77,6 +77,8 @@ namespace Configuration.Xml
 
 			return section.Deserialize<T>();
 		}
+
+		public abstract string Identity { get; }
 	}
 }
 

@@ -12,17 +12,19 @@ namespace Configuration.Xml
 {
 	public class XmlSystemSettings : XmlSettings, IRelativePathOwner
 	{
+		private readonly string _sectionName;
 		private readonly string _directory;
 
 		public XmlSystemSettings(string sectionName)
 		{
+			_sectionName = sectionName;
 			var confFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 			confFile = Path.GetFullPath(confFile);
 			_directory = Path.GetDirectoryName(confFile);
 
 			try
 			{
-				var section = ConfigurationManager.GetSection(sectionName) as PlainXmlSection;
+				var section = ConfigurationManager.GetSection(_sectionName) as PlainXmlSection;
 				if(section == null || section.PlainXml == null)
 					throw new FormatException("section not found");
 
@@ -31,6 +33,14 @@ namespace Configuration.Xml
 			catch(SystemException ex)
 			{
 				throw new ApplicationException(string.Format("Unable to system section `{0}'", sectionName), ex);
+			}
+		}
+
+		public override string Identity
+		{
+			get
+			{
+				return _sectionName;
 			}
 		}
 

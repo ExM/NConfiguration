@@ -13,7 +13,7 @@ namespace Configuration.Xml
 	public class XmlFileSettings : XmlSettings, IRelativePathOwner
 	{
 		private readonly string _directory;
-
+		private readonly string _fullFileName;
 		/// <summary>
 		/// settings loaded from a file
 		/// </summary>
@@ -23,6 +23,7 @@ namespace Configuration.Xml
 			try
 			{
 				fileName = Path.GetFullPath(fileName);
+				_fullFileName = fileName; //FIXME: normalize path
 				_directory = Path.GetDirectoryName(fileName);
 
 				using(var s = System.IO.File.OpenRead(fileName))
@@ -31,6 +32,14 @@ namespace Configuration.Xml
 			catch(SystemException ex)
 			{
 				throw new ApplicationException(string.Format("Unable to load file `{0}'", fileName), ex);
+			}
+		}
+
+		public override string Identity
+		{
+			get
+			{
+				return _fullFileName;
 			}
 		}
 
