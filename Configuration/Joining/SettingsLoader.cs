@@ -47,7 +47,6 @@ namespace Configuration.Joining
 		
 		public SettingsLoader LoadSettings(IAppSettings settings)
 		{
-			Console.WriteLine(settings.GetType().FullName);
 			_settings.Add(settings);
 			OnLoaded(settings);
 			return this;

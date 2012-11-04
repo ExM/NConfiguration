@@ -10,11 +10,11 @@ using Configuration.Xml.ConfigSections;
 
 namespace Configuration.Xml.Joining
 {
-	public class XmlFileSettingsLoader
+	public static class XmlFileSettingsLoader
 	{
 		private static readonly XName _elementName = XName.Get("XmlFile", "");
 
-		public void ResolveXmlElement(object sender, IncludeXmlElementEventArgs args)
+		public static void ResolveXmlElement(object sender, IncludeXmlElementEventArgs args)
 		{
 			if (args.Handled)
 				return;
@@ -58,7 +58,7 @@ namespace Configuration.Xml.Joining
 			}
 		}
 
-		private List<XmlFileSettings> SearchXmlSettings(string basePath, string fileName, SearchMode mode)
+		private static List<XmlFileSettings> SearchXmlSettings(string basePath, string fileName, SearchMode mode)
 		{
 			var result = new List<XmlFileSettings>();
 

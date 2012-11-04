@@ -40,6 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Examples\ExampleCombineConfig.cs" />
+    <Compile Include="Examples\ConnectionConfig.cs" />
+    <Compile Include="Examples\IncludeSettingsTests.cs" />
     <Compile Include="XmlDeserializerTests.cs" />
     <Compile Include="KeyManager.cs" />
     <Compile Include="MultiSettings\CombineConfig.cs" />
@@ -62,6 +65,18 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Examples\Additional.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\AppDirectory\secureMain.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\ExternalConfigurations\Common.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="testConfig1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -72,5 +87,18 @@
       <Project>{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}</Project>
       <Name>Configuration</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="Examples\AppDirectory\main.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Examples\AppDirectory\Additional.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

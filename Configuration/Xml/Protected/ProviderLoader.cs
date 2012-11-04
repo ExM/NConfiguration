@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Collections.Specialized;
 using System.Xml;
 using Configuration.Xml.ConfigSections;
+using Configuration.Joining;
 
 namespace Configuration.Xml.Protected
 {
@@ -124,13 +125,27 @@ namespace Configuration.Xml.Protected
 			return new ProviderLoader().LoadAppSettings(settings);
 		}
 
+		public ProviderLoader TryLoadAppSettings(IAppSettings settings)
+		{
+			var cfg = settings.TryLoad<ConfigProtectedData>(false);
+			if (cfg == null)
+				return this;
+
+			LoadConfig(cfg);
+			return this;
+		}
+
 		public ProviderLoader LoadAppSettings(IAppSettings settings)
 		{
-			var cfg = settings.Load<ConfigProtectedData>();
-			
-			foreach(XmlElement el in cfg.Providers.ChildNodes)
+			LoadConfig(settings.Load<ConfigProtectedData>());
+			return this;
+		}
+
+		private void LoadConfig(ConfigProtectedData cfg)
+		{
+			foreach (XmlElement el in cfg.Providers.ChildNodes)
 			{
-				if(el.Name == "clear")
+				if (el.Name == "clear")
 				{
 					if (OnClearing())
 						continue;
@@ -139,7 +154,7 @@ namespace Configuration.Xml.Protected
 					continue;
 				}
 
-				if(el.Name == "add")
+				if (el.Name == "add")
 				{
 					Append(el.Attributes.ToNameValueCollection());
 					continue;
@@ -147,8 +162,6 @@ namespace Configuration.Xml.Protected
 
 				throw new InvalidOperationException(string.Format("unexpected element `{0}'", el.Name));
 			}
-
-			return this;
 		}
 
 		public static ProviderLoader FromConfigProtectedData()
@@ -162,6 +175,15 @@ namespace Configuration.Xml.Protected
 				Resolve(settings.Name, settings.Type, settings.Parameters);
 
 			return this;
+		}
+
+		public void TryExtractConfigProtectedData(object s, LoadedEventArgs e)
+		{
+			XmlFileSettings xmlSettings = e.Settings as XmlFileSettings;
+			if (xmlSettings == null)
+				return;
+			TryLoadAppSettings(xmlSettings);
+			xmlSettings.SetProviderCollection(Providers);
 		}
 	}
 }
