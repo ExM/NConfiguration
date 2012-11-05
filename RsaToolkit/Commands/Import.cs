@@ -15,8 +15,8 @@ namespace RsaToolkit.Commands
 
 		public override void Validate()
 		{
-			NotEmpty(_keyFile, "keyFile");
-			NotEmpty(_containerName, "containerName");
+			NotNull(_keyFile, "keyFile");
+			NotNull(_containerName, "containerName");
 		}
 
 		protected override OptionSet OptionSetCreater()
@@ -30,7 +30,7 @@ namespace RsaToolkit.Commands
 
 		public override string Description
 		{
-			get { return "//TODO"; }
+			get { return "Import a RSA-key from the specified XML-file to the key container"; ; }
 		}
 
 		public override void Run()

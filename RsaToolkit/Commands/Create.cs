@@ -37,11 +37,11 @@ namespace RsaToolkit.Commands
 
 		public override void Validate()
 		{
-			if(string.IsNullOrWhiteSpace(_keyFile))
-				NotEmpty(_containerName, "containerName");
+			if(_keyFile == null)
+				NotNull(_containerName, "containerName");
 
-			if (string.IsNullOrWhiteSpace(_containerName))
-				NotEmpty(_keyFile, "keyFile");
+			if (_containerName == null)
+				NotNull(_keyFile, "keyFile");
 		}
 
 		protected override OptionSet OptionSetCreater()

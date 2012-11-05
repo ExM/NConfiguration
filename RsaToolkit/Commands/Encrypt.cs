@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NDesk.Options;
+using System.Security.Cryptography;
+using System.IO;
+using System.Xml;
+using System.Configuration;
+using System.Collections.Specialized;
 
 namespace RsaToolkit.Commands
 {
@@ -17,17 +22,17 @@ namespace RsaToolkit.Commands
 
 		public override void Validate()
 		{
-			if (string.IsNullOrWhiteSpace(_keyFile))
-				NotEmpty(_containerName, "containerName");
+			if (_keyFile == null)
+				NotNull(_containerName, "containerName");
 			else
 			{
-				if (!string.IsNullOrWhiteSpace(_containerName))
+				if (_containerName != null)
 					throw new ArgumentOutOfRangeException("want to set the option 'keyFile' or 'containerName'");
 			}
 
-			NotEmpty(_configFile, "configFile");
-			NotEmpty(_sectionName, "sectionName");
-			NotEmpty(_providerName, "providerName");
+			NotNull(_configFile, "configFile");
+			NotNull(_sectionName, "sectionName");
+			NotNull(_providerName, "providerName");
 		}
 
 		protected override OptionSet OptionSetCreater()
@@ -45,13 +50,51 @@ namespace RsaToolkit.Commands
 
 		public override string Description
 		{
-			get { return "//TODO"; }
+			get { return "Encrypt section in the file of configurations"; }
 		}
 
 		public override void Run()
 		{
-			//TODO
-			Console.WriteLine("run Encrypt {0} {1} {2} {3} {4}", _keyFile, _containerName, _configFile, _sectionName, _providerName);
+			try
+			{
+				var provider = new RsaProtectedConfigurationProvider();
+				
+				if (_containerName != null)
+					provider.Initialize("RSA-key from key container", new NameValueCollection()
+					{
+						{"keyContainerName", _containerName},
+						{"useMachineContainer", "true"}
+					});
+
+				if (_keyFile != null)
+				{
+					provider.Initialize("RSA-key from XML-file", new NameValueCollection());
+					provider.ImportKey(_keyFile, false);
+				}
+
+				XmlDocument doc = new XmlDocument();
+				doc.Load(_configFile);
+
+				var el = doc.DocumentElement[_sectionName];
+				if(el == null)
+					throw new ApplicationException("section not found");
+				
+				var cryptEl = doc.CreateElement(_sectionName);
+				var prNameAttr = doc.CreateAttribute("configProtectionProvider");
+				prNameAttr.Value = _providerName;
+				cryptEl.Attributes.Append(prNameAttr);
+
+				var cryptData = provider.Encrypt(el);
+				cryptData = doc.ImportNode(cryptData, true);
+				cryptEl.AppendChild(cryptData);
+				doc.DocumentElement.ReplaceChild(cryptEl, el);
+
+				doc.Save(_configFile);
+			}
+			catch (CryptographicException ex)
+			{
+				throw new ApplicationException("crypto service provider not found", ex);
+			}
 		}
 	}
 }

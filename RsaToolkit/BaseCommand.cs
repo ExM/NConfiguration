@@ -67,9 +67,9 @@ namespace RsaToolkit
 
 		public abstract string Description { get; }
 
-		protected void NotEmpty(string text, string name)
+		protected void NotNull(string text, string name)
 		{
-			if (string.IsNullOrWhiteSpace(text))
+			if (text == null)
 				throw new ArgumentNullException(name, "required - " + Options[name].Description);
 		}
 	}

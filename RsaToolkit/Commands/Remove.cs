@@ -13,7 +13,7 @@ namespace RsaToolkit.Commands
 
 		public override void Validate()
 		{
-			NotEmpty(_containerName, "containerName");
+			NotNull(_containerName, "containerName");
 		}
 
 		protected override OptionSet OptionSetCreater()
@@ -26,7 +26,7 @@ namespace RsaToolkit.Commands
 
 		public override string Description
 		{
-			get { return "//TODO"; }
+			get { return "Remove a RSA-key from the specified key container"; }
 		}
 
 		public override void Run()

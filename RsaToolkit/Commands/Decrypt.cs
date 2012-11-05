@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NDesk.Options;
+using System.Configuration;
+using System.Collections.Specialized;
+using System.Xml;
+using System.Security.Cryptography;
 
 namespace RsaToolkit.Commands
 {
@@ -16,16 +20,16 @@ namespace RsaToolkit.Commands
 
 		public override void Validate()
 		{
-			if (string.IsNullOrWhiteSpace(_keyFile))
-				NotEmpty(_containerName, "containerName");
+			if (_keyFile == null)
+				NotNull(_containerName, "containerName");
 			else
 			{
-				if (!string.IsNullOrWhiteSpace(_containerName))
+				if (_containerName != null)
 					throw new ArgumentOutOfRangeException("want to set the option 'keyFile' or 'containerName'");
 			}
 
-			NotEmpty(_configFile, "configFile");
-			NotEmpty(_sectionName, "sectionName");
+			NotNull(_configFile, "configFile");
+			NotNull(_sectionName, "sectionName");
 		}
 
 		protected override OptionSet OptionSetCreater()
@@ -42,13 +46,49 @@ namespace RsaToolkit.Commands
 
 		public override string Description
 		{
-			get { return "//TODO"; }
+			get { return "Decrypt section in the file of configurations"; }
 		}
 
 		public override void Run()
 		{
-			//TODO
-			Console.WriteLine("run Decrypt {0} {1} {2} {3}", _keyFile, _containerName, _configFile, _sectionName);
+			try
+			{
+				var provider = new RsaProtectedConfigurationProvider();
+
+				if (_containerName != null)
+					provider.Initialize("RSA-key from key container", new NameValueCollection()
+					{
+						{"keyContainerName", _containerName},
+						{"useMachineContainer", "true"}
+					});
+
+				if (_keyFile != null)
+				{
+					provider.ImportKey(_keyFile, true);
+					provider.Initialize("RSA-key from XML-file", new NameValueCollection());
+				}
+
+				XmlDocument doc = new XmlDocument();
+				doc.Load(_configFile);
+
+				var el = doc.DocumentElement[_sectionName];
+				if (el == null)
+					throw new ApplicationException("section not found");
+
+				var cryptData = el["EncryptedData", "http://www.w3.org/2001/04/xmlenc#"];
+				if (cryptData == null)
+					throw new ApplicationException("crypt data not found");
+
+				var decryptedData = provider.Decrypt(cryptData);
+				decryptedData = doc.ImportNode(decryptedData, true);
+				doc.DocumentElement.ReplaceChild(decryptedData, el);
+
+				doc.Save(_configFile);
+			}
+			catch (CryptographicException ex)
+			{
+				throw new ApplicationException("crypto service provider not found", ex);
+			}
 		}
 	}
 }
