@@ -40,7 +40,6 @@ namespace Configuration
 		public void SecureLoad()
 		{
 			var providerLoader = new ProviderLoader();
-
 			var loader = new SettingsLoader();
 			var includer = new IncludeInXmlLoader();
 
@@ -61,6 +60,11 @@ namespace Configuration
 
 			Assert.IsNotNull(addCfg);
 			Assert.AreEqual("InUpDirectory", addCfg.F);
+
+			var extConn = settings.TryLoad<ConnectionConfig>("MyExtConnection");
+
+			Assert.AreEqual("Server=localhost;Database=workDb;User ID=admin;Password=pass;", settings.TryLoad<ConnectionConfig>("MyExtConnection").ConnectionString);
+			Assert.AreEqual("Server=localhost;Database=workDb;User ID=admin;Password=pass;", settings.TryLoad<ConnectionConfig>("MySecuredConnection").ConnectionString);
 		}
 
 	}

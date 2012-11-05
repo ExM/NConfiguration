@@ -6,3 +6,4 @@
 */bin/*
 bin/*
 test-results
+*.csproj.user

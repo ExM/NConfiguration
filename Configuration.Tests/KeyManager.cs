@@ -16,7 +16,7 @@ namespace Configuration
 			var cp = new CspParameters();
 			cp.KeyContainerName = KeyContainerName;
 			cp.Flags = CspProviderFlags.UseMachineKeyStore;
-
+			
 			var rsa = new RSACryptoServiceProvider(cp);
 			rsa.FromXmlString(XmlKey);
 			rsa.PersistKeyInCsp = true;
