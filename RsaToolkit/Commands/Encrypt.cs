@@ -43,6 +43,11 @@ namespace RsaToolkit.Commands
 			};
 		}
 
+		public override string Description
+		{
+			get { return "//TODO"; }
+		}
+
 		public override void Run()
 		{
 			//TODO

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NDesk.Options;
+using System.Security.Cryptography;
+using System.IO;
 
 namespace RsaToolkit.Commands
 {
@@ -35,8 +37,11 @@ namespace RsaToolkit.Commands
 
 		public override void Validate()
 		{
-			NotEmpty(_keyFile, "keyFile");
-			NotEmpty(_containerName, "containerName");
+			if(string.IsNullOrWhiteSpace(_keyFile))
+				NotEmpty(_containerName, "containerName");
+
+			if (string.IsNullOrWhiteSpace(_containerName))
+				NotEmpty(_keyFile, "keyFile");
 		}
 
 		protected override OptionSet OptionSetCreater()
@@ -49,10 +54,23 @@ namespace RsaToolkit.Commands
 				};
 		}
 
+		public override string Description
+		{
+			get { return "Create RSA-key and saves it in key container and(or) in XML-file"; }
+		}
+
 		public override void Run()
 		{
-			//TODO
-			Console.WriteLine("run create {0} {1} {2}", _keyFile, _keySize, _containerName);
+			var cp = new CspParameters();
+			if(_containerName != null)
+				cp.KeyContainerName = _containerName;
+			cp.Flags = CspProviderFlags.UseMachineKeyStore;
+
+			var rsa = new RSACryptoServiceProvider(_keySize, cp);
+			if (_keyFile != null)
+				File.WriteAllText(_keyFile, rsa.ToXmlString(true));
+			rsa.PersistKeyInCsp = (_containerName != null);
+			rsa.Clear();
 		}
 	}
 }

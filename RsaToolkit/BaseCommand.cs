@@ -9,17 +9,31 @@ namespace RsaToolkit
 {
 	public abstract class BaseCommand
 	{
+		private static Dictionary<string, Type> _nameToTypeMap = new Dictionary<string, Type>()
+		{
+			{"create", typeof(Create)},
+			{"import", typeof(Import)},
+			{"export", typeof(Export)},
+			{"remove", typeof(Remove)},
+			{"encrypt", typeof(Encrypt)},
+			{"decrypt", typeof(Decrypt)},
+		};
+
 		public static BaseCommand CreateFromName(string name)
 		{
-			switch (name)
+			Type cmdType;
+			if (_nameToTypeMap.TryGetValue(name, out cmdType))
+				return (BaseCommand)Activator.CreateInstance(cmdType);
+
+			return null;
+		}
+
+		public static IEnumerable<KeyValuePair<string, BaseCommand>> AllCommands
+		{
+			get
 			{
-				case "create": return new Create();
-				case "import": return new Import();
-				case "export": return new Export();
-				case "remove": return new Remove();
-				case "encrypt": return new Encrypt();
-				case "decrypt": return new Decrypt();
-				default: return null;
+				return _nameToTypeMap.Select(pair =>
+					new KeyValuePair<string, BaseCommand>(pair.Key, (BaseCommand)Activator.CreateInstance(pair.Value)));
 			}
 		}
 
@@ -50,6 +64,8 @@ namespace RsaToolkit
 		public abstract void Validate();
 
 		public abstract void Run();
+
+		public abstract string Description { get; }
 
 		protected void NotEmpty(string text, string name)
 		{

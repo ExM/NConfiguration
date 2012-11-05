@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NDesk.Options;
+using System.Security.Cryptography;
+using System.IO;
 
 namespace RsaToolkit.Commands
 {
@@ -26,10 +28,24 @@ namespace RsaToolkit.Commands
 			};
 		}
 
+		public override string Description
+		{
+			get { return "//TODO"; }
+		}
+
 		public override void Run()
 		{
-			//TODO
-			Console.WriteLine("run Export {0} {1}", _keyFile, _containerName);
+			try
+			{
+				var cp = new CspParameters();
+				cp.KeyContainerName = _containerName;
+				cp.Flags = CspProviderFlags.UseMachineKeyStore | CspProviderFlags.UseExistingKey;
+				File.WriteAllText(_keyFile, new RSACryptoServiceProvider(cp).ToXmlString(true));
+			}
+			catch (CryptographicException ex)
+			{
+				throw new ApplicationException("key not found in " + _containerName, ex);
+			}
 		}
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NDesk.Options;
+using System.Security.Cryptography;
 
 namespace RsaToolkit.Commands
 {
@@ -23,10 +24,26 @@ namespace RsaToolkit.Commands
 			};
 		}
 
+		public override string Description
+		{
+			get { return "//TODO"; }
+		}
+
 		public override void Run()
 		{
-			//TODO
-			Console.WriteLine("run Remove {0}", _containerName);
+			try
+			{
+				var cp = new CspParameters();
+				cp.KeyContainerName = _containerName;
+				cp.Flags = CspProviderFlags.UseMachineKeyStore | CspProviderFlags.UseExistingKey;
+				var rsa = new RSACryptoServiceProvider(cp);
+				rsa.PersistKeyInCsp = false;
+				rsa.Clear();
+			}
+			catch (CryptographicException ex)
+			{
+				throw new ApplicationException("key not found in " + _containerName, ex);
+			}
 		}
 	}
 }

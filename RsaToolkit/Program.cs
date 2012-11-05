@@ -52,6 +52,7 @@ namespace RsaToolkit
 			catch (Exception ex)
 			{
 				Console.WriteLine("Exception: {0}", ex);
+				//Console.WriteLine("Exception: {0}", BuildMessage(ex));
 				return 1;
 			}
 		}
@@ -74,8 +75,14 @@ namespace RsaToolkit
 			Console.WriteLine("Usage: RsaToolkit [OPTIONS]");
 			Console.WriteLine("Options:");
 			p.WriteOptionDescriptions(Console.Out);
-			Console.WriteLine();
-			Console.WriteLine("Usage: RsaToolkit [COMMAND] [OPTIONS]");
+			foreach (var pair in BaseCommand.AllCommands)
+			{
+				Console.WriteLine();
+				Console.WriteLine("Usage: RsaToolkit {0} [OPTIONS]", pair.Key);
+				Console.WriteLine(pair.Value.Description);
+				Console.WriteLine("Options:");
+				pair.Value.Options.WriteOptionDescriptions(Console.Out);
+			}
 		}
 	}
 }
