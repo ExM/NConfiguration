@@ -35,14 +35,28 @@ namespace RsaToolkit.Commands
 
 		public override void Run()
 		{
-			var cp = new CspParameters();
-			cp.KeyContainerName = _containerName;
-			cp.Flags = CspProviderFlags.UseMachineKeyStore;
+			RSACryptoServiceProvider rsa = null;
+			try
+			{
+				var cp = new CspParameters();
+				cp.KeyContainerName = _containerName;
+				cp.Flags = CspProviderFlags.UseMachineKeyStore;
 
-			var rsa = new RSACryptoServiceProvider(cp);
-			rsa.FromXmlString(File.ReadAllText(_keyFile));
-			rsa.PersistKeyInCsp = true;
-			rsa.Clear();
+				rsa = new RSACryptoServiceProvider(cp);
+				rsa.FromXmlString(File.ReadAllText(_keyFile));
+				rsa.PersistKeyInCsp = true;
+				rsa.Clear();
+			}
+			catch (Exception)
+			{
+				if (rsa != null)
+				{
+					rsa.PersistKeyInCsp = false;
+					rsa.Clear();
+				}
+
+				throw;
+			}
 		}
 	}
 }
