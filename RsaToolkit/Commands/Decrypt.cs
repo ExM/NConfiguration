@@ -51,44 +51,37 @@ namespace RsaToolkit.Commands
 
 		public override void Run()
 		{
-			try
-			{
-				var provider = new RsaProtectedConfigurationProvider();
+			var provider = new RsaProtectedConfigurationProvider();
 
-				if (_containerName != null)
-					provider.Initialize("RSA-key from key container", new NameValueCollection()
-					{
-						{"keyContainerName", _containerName},
-						{"useMachineContainer", "true"}
-					});
-
-				if (_keyFile != null)
+			if (_containerName != null)
+				provider.Initialize("RSA-key from key container", new NameValueCollection()
 				{
-					provider.ImportKey(_keyFile, true);
-					provider.Initialize("RSA-key from XML-file", new NameValueCollection());
-				}
+					{"keyContainerName", _containerName},
+					{"useMachineContainer", "true"}
+				});
 
-				XmlDocument doc = new XmlDocument();
-				doc.Load(_configFile);
-
-				var el = doc.DocumentElement[_sectionName];
-				if (el == null)
-					throw new ApplicationException("section not found");
-
-				var cryptData = el["EncryptedData", "http://www.w3.org/2001/04/xmlenc#"];
-				if (cryptData == null)
-					throw new ApplicationException("crypt data not found");
-
-				var decryptedData = provider.Decrypt(cryptData);
-				decryptedData = doc.ImportNode(decryptedData, true);
-				doc.DocumentElement.ReplaceChild(decryptedData, el);
-
-				doc.Save(_configFile);
-			}
-			catch (CryptographicException ex)
+			if (_keyFile != null)
 			{
-				throw new ApplicationException("crypto service provider not found", ex);
+				provider.ImportKey(_keyFile, true);
+				provider.Initialize("RSA-key from XML-file", new NameValueCollection());
 			}
+
+			XmlDocument doc = new XmlDocument();
+			doc.Load(_configFile);
+
+			var el = doc.DocumentElement[_sectionName];
+			if (el == null)
+				throw new ApplicationException("section not found");
+
+			var cryptData = el["EncryptedData", "http://www.w3.org/2001/04/xmlenc#"];
+			if (cryptData == null)
+				throw new ApplicationException("crypt data not found");
+
+			var decryptedData = provider.Decrypt(cryptData);
+			decryptedData = doc.ImportNode(decryptedData, true);
+			doc.DocumentElement.ReplaceChild(decryptedData, el);
+
+			doc.Save(_configFile);
 		}
 	}
 }

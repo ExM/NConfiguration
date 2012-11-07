@@ -55,46 +55,39 @@ namespace RsaToolkit.Commands
 
 		public override void Run()
 		{
-			try
-			{
-				var provider = new RsaProtectedConfigurationProvider();
+			var provider = new RsaProtectedConfigurationProvider();
 				
-				if (_containerName != null)
-					provider.Initialize("RSA-key from key container", new NameValueCollection()
-					{
-						{"keyContainerName", _containerName},
-						{"useMachineContainer", "true"}
-					});
-
-				if (_keyFile != null)
+			if (_containerName != null)
+				provider.Initialize("RSA-key from key container", new NameValueCollection()
 				{
-					provider.Initialize("RSA-key from XML-file", new NameValueCollection());
-					provider.ImportKey(_keyFile, false);
-				}
+					{"keyContainerName", _containerName},
+					{"useMachineContainer", "true"}
+				});
 
-				XmlDocument doc = new XmlDocument();
-				doc.Load(_configFile);
-
-				var el = doc.DocumentElement[_sectionName];
-				if(el == null)
-					throw new ApplicationException("section not found");
-				
-				var cryptEl = doc.CreateElement(_sectionName);
-				var prNameAttr = doc.CreateAttribute("configProtectionProvider");
-				prNameAttr.Value = _providerName;
-				cryptEl.Attributes.Append(prNameAttr);
-
-				var cryptData = provider.Encrypt(el);
-				cryptData = doc.ImportNode(cryptData, true);
-				cryptEl.AppendChild(cryptData);
-				doc.DocumentElement.ReplaceChild(cryptEl, el);
-
-				doc.Save(_configFile);
-			}
-			catch (CryptographicException ex)
+			if (_keyFile != null)
 			{
-				throw new ApplicationException("crypto service provider not found", ex);
+				provider.Initialize("RSA-key from XML-file", new NameValueCollection());
+				provider.ImportKey(_keyFile, false);
 			}
+
+			XmlDocument doc = new XmlDocument();
+			doc.Load(_configFile);
+
+			var el = doc.DocumentElement[_sectionName];
+			if(el == null)
+				throw new ApplicationException("section not found");
+				
+			var cryptEl = doc.CreateElement(_sectionName);
+			var prNameAttr = doc.CreateAttribute("configProtectionProvider");
+			prNameAttr.Value = _providerName;
+			cryptEl.Attributes.Append(prNameAttr);
+
+			var cryptData = provider.Encrypt(el);
+			cryptData = doc.ImportNode(cryptData, true);
+			cryptEl.AppendChild(cryptData);
+			doc.DocumentElement.ReplaceChild(cryptEl, el);
+
+			doc.Save(_configFile);
 		}
 	}
 }

@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EncryptDecryptTests.cs" />
     <Compile Include="RemoveTests.cs" />
     <Compile Include="ImportTests.cs" />
     <Compile Include="ExportTests.cs" />

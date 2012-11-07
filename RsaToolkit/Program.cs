@@ -11,11 +11,13 @@ namespace RsaToolkit
 		public static int Main(string[] args)
 		{
 			bool showHelp = false;
+			bool trace = false;
 			BaseCommand command = null;
 
 			var p = new OptionSet()
 			{
-				{ "h|help", "show this message and exit", v => showHelp = v != null }
+				{ "h|help", "show this message and exit", v => showHelp = v != null },
+				{ "t|trace", "show stack trace of exception", v => trace = v != null }
 			};
 
 			try
@@ -23,19 +25,22 @@ namespace RsaToolkit
 				if (args.Length == 0)
 					throw new ArgumentNullException("required parameters in command line");
 
-				command = BaseCommand.CreateFromName(args[0]);
-				if (command == null)
+				args = p.Parse(args).ToArray();
+				if (showHelp)
 				{
-					if (p.Parse(args).Count != 0)
-						throw new FormatException("unexpected command: " + command);
 					ShowHelp(p);
 					return 0;
 				}
-				else
-				{
-					command.Initialize(args.Skip(1));
-					command.Validate();
-				}
+
+				if (args.Length == 0)
+					throw new ArgumentNullException("required command in command line");
+
+				command = BaseCommand.CreateFromName(args[0]);
+				if (command == null)
+					throw new FormatException("unexpected command: " + args[0]);
+
+				command.Initialize(args.Skip(1));
+				command.Validate();
 			}
 			catch(Exception e)
 			{
@@ -51,8 +56,10 @@ namespace RsaToolkit
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine("Exception: {0}", ex);
-				//Console.WriteLine("Exception: {0}", BuildMessage(ex));
+				if(trace)
+					Console.WriteLine("Exception: {0}", ex);
+				else
+					Console.WriteLine("Exception: {0}", BuildMessage(ex));
 				return 1;
 			}
 		}
