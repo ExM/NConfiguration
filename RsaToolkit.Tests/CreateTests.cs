@@ -19,9 +19,8 @@ namespace RsaToolkit
 		{
 			("testKey" + keySize + ".xml").DeleteIfExist();
 
-			var exCode = ("create -f=testKey" + keySize + ".xml -s=" + keySize).Run();
+			("create -f=testKey" + keySize + ".xml -s=" + keySize).SuccessRun();
 
-			Assert.AreEqual(0, exCode);
 			Assert.True(File.Exists("testKey" + keySize + ".xml"));
 		}
 
@@ -30,9 +29,8 @@ namespace RsaToolkit
 		{
 			"testKey.xml".DeleteIfExist();
 
-			var exCode = "create -s=1024".Run();
+			"create -s=1024".FailRun();
 
-			Assert.AreEqual(1, exCode);
 			Assert.False(File.Exists("testKey.xml"));
 		}
 
@@ -41,9 +39,8 @@ namespace RsaToolkit
 		{
 			"testKey.xml".DeleteIfExist();
 
-			var exCode = "create -s=ABC -f=testKey.xml".Run();
+			"create -s=ABC -f=testKey.xml".FailRun();
 
-			Assert.AreEqual(1, exCode);
 			Assert.False(File.Exists("testKey.xml"));
 		}
 
@@ -52,9 +49,8 @@ namespace RsaToolkit
 		{
 			"testKey.xml".DeleteIfExist();
 
-			var exCode = "create -f=testKey.xml".Run();
+			"create -f=testKey.xml".SuccessRun();
 
-			Assert.AreEqual(0, exCode);
 			Assert.True(File.Exists("testKey.xml"));
 		}
 
@@ -63,11 +59,8 @@ namespace RsaToolkit
 		{
 			"remove -n=TestContainer".Run();
 
-			var exCode = "create -n=TestContainer".Run();
-			Assert.AreEqual(0, exCode);
-
-			exCode = "remove -n=TestContainer".Run();
-			Assert.AreEqual(0, exCode);
+			"create -n=TestContainer".SuccessRun();
+			"remove -n=TestContainer".SuccessRun();
 		}
 	}
 }

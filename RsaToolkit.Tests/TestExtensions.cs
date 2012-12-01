@@ -20,6 +20,9 @@ namespace RsaToolkit
 		{
 			Console.WriteLine("RsaToolkit.exe " + parameters);
 
+			return Program.Main(parameters.Split(' '));
+
+			/*
 			ProcessStartInfo psi = new ProcessStartInfo("RsaToolkit.exe", parameters);
 			psi.CreateNoWindow = true;
 			var proc = Process.Start(psi);
@@ -31,6 +34,17 @@ namespace RsaToolkit
 			}
 
 			return proc.ExitCode;
+			 */
+		}
+
+		public static void SuccessRun(this string parameters)
+		{
+			Assert.AreEqual(0, Run(parameters), "run the program was a failure");
+		}
+
+		public static void FailRun(this string parameters)
+		{
+			Assert.AreEqual(1, Run(parameters), "unexpectedly successful execution of the program");
 		}
 	}
 }

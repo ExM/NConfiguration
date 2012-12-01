@@ -18,21 +18,17 @@ namespace RsaToolkit
 		{
 			File.WriteAllText("testConfig.xml", XmlConfigContent);
 
-			var exCode = "create -n=TestContainer".Run();
-			Assert.AreEqual(0, exCode);
+			"create -n=TestContainer".SuccessRun();
 
-			exCode = "create -n=TestContainer2".Run();
-			Assert.AreEqual(0, exCode);
+			"create -n=TestContainer2".SuccessRun();
 
-			exCode = "encrypt -n=TestContainer -c=testConfig.xml -s=MySecuredConnection -p=TestProvider".Run();
-			Assert.AreEqual(0, exCode);
+			"encrypt -n=TestContainer -c=testConfig.xml -s=MySecuredConnection -p=TestProvider".SuccessRun();
 
 			var cryptedContent = File.ReadAllText("testConfig.xml");
 
 			Assert.AreNotEqual(XmlConfigContent, cryptedContent);
 
-			exCode = "decrypt -n=TestContainer2 -c=testConfig.xml -s=MySecuredConnection".Run();
-			Assert.AreEqual(1, exCode);
+			"decrypt -n=TestContainer2 -c=testConfig.xml -s=MySecuredConnection".FailRun();
 
 			Assert.AreEqual(cryptedContent, File.ReadAllText("testConfig.xml"));
 		}
@@ -42,16 +38,13 @@ namespace RsaToolkit
 		{
 			File.WriteAllText("testConfig.xml", XmlConfigContent);
 
-			var exCode = "create -f=testKey.xml".Run();
-			Assert.AreEqual(0, exCode);
+			"create -f=testKey.xml".SuccessRun();
 
-			exCode = "encrypt -f=testKey.xml -c=testConfig.xml -s=MySecuredConnection -p=TestProvider".Run();
-			Assert.AreEqual(0, exCode);
+			"encrypt -f=testKey.xml -c=testConfig.xml -s=MySecuredConnection -p=TestProvider".SuccessRun();
 
 			Assert.AreNotEqual(XmlConfigContent, File.ReadAllText("testConfig.xml"));
 
-			exCode = "decrypt -f=testKey.xml -c=testConfig.xml -s=MySecuredConnection".Run();
-			Assert.AreEqual(0, exCode);
+			"decrypt -f=testKey.xml -c=testConfig.xml -s=MySecuredConnection".SuccessRun();
 
 			Assert.AreEqual(XmlConfigContent, File.ReadAllText("testConfig.xml"));
 		}
@@ -61,16 +54,13 @@ namespace RsaToolkit
 		{
 			File.WriteAllText("testConfig.xml", XmlConfigContent);
 
-			var exCode = "create -n=TestContainer".Run();
-			Assert.AreEqual(0, exCode);
+			"create -n=TestContainer".SuccessRun();
 
-			exCode = "encrypt -n=TestContainer -c=testConfig.xml -s=MySecuredConnection -p=TestProvider".Run();
-			Assert.AreEqual(0, exCode);
+			"encrypt -n=TestContainer -c=testConfig.xml -s=MySecuredConnection -p=TestProvider".SuccessRun();
 
 			Assert.AreNotEqual(XmlConfigContent, File.ReadAllText("testConfig.xml"));
 
-			exCode = "decrypt -n=TestContainer -c=testConfig.xml -s=MySecuredConnection".Run();
-			Assert.AreEqual(0, exCode);
+			"decrypt -n=TestContainer -c=testConfig.xml -s=MySecuredConnection".SuccessRun();
 
 			Assert.AreEqual(XmlConfigContent, File.ReadAllText("testConfig.xml"));
 		}

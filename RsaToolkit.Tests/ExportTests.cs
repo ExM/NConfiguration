@@ -14,8 +14,7 @@ namespace RsaToolkit
 		[Test]
 		public void NoOutput()
 		{
-			var exCode = "export -n=TestContainer".Run();
-			Assert.AreEqual(1, exCode);
+			"export -n=TestContainer".FailRun();
 		}
 
 		[Test]
@@ -23,27 +22,23 @@ namespace RsaToolkit
 		{
 			"exportedKey.xml".DeleteIfExist();
 
-			var exCode = "export -f=exportedKey.xml".Run();
+			"export -f=exportedKey.xml".FailRun();
 
-			Assert.AreEqual(1, exCode);
 			Assert.False(File.Exists("exportedKey.xml"));
 		}
 
 		[Test]
 		public void ToXmlFile()
 		{
-			var exCode = "create -n=TestContainer".Run();
-			Assert.AreEqual(0, exCode);
+			"create -n=TestContainer".SuccessRun();
 
 			"exportedKey1.xml".DeleteIfExist();
 			"exportedKey2.xml".DeleteIfExist();
 
-			exCode = "export -n=TestContainer -f=exportedKey1.xml".Run();
-			Assert.AreEqual(0, exCode);
+			"export -n=TestContainer -f=exportedKey1.xml".SuccessRun();
 			Assert.True(File.Exists("exportedKey1.xml"));
 
-			exCode = "export -n=TestContainer -f=exportedKey2.xml".Run();
-			Assert.AreEqual(0, exCode);
+			"export -n=TestContainer -f=exportedKey2.xml".SuccessRun();
 			Assert.True(File.Exists("exportedKey2.xml"));
 
 			FileAssert.AreEqual("exportedKey1.xml", "exportedKey2.xml");

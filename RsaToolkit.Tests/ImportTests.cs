@@ -14,15 +14,13 @@ namespace RsaToolkit
 		[Test]
 		public void NoInput()
 		{
-			var exCode = "import -n=TestContainer".Run();
-			Assert.AreEqual(1, exCode);
+			"import -n=TestContainer".FailRun();
 		}
 
 		[Test]
 		public void NoOutput()
 		{
-			var exCode = "import -f=testKey.xml".Run();
-			Assert.AreEqual(1, exCode);
+			"import -f=testKey.xml".FailRun();
 		}
 
 		[Test]
@@ -30,11 +28,9 @@ namespace RsaToolkit
 		{
 			"remove -n=TestContainer".Run();
 			"testKey.xml".DeleteIfExist();
-			var exCode = "import -f=testKey.xml -n=TestContainer".Run();
-			Assert.AreEqual(1, exCode);
+			"import -f=testKey.xml -n=TestContainer".FailRun();
 
-			exCode = "remove -n=TestContainer".Run();
-			Assert.AreEqual(1, exCode); // container not created
+			"remove -n=TestContainer".FailRun(); // container not created
 		}
 
 		[Test]
@@ -42,16 +38,13 @@ namespace RsaToolkit
 		{
 			"testKey.xml".DeleteIfExist();
 
-			var exCode = "create -f=testKey.xml".Run();
-			Assert.AreEqual(0, exCode);
+			"create -f=testKey.xml".SuccessRun();
 
-			exCode = "import -f=testKey.xml -n=TestContainer".Run();
-			Assert.AreEqual(0, exCode);
+			"import -f=testKey.xml -n=TestContainer".SuccessRun();
 
 			"exportedKey.xml".DeleteIfExist();
 
-			exCode = "export -n=TestContainer -f=exportedKey.xml".Run();
-			Assert.AreEqual(0, exCode);
+			"export -n=TestContainer -f=exportedKey.xml".SuccessRun();
 
 			FileAssert.AreEqual("testKey.xml", "exportedKey.xml");
 		}

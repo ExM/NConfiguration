@@ -66,8 +66,8 @@ namespace RsaToolkit.Commands
 
 			if (_keyFile != null)
 			{
-				provider.Initialize("RSA-key from XML-file", new NameValueCollection());
 				provider.ImportKey(_keyFile, false);
+				provider.Initialize("RSA-key from XML-file", new NameValueCollection());
 			}
 
 			XmlDocument doc = new XmlDocument();
