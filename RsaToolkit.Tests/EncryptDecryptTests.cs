@@ -65,9 +65,8 @@ namespace RsaToolkit
 			Assert.AreEqual(XmlConfigContent, File.ReadAllText("testConfig.xml"));
 		}
 
-		private static string XmlConfigContent = XDocument.Parse(@"<?xml version='1.0' encoding='utf-8' ?>
-<configuration>
-	<AdditionalConfig F='InUpDirectory'/>
+		private static string XmlConfigContent = XDocument.Parse(@"<configuration>
+	<AdditionalConfig F='InUpDirectory' />
 	<MyExtConnection Server='localhost' Database='workDb' User='admin' Password='pass' />
 	<MySecuredConnection Server='localhost' Database='workDb' User='admin' Password='pass' />
 </configuration>").ToString();
