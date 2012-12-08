@@ -12,7 +12,6 @@ namespace RsaToolkit.Commands
 {
 	public class Decrypt : BaseCommand
 	{
-		private string _keyFile = null;
 		private string _containerName = null;
 
 		private string _configFile = null;
@@ -20,14 +19,7 @@ namespace RsaToolkit.Commands
 
 		public override void Validate()
 		{
-			if (_keyFile == null)
-				NotNull(_containerName, "containerName");
-			else
-			{
-				if (_containerName != null)
-					throw new ArgumentOutOfRangeException("want to set the option 'keyFile' or 'containerName'");
-			}
-
+			NotNull(_containerName, "containerName");
 			NotNull(_configFile, "configFile");
 			NotNull(_sectionName, "sectionName");
 		}
@@ -36,9 +28,7 @@ namespace RsaToolkit.Commands
 		{
 			return new OptionSet()
 			{
-				{ "f=|keyFile=", "file name of key in XML format", v => _keyFile = v },
 				{ "n=|containerName=", "key container name", v => _containerName = v },
-
 				{ "c=|configFile=", "file name of configuration in XML format", v => _configFile = v },
 				{ "s=|sectionName=", "section name", v => _sectionName = v },
 			};
@@ -53,18 +43,11 @@ namespace RsaToolkit.Commands
 		{
 			var provider = new RsaProtectedConfigurationProvider();
 
-			if (_containerName != null)
-				provider.Initialize("RSA-key from key container", new NameValueCollection()
-				{
-					{"keyContainerName", _containerName},
-					{"useMachineContainer", "true"}
-				});
-
-			if (_keyFile != null)
+			provider.Initialize("RSA-key from key container", new NameValueCollection()
 			{
-				provider.ImportKey(_keyFile, true);
-				provider.Initialize("RSA-key from XML-file", new NameValueCollection());
-			}
+				{"keyContainerName", _containerName},
+				{"useMachineContainer", "true"}
+			});
 
 			XmlDocument doc = new XmlDocument();
 			doc.Load(_configFile);

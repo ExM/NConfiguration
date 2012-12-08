@@ -34,23 +34,7 @@ namespace RsaToolkit
 		}
 
 		[Test]
-		public void FromKeyFile()
-		{
-			File.WriteAllText("testConfig.xml", XmlConfigContent);
-
-			"create -f=testKey.xml".SuccessRun();
-
-			"encrypt -f=testKey.xml -c=testConfig.xml -s=MySecuredConnection -p=TestProvider".SuccessRun();
-
-			Assert.AreNotEqual(XmlConfigContent, File.ReadAllText("testConfig.xml"));
-
-			"decrypt -f=testKey.xml -c=testConfig.xml -s=MySecuredConnection".SuccessRun();
-
-			Assert.AreEqual(XmlConfigContent, File.ReadAllText("testConfig.xml"));
-		}
-
-		[Test]
-		public void FromContainer()
+		public void FromNewContainer()
 		{
 			File.WriteAllText("testConfig.xml", XmlConfigContent);
 
@@ -69,6 +53,6 @@ namespace RsaToolkit
 	<AdditionalConfig F='InUpDirectory' />
 	<MyExtConnection Server='localhost' Database='workDb' User='admin' Password='pass' />
 	<MySecuredConnection Server='localhost' Database='workDb' User='admin' Password='pass' />
-</configuration>").ToString();
+</configuration>".Replace('\'', '\"')).ToString();
 	}
 }
