@@ -39,6 +39,8 @@ namespace Configuration
 		[Test]
 		public void SecureLoad()
 		{
+			KeyManager.Create();
+
 			var providerLoader = new ProviderLoader();
 			var loader = new SettingsLoader();
 			var includer = new IncludeInXmlLoader();
@@ -65,6 +67,8 @@ namespace Configuration
 
 			Assert.AreEqual("Server=localhost;Database=workDb;User ID=admin;Password=pass;", settings.TryLoad<ConnectionConfig>("MyExtConnection").ConnectionString);
 			Assert.AreEqual("Server=localhost;Database=workDb;User ID=admin;Password=pass;", settings.TryLoad<ConnectionConfig>("MySecuredConnection").ConnectionString);
+
+			KeyManager.Delete();
 		}
 
 	}

@@ -88,7 +88,6 @@
       <Name>Configuration</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="Examples\AppDirectory\main.config">
       <SubType>Designer</SubType>
@@ -100,5 +99,8 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="testKey.xml" />
   </ItemGroup>
 </Project>
