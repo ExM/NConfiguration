@@ -43,6 +43,8 @@
     <Compile Include="Examples\ExampleCombineConfig.cs" />
     <Compile Include="Examples\ConnectionConfig.cs" />
     <Compile Include="Examples\IncludeSettingsTests.cs" />
+    <Compile Include="GenericView\XmlViewTests.cs" />
+    <Compile Include="GenericView\GenericMapperTests.cs" />
     <Compile Include="XmlDeserializerTests.cs" />
     <Compile Include="KeyManager.cs" />
     <Compile Include="MultiSettings\CombineConfig.cs" />

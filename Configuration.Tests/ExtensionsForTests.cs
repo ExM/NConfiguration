@@ -25,6 +25,11 @@ namespace Configuration
 			doc.LoadXml(xml);
 			return doc.DocumentElement;
 		}
+
+		public static XDocument ToXDocument(this string xml)
+		{
+			return XDocument.Parse(xml);
+		}
 	}
 }
 
