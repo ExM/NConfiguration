@@ -7,17 +7,19 @@ using System.Reflection;
 
 namespace Configuration.GenericView.Deserialization
 {
-	public class MapFunctionBuilder<T>
+	internal class MapFunctionBuilder<T>
 	{
 		private Type _resultType = typeof(T);
+		private GenericMapper _mapper;
 		private IGenericDeserializer _deserializer;
 		private ParameterExpression _pCfgNode = Expression.Parameter(typeof(ICfgNode));
 		private List<Expression> _bodyList = new List<Expression>();
 		private ParameterExpression _pResult;
 
-		public MapFunctionBuilder(IGenericDeserializer deserializer)
+		public MapFunctionBuilder(GenericMapper mapper, IGenericDeserializer deserializer)
 		{
 			_pResult = Expression.Parameter(_resultType);
+			_mapper = mapper;
 			_deserializer = deserializer;
 
 			SetConstructor();

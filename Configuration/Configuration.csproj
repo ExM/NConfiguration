@@ -39,7 +39,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GenericView\Deserialization\LoadDescription.cs" />
     <Compile Include="GenericView\Deserialization\LoadToolkit.cs" />
+    <Compile Include="GenericView\Deserialization\LoadType.cs" />
     <Compile Include="GenericView\IgnoreCaseEqualityComparer.cs" />
     <Compile Include="GenericView\XmlViewNode.cs" />
     <Compile Include="GenericView\XmlViewField.cs" />
