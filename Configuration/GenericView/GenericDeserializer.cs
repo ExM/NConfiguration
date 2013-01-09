@@ -11,8 +11,13 @@ namespace Configuration.GenericView
 		private GenericMapper _mapper = new GenericMapper();
 		private Dictionary<Type, object> _funcMap = new Dictionary<Type, object>();
 
-		public GenericDeserializer()
+		public GenericDeserializer() : this(new GenericMapper())
 		{
+		}
+
+		public GenericDeserializer(GenericMapper mapper)
+		{
+			_mapper = mapper;
 		}
 
 		public T Deserialize<T>(ICfgNode cfgNode)
@@ -23,12 +28,13 @@ namespace Configuration.GenericView
 		private Func<ICfgNode, T> GetFunction<T>()
 		{
 			object func;
-			if (_funcMap.TryGetValue(typeof(T), out func))
-				return (Func<ICfgNode, T>)func;
+			if (!_funcMap.TryGetValue(typeof(T), out func))
+			{
+				func = _mapper.CreateFunction(typeof (T), this);
+				_funcMap.Add(typeof (T), func);
+			}
 
-			var typedFunc = _mapper.CreateFunction<T>(this);
-			_funcMap.Add(typeof(T), typedFunc);
-			return typedFunc;
+			return (Func<ICfgNode, T>)func;
 		}
 	}
 }

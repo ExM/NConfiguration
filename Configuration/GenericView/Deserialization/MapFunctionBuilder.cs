@@ -7,39 +7,56 @@ using System.Reflection;
 
 namespace Configuration.GenericView.Deserialization
 {
-	internal class MapFunctionBuilder<T>
+	public class MapFunctionBuilder
 	{
-		private Type _resultType = typeof(T);
-		private GenericMapper _mapper;
+		private Type _targetType;
 		private IGenericDeserializer _deserializer;
 		private ParameterExpression _pCfgNode = Expression.Parameter(typeof(ICfgNode));
 		private List<Expression> _bodyList = new List<Expression>();
 		private ParameterExpression _pResult;
+		private FieldReaderCreator _frCreator;
 
-		public MapFunctionBuilder(GenericMapper mapper, IGenericDeserializer deserializer)
+		public MapFunctionBuilder(Type targetType, IGenericDeserializer deserializer, FieldReaderCreator frCreator)
 		{
-			_pResult = Expression.Parameter(_resultType);
-			_mapper = mapper;
+			_targetType = targetType;
+			_pResult = Expression.Parameter(_targetType);
 			_deserializer = deserializer;
+			_frCreator = frCreator;
 
 			SetConstructor();
 		}
 
+		public Type TargetType
+		{
+			get
+			{
+				return _targetType;
+			}
+		}
+
+		public Expression CfgNode
+		{
+			get
+			{
+				return _pCfgNode;
+			}
+		}
+
 		private void SetConstructor()
 		{
-			if (_resultType.IsValueType)
+			if (_targetType.IsValueType)
 				return;
 			
-			var ci = _resultType.GetConstructor(new Type[] { });
+			var ci = _targetType.GetConstructor(new Type[] { });
 			if (ci == null)
 				throw new NotImplementedException("default constructor not found");
 
 			_bodyList.Add(Expression.Assign(_pResult, Expression.New(ci)));
 		}
 
-		public Func<ICfgNode, T> Compile()
+		public object Compile()
 		{
-			foreach (var fi in _resultType.GetFields(BindingFlags.Instance | BindingFlags.Public))
+			foreach (var fi in _targetType.GetFields(BindingFlags.Instance | BindingFlags.Public))
 			{
 				var right = CreateLoader(fi.FieldType, fi.Name, fi.GetCustomAttributes(true));
 				if (right == null)
@@ -48,7 +65,7 @@ namespace Configuration.GenericView.Deserialization
 				_bodyList.Add(Expression.Assign(left, right));
 			}
 
-			foreach (var pi in _resultType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
+			foreach (var pi in _targetType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
 			{
 				if (!pi.CanWrite)
 					continue;
@@ -59,20 +76,16 @@ namespace Configuration.GenericView.Deserialization
 				_bodyList.Add(Expression.Assign(left, right));
 			}
 
-			_bodyList.Add(Expression.Label(Expression.Label(_resultType), _pResult));
+			_bodyList.Add(Expression.Label(Expression.Label(_targetType), _pResult));
 
-			Func<ICfgNode, T> loader = Expression
-				.Lambda<Func<ICfgNode, T>>(Expression.Block(new[] { _pResult }, _bodyList), _pCfgNode)
-				.Compile();
+			var delegateType = typeof (Func<,>).MakeGenericType(typeof (ICfgNode), _targetType);
 
-			return loader;
+			return Expression.Lambda(delegateType, Expression.Block(new[] { _pResult }, _bodyList), _pCfgNode).Compile();
 		}
 
-		private Expression CreateLoader(Type agrType, string name, object[] customAttributes)
+		private Expression CreateLoader(Type fieldType, string name, object[] customAttributes)
 		{
-			var right = Expression.Call(null, typeof(LoadToolkit).GetMethod("RequiredField").MakeGenericMethod(agrType), _pCfgNode, Expression.Constant(name));
-
-			return right;
+			return _frCreator(this, fieldType, name, customAttributes);
 		}
 	}
 }

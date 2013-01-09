@@ -28,14 +28,14 @@ namespace Configuration.GenericView.Deserialization
 		public static List<T> List<T>(IGenericDeserializer deserializer, ICfgNode node, string name)
 		{
 			return node.GetCollection(name)
-				.Select(i => deserializer.Deserialize<T>(i))
+				.Select(deserializer.Deserialize<T>)
 				.ToList();
 		}
 
 		public static T[] Array<T>(IGenericDeserializer deserializer, ICfgNode node, string name)
 		{
 			return node.GetCollection(name)
-				.Select(i => deserializer.Deserialize<T>(i))
+				.Select(deserializer.Deserialize<T>)
 				.ToArray();
 		}
 

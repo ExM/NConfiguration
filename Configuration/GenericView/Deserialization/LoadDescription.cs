@@ -74,6 +74,16 @@ namespace Configuration.GenericView.Deserialization
 			if (elemAttr != null && !string.IsNullOrWhiteSpace(elemAttr.ElementName))
 				SetName(elemAttr.ElementName, throwCollision);
 
+			if(PopAttribute<XmlArrayAttribute>(customAttributes) != null)
+				throw new NotImplementedException("XmlArrayAttribute not implemented");
+
+			if(PopAttribute<XmlArrayItemAttribute>(customAttributes) != null)
+				throw new NotImplementedException("XmlArrayItemAttribute not implemented");
+
+			if(PopAttribute<XmlTextAttribute>(customAttributes) != null)
+				throw new NotImplementedException("XmlTextAttribute not implemented");
+
+			
 
 			//customAttributes.First
 		}
