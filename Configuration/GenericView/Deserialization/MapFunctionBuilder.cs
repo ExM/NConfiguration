@@ -34,6 +34,14 @@ namespace Configuration.GenericView.Deserialization
 			}
 		}
 
+		public Expression Deserializer
+		{
+			get
+			{
+				return Expression.Constant(_deserializer);
+			}
+		}
+
 		public Expression CfgNode
 		{
 			get

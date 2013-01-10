@@ -1,0 +1,49 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+<# string[] types = new []{
+	"Boolean",
+	"Byte",
+	"SByte",
+	"Char",
+	"Int16",
+	"Int32",
+	"Int64",
+	"UInt16",
+	"UInt32",
+	"UInt64",
+	"Single",
+	"Double",
+	"TimeSpan",
+	"DateTime"
+};#>
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+
+namespace Configuration.GenericView
+{
+	public partial class XmlViewConverter
+	{
+		private void InitMap()
+		{
+			_map.Add(typeof(string), (Func<string, string>)ToString);
+			_map.Add(typeof(byte[]), (Func<string, byte[]>)ToByteArray);
+<#foreach(var type in types){#>
+			_map.Add(typeof(<#= type#>), (Func<string, <#= type#>>)To<#= type#>);
+			_map.Add(typeof(<#= type#>?), (Func<string, <#= type#>?>)ToN<#= type#>);
+<#}#>
+		}
+<#foreach(var type in types){#>
+		
+		public <#= type#>? ToN<#= type#>(string text)
+		{
+			if (string.IsNullOrWhiteSpace(text))
+				return null;
+
+			return To<#= type#>(text);
+		}
+<#}#>
+		
+	}
+}
+

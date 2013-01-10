@@ -39,17 +39,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="GenericView\Deserialization\LoadDescription.cs" />
-    <Compile Include="GenericView\Deserialization\LoadToolkit.cs" />
-    <Compile Include="GenericView\Deserialization\LoadType.cs" />
     <Compile Include="GenericView\IgnoreCaseEqualityComparer.cs" />
+    <Compile Include="GenericView\XmlViewConverter.Methods.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>XmlViewConverter.Methods.tt</DependentUpon>
+    </Compile>
     <Compile Include="GenericView\XmlViewNode.cs" />
     <Compile Include="GenericView\XmlViewField.cs" />
     <Compile Include="GenericView\IGenericDeserializer.cs" />
     <Compile Include="GenericView\Deserialization\GenericMapper.cs" />
     <Compile Include="GenericView\Deserialization\MapFunctionBuilder.cs" />
     <Compile Include="GenericView\GenericDeserializer.cs" />
-    <Compile Include="GenericView\XmlViewSettings.cs" />
+    <Compile Include="GenericView\XmlViewConverter.cs" />
     <Compile Include="GenericView\ICfgNode.cs" />
     <Compile Include="GenericView\XmlView.cs" />
     <Compile Include="IRelativePathOwner.cs" />
@@ -85,5 +87,13 @@
     <Compile Include="Xml\Protected\IProviderCollection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="GenericView\XmlViewConverter.Methods.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>XmlViewConverter.Methods.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
 </Project>

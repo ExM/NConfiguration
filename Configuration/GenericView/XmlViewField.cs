@@ -7,11 +7,11 @@ namespace Configuration.GenericView
 	internal class XmlViewField: ICfgNode
 	{
 		private string _text;
-		private XmlViewSettings _settings;
+		private XmlViewConverter _converter;
 
-		public XmlViewField(XmlViewSettings settings, string text)
+		public XmlViewField(XmlViewConverter converter, string text)
 		{
-			_settings = settings;
+			_converter = converter;
 			_text = text;
 		}
 
@@ -27,7 +27,7 @@ namespace Configuration.GenericView
 
 		public T As<T>()
 		{
-			return _settings.Convert<T>(_text);
+			return _converter.Convert<T>(_text);
 		}
 
 		public IEnumerable<KeyValuePair<string, ICfgNode>> GetNodes()

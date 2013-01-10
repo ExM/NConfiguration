@@ -9,7 +9,7 @@ namespace Configuration.GenericView
 	{
 		public static ICfgNode Create(XDocument doc)
 		{
-			return new XmlViewNode(new XmlViewSettings(), doc.Root);
+			return new XmlViewNode(new XmlViewConverter(), doc.Root);
 		}
 	}
 }
