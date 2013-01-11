@@ -19,6 +19,26 @@ namespace Configuration.GenericView
 			_ci = ci;
 			InitMap();
 		}
+
+		public void SetConvert<T>(Func<string, T> conv)
+		{
+			_map[typeof(T)] = conv;
+		}
+
+		public T Convert<T>(string text)
+		{
+			var type = typeof(T);
+			if (type.IsEnum)
+				return (T)Enum.Parse(type, text, true);
+
+			object conv;
+			if (!_map.TryGetValue(type, out conv))
+				throw new ApplicationException(string.Format("unknown type: {0}", type.FullName));
+
+			var func = (Func<string, T>)conv;
+			
+			return func(text);
+		}
 		
 		public Byte[] ToByteArray(string text)
 		{
@@ -124,22 +144,6 @@ namespace Configuration.GenericView
 				return result;
 
 			throw new FormatException(string.Format("can not convert '{0}' to a boolean type", text));
-		}
-
-		public void SetConvert<T>(Func<string, T> conv)
-		{
-			_map[typeof(T)] = conv;
-		}
-
-		public T Convert<T>(string text)
-		{
-			object conv;
-			if (!_map.TryGetValue(typeof(T), out conv))
-				throw new ApplicationException(string.Format("unknown type: {0}", typeof(T).FullName));
-
-			var func = (Func<string, T>)conv;
-
-			return func(text);
 		}
 	}
 }

@@ -39,6 +39,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GenericView\EnumParsing\IEnumParser_1.cs" />
+    <Compile Include="GenericView\EnumParsing\EnumHelper_1.cs" />
+    <Compile Include="GenericView\EnumParsing\EnumParsers.cs">
+      <DependentUpon>EnumParsers.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="GenericView\IgnoreCaseEqualityComparer.cs" />
     <Compile Include="GenericView\XmlViewConverter.Methods.cs">
       <AutoGen>True</AutoGen>
@@ -88,6 +95,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <None Include="GenericView\EnumParsing\EnumParsers.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EnumParsers.cs</LastGenOutput>
+    </None>
     <None Include="GenericView\XmlViewConverter.Methods.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>XmlViewConverter.Methods.cs</LastGenOutput>
@@ -96,4 +107,5 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
 </Project>
