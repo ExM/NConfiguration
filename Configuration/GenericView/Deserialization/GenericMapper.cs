@@ -63,7 +63,7 @@ namespace Configuration.GenericView.Deserialization
 		public virtual object CreateFunction(Type targetType, IGenericDeserializer deserializer)
 		{
 			if(IsPrimitive(targetType))
-				throw new ArgumentOutOfRangeException(string.Format("type '{0}' is primitive", targetType.FullName));
+				return CreatePrimitiveTargetReader(targetType);
 
 			if(targetType.IsArray ||
 				IsCollection(targetType))
@@ -74,11 +74,18 @@ namespace Configuration.GenericView.Deserialization
 			return builder.Compile();
 		}
 
+		private object CreatePrimitiveTargetReader(Type type)
+		{
+			var mi = typeof(GenericMapper).GetMethod("PrimitiveTarget").MakeGenericMethod(type);
+			var funcType = typeof(Func<,>).MakeGenericType(typeof(ICfgNode),type);
+			return Delegate.CreateDelegate(funcType, mi);
+		}
+
 		public Expression NativeNameFieldReader(MapFunctionBuilder builder, Type fieldType, string name, object[] customAttributes)
 		{
 			if(IsPrimitive(fieldType))
 			{
-				var methodName = (fieldType.IsByRef || IsNullable(fieldType)) ? "OptionalPrimitiveField" : "RequiredPrimitiveField";
+				var methodName = (!fieldType.IsValueType || IsNullable(fieldType)) ? "OptionalPrimitiveField" : "RequiredPrimitiveField";
 				var mi = typeof(GenericMapper).GetMethod(methodName).MakeGenericMethod(fieldType);
 				return Expression.Call(null, mi, Expression.Constant(name), builder.CfgNode);
 			}
@@ -98,7 +105,7 @@ namespace Configuration.GenericView.Deserialization
 			}
 
 			{
-				var methodName = (fieldType.IsByRef || IsNullable(fieldType)) ? "OptionalComplexField" : "RequiredComplexField";
+				var methodName = (!fieldType.IsValueType || IsNullable(fieldType)) ? "OptionalComplexField" : "RequiredComplexField";
 				var mi = typeof (GenericMapper).GetMethod(methodName).MakeGenericMethod(fieldType);
 				return Expression.Call(null, mi, Expression.Constant(name), builder.CfgNode, builder.Deserializer);
 			}
@@ -127,6 +134,11 @@ namespace Configuration.GenericView.Deserialization
 			// XmlTextAttribute
 			// XmlIgnoreAttribute
 			return false;
+		}
+
+		public static T PrimitiveTarget<T>(ICfgNode node)
+		{
+			return node.As<T>();
 		}
 
 		public static T OptionalPrimitiveField<T>(string name, ICfgNode node)
@@ -174,6 +186,8 @@ namespace Configuration.GenericView.Deserialization
 
 		public static T[] Array<T>(string name, ICfgNode node, IGenericDeserializer deserializer)
 		{
+			Console.WriteLine("Array {0} {1}", typeof(T), name);
+
 			return node.GetCollection(name)
 				.Select(deserializer.Deserialize<T>)
 				.ToArray();

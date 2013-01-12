@@ -11,7 +11,7 @@ namespace Configuration.GenericView
 	[TestFixture]
 	public class GenericDeserializerTests
 	{
-		public struct TestClass
+		public class PrimitiveTypeCollection
 		{
 			public string TextField;
 			public string TextProp {get; set;}
@@ -47,7 +47,7 @@ namespace Configuration.GenericView
 ><Dump></Dump></Config>".ToXDocument());
 			var d = new GenericDeserializer();
 
-			var tc = d.Deserialize<TestClass>(root);
+			var tc = d.Deserialize<PrimitiveTypeCollection>(root);
 
 			Assert.AreEqual("val1", tc.TextField);
 			Assert.AreEqual("val2", tc.TextProp);
@@ -63,5 +63,53 @@ namespace Configuration.GenericView
 			Assert.AreEqual(0, tc.Dump.Length);
 			Assert.AreEqual(TestEn.One, tc.EnProp);
 		}
+
+		public class ComplexTest
+		{
+			public int[] Array { get; set; }
+			public ICollection<sbyte> Coll { get; set; }
+			public ComplexTest Inner { get; set; }
+			public List<ComplexTest> InnerList { get; set; }
+		}
+
+		[Test]
+		public void ParseEmptyCollections()
+		{
+			var root = XmlView.Create(
+@"<Root></Root>".ToXDocument());
+			var d = new GenericDeserializer();
+
+			var tc = d.Deserialize<ComplexTest>(root);
+
+			CollectionAssert.IsEmpty(tc.Array);
+			CollectionAssert.IsEmpty(tc.Coll);
+			Assert.IsNull(tc.Inner);
+			CollectionAssert.IsEmpty(tc.InnerList);
+		}
+
+		[Test]
+		public void ParseArray1()
+		{
+			var root = XmlView.Create(
+@"<Root Array='123'></Root>".ToXDocument());
+			var d = new GenericDeserializer();
+
+			var tc = d.Deserialize<ComplexTest>(root);
+
+			CollectionAssert.AreEqual(new int[] { 123 }, tc.Array);
+		}
+
+		[Test]
+		public void ParseArray2()
+		{
+			var root = XmlView.Create(
+@"<Root Array='123'><Array>345</Array></Root>".ToXDocument());
+			var d = new GenericDeserializer();
+
+			var tc = d.Deserialize<ComplexTest>(root);
+
+			CollectionAssert.AreEqual(new int[] { 123, 345 }, tc.Array);
+		}
+
 	}
 }
