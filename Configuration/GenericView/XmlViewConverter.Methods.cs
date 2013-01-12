@@ -6,39 +6,72 @@ namespace Configuration.GenericView
 {
 	public partial class XmlViewConverter
 	{
-		private void InitMap()
+		private object CreateByPrimitiveType(Type type)
 		{
-			_map.Add(typeof(string), (Func<string, string>)ToString);
-			_map.Add(typeof(byte[]), (Func<string, byte[]>)ToByteArray);
-			_map.Add(typeof(Boolean), (Func<string, Boolean>)ToBoolean);
-			_map.Add(typeof(Boolean?), (Func<string, Boolean?>)ToNBoolean);
-			_map.Add(typeof(Byte), (Func<string, Byte>)ToByte);
-			_map.Add(typeof(Byte?), (Func<string, Byte?>)ToNByte);
-			_map.Add(typeof(SByte), (Func<string, SByte>)ToSByte);
-			_map.Add(typeof(SByte?), (Func<string, SByte?>)ToNSByte);
-			_map.Add(typeof(Char), (Func<string, Char>)ToChar);
-			_map.Add(typeof(Char?), (Func<string, Char?>)ToNChar);
-			_map.Add(typeof(Int16), (Func<string, Int16>)ToInt16);
-			_map.Add(typeof(Int16?), (Func<string, Int16?>)ToNInt16);
-			_map.Add(typeof(Int32), (Func<string, Int32>)ToInt32);
-			_map.Add(typeof(Int32?), (Func<string, Int32?>)ToNInt32);
-			_map.Add(typeof(Int64), (Func<string, Int64>)ToInt64);
-			_map.Add(typeof(Int64?), (Func<string, Int64?>)ToNInt64);
-			_map.Add(typeof(UInt16), (Func<string, UInt16>)ToUInt16);
-			_map.Add(typeof(UInt16?), (Func<string, UInt16?>)ToNUInt16);
-			_map.Add(typeof(UInt32), (Func<string, UInt32>)ToUInt32);
-			_map.Add(typeof(UInt32?), (Func<string, UInt32?>)ToNUInt32);
-			_map.Add(typeof(UInt64), (Func<string, UInt64>)ToUInt64);
-			_map.Add(typeof(UInt64?), (Func<string, UInt64?>)ToNUInt64);
-			_map.Add(typeof(Single), (Func<string, Single>)ToSingle);
-			_map.Add(typeof(Single?), (Func<string, Single?>)ToNSingle);
-			_map.Add(typeof(Double), (Func<string, Double>)ToDouble);
-			_map.Add(typeof(Double?), (Func<string, Double?>)ToNDouble);
-			_map.Add(typeof(TimeSpan), (Func<string, TimeSpan>)ToTimeSpan);
-			_map.Add(typeof(TimeSpan?), (Func<string, TimeSpan?>)ToNTimeSpan);
-			_map.Add(typeof(DateTime), (Func<string, DateTime>)ToDateTime);
-			_map.Add(typeof(DateTime?), (Func<string, DateTime?>)ToNDateTime);
+			if(type == typeof(string))
+				return (Func<string, string>)ToString;
+			else if(type == typeof(byte[]))
+				return (Func<string, byte[]>)ToByteArray;
+			else if(type == typeof(Boolean))
+				return (Func<string, Boolean>)ToBoolean;
+			else if(type == typeof(Boolean?))
+				return (Func<string, Boolean?>)ToNBoolean;
+			else if(type == typeof(Byte))
+				return (Func<string, Byte>)ToByte;
+			else if(type == typeof(Byte?))
+				return (Func<string, Byte?>)ToNByte;
+			else if(type == typeof(SByte))
+				return (Func<string, SByte>)ToSByte;
+			else if(type == typeof(SByte?))
+				return (Func<string, SByte?>)ToNSByte;
+			else if(type == typeof(Char))
+				return (Func<string, Char>)ToChar;
+			else if(type == typeof(Char?))
+				return (Func<string, Char?>)ToNChar;
+			else if(type == typeof(Int16))
+				return (Func<string, Int16>)ToInt16;
+			else if(type == typeof(Int16?))
+				return (Func<string, Int16?>)ToNInt16;
+			else if(type == typeof(Int32))
+				return (Func<string, Int32>)ToInt32;
+			else if(type == typeof(Int32?))
+				return (Func<string, Int32?>)ToNInt32;
+			else if(type == typeof(Int64))
+				return (Func<string, Int64>)ToInt64;
+			else if(type == typeof(Int64?))
+				return (Func<string, Int64?>)ToNInt64;
+			else if(type == typeof(UInt16))
+				return (Func<string, UInt16>)ToUInt16;
+			else if(type == typeof(UInt16?))
+				return (Func<string, UInt16?>)ToNUInt16;
+			else if(type == typeof(UInt32))
+				return (Func<string, UInt32>)ToUInt32;
+			else if(type == typeof(UInt32?))
+				return (Func<string, UInt32?>)ToNUInt32;
+			else if(type == typeof(UInt64))
+				return (Func<string, UInt64>)ToUInt64;
+			else if(type == typeof(UInt64?))
+				return (Func<string, UInt64?>)ToNUInt64;
+			else if(type == typeof(Single))
+				return (Func<string, Single>)ToSingle;
+			else if(type == typeof(Single?))
+				return (Func<string, Single?>)ToNSingle;
+			else if(type == typeof(Double))
+				return (Func<string, Double>)ToDouble;
+			else if(type == typeof(Double?))
+				return (Func<string, Double?>)ToNDouble;
+			else if(type == typeof(TimeSpan))
+				return (Func<string, TimeSpan>)ToTimeSpan;
+			else if(type == typeof(TimeSpan?))
+				return (Func<string, TimeSpan?>)ToNTimeSpan;
+			else if(type == typeof(DateTime))
+				return (Func<string, DateTime>)ToDateTime;
+			else if(type == typeof(DateTime?))
+				return (Func<string, DateTime?>)ToNDateTime;
+
+			throw new ApplicationException(string.Format("unexpected type: {0}", type.FullName));
 		}
+
 		
 		public Boolean? ToNBoolean(string text)
 		{

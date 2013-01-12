@@ -15,13 +15,13 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count);
+			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
 			_numMap = new Dictionary<Byte, T>(count);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
 			{
 				T exist;
-				string strkey = item.ToString().ToLowerInvariant();
+				string strkey = item.ToString();
 				if (!_nameMap.TryGetValue(strkey, out exist))
 					_nameMap.Add(strkey, item);
 
@@ -31,10 +31,10 @@ namespace Configuration.GenericView
 			}
 		}
 
-		public T ParseOne(string text)
+		public T Parse(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return exist;
 
 			Byte num;
@@ -47,11 +47,31 @@ namespace Configuration.GenericView
 
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
+	}
 
-		private T ParseNoCheck(string text)
+	internal class ByteFlagEnumParser<T>: IEnumParser<T> where T: struct
+	{
+		private readonly Dictionary<string, T> _nameMap;
+
+		public ByteFlagEnumParser()
+		{
+			int count = Enum.GetValues(typeof(T)).Length;
+
+			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+
+			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
+			{
+				T exist;
+				string strkey = item.ToString();
+				if (!_nameMap.TryGetValue(strkey, out exist))
+					_nameMap.Add(strkey, item);
+			}
+		}
+		
+		private T ParseOne(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return exist;
 
 			Byte num;
@@ -67,7 +87,7 @@ namespace Configuration.GenericView
 		private Byte ParseToNumber(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return (Byte)(ValueType)exist;
 
 			Byte num;
@@ -80,7 +100,7 @@ namespace Configuration.GenericView
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
 
-		public T ParseFlags(string text)
+		public T Parse(string text)
 		{
 			string[] items = text.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -88,7 +108,7 @@ namespace Configuration.GenericView
 				return default(T);
 
 			if (items.Length == 1)
-				return ParseNoCheck(items[0]);
+				return ParseOne(items[0]);
 
 			Byte result = 0;
 
@@ -108,13 +128,13 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count);
+			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
 			_numMap = new Dictionary<SByte, T>(count);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
 			{
 				T exist;
-				string strkey = item.ToString().ToLowerInvariant();
+				string strkey = item.ToString();
 				if (!_nameMap.TryGetValue(strkey, out exist))
 					_nameMap.Add(strkey, item);
 
@@ -124,10 +144,10 @@ namespace Configuration.GenericView
 			}
 		}
 
-		public T ParseOne(string text)
+		public T Parse(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return exist;
 
 			SByte num;
@@ -140,11 +160,31 @@ namespace Configuration.GenericView
 
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
+	}
 
-		private T ParseNoCheck(string text)
+	internal class SByteFlagEnumParser<T>: IEnumParser<T> where T: struct
+	{
+		private readonly Dictionary<string, T> _nameMap;
+
+		public SByteFlagEnumParser()
+		{
+			int count = Enum.GetValues(typeof(T)).Length;
+
+			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+
+			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
+			{
+				T exist;
+				string strkey = item.ToString();
+				if (!_nameMap.TryGetValue(strkey, out exist))
+					_nameMap.Add(strkey, item);
+			}
+		}
+		
+		private T ParseOne(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return exist;
 
 			SByte num;
@@ -160,7 +200,7 @@ namespace Configuration.GenericView
 		private SByte ParseToNumber(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return (SByte)(ValueType)exist;
 
 			SByte num;
@@ -173,7 +213,7 @@ namespace Configuration.GenericView
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
 
-		public T ParseFlags(string text)
+		public T Parse(string text)
 		{
 			string[] items = text.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -181,7 +221,7 @@ namespace Configuration.GenericView
 				return default(T);
 
 			if (items.Length == 1)
-				return ParseNoCheck(items[0]);
+				return ParseOne(items[0]);
 
 			SByte result = 0;
 
@@ -201,13 +241,13 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count);
+			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
 			_numMap = new Dictionary<Int16, T>(count);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
 			{
 				T exist;
-				string strkey = item.ToString().ToLowerInvariant();
+				string strkey = item.ToString();
 				if (!_nameMap.TryGetValue(strkey, out exist))
 					_nameMap.Add(strkey, item);
 
@@ -217,10 +257,10 @@ namespace Configuration.GenericView
 			}
 		}
 
-		public T ParseOne(string text)
+		public T Parse(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return exist;
 
 			Int16 num;
@@ -233,11 +273,31 @@ namespace Configuration.GenericView
 
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
+	}
 
-		private T ParseNoCheck(string text)
+	internal class Int16FlagEnumParser<T>: IEnumParser<T> where T: struct
+	{
+		private readonly Dictionary<string, T> _nameMap;
+
+		public Int16FlagEnumParser()
+		{
+			int count = Enum.GetValues(typeof(T)).Length;
+
+			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+
+			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
+			{
+				T exist;
+				string strkey = item.ToString();
+				if (!_nameMap.TryGetValue(strkey, out exist))
+					_nameMap.Add(strkey, item);
+			}
+		}
+		
+		private T ParseOne(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return exist;
 
 			Int16 num;
@@ -253,7 +313,7 @@ namespace Configuration.GenericView
 		private Int16 ParseToNumber(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return (Int16)(ValueType)exist;
 
 			Int16 num;
@@ -266,7 +326,7 @@ namespace Configuration.GenericView
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
 
-		public T ParseFlags(string text)
+		public T Parse(string text)
 		{
 			string[] items = text.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -274,7 +334,7 @@ namespace Configuration.GenericView
 				return default(T);
 
 			if (items.Length == 1)
-				return ParseNoCheck(items[0]);
+				return ParseOne(items[0]);
 
 			Int16 result = 0;
 
@@ -294,13 +354,13 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count);
+			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
 			_numMap = new Dictionary<Int32, T>(count);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
 			{
 				T exist;
-				string strkey = item.ToString().ToLowerInvariant();
+				string strkey = item.ToString();
 				if (!_nameMap.TryGetValue(strkey, out exist))
 					_nameMap.Add(strkey, item);
 
@@ -310,10 +370,10 @@ namespace Configuration.GenericView
 			}
 		}
 
-		public T ParseOne(string text)
+		public T Parse(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return exist;
 
 			Int32 num;
@@ -326,11 +386,31 @@ namespace Configuration.GenericView
 
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
+	}
 
-		private T ParseNoCheck(string text)
+	internal class Int32FlagEnumParser<T>: IEnumParser<T> where T: struct
+	{
+		private readonly Dictionary<string, T> _nameMap;
+
+		public Int32FlagEnumParser()
+		{
+			int count = Enum.GetValues(typeof(T)).Length;
+
+			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+
+			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
+			{
+				T exist;
+				string strkey = item.ToString();
+				if (!_nameMap.TryGetValue(strkey, out exist))
+					_nameMap.Add(strkey, item);
+			}
+		}
+		
+		private T ParseOne(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return exist;
 
 			Int32 num;
@@ -346,7 +426,7 @@ namespace Configuration.GenericView
 		private Int32 ParseToNumber(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return (Int32)(ValueType)exist;
 
 			Int32 num;
@@ -359,7 +439,7 @@ namespace Configuration.GenericView
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
 
-		public T ParseFlags(string text)
+		public T Parse(string text)
 		{
 			string[] items = text.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -367,7 +447,7 @@ namespace Configuration.GenericView
 				return default(T);
 
 			if (items.Length == 1)
-				return ParseNoCheck(items[0]);
+				return ParseOne(items[0]);
 
 			Int32 result = 0;
 
@@ -387,13 +467,13 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count);
+			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
 			_numMap = new Dictionary<Int64, T>(count);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
 			{
 				T exist;
-				string strkey = item.ToString().ToLowerInvariant();
+				string strkey = item.ToString();
 				if (!_nameMap.TryGetValue(strkey, out exist))
 					_nameMap.Add(strkey, item);
 
@@ -403,10 +483,10 @@ namespace Configuration.GenericView
 			}
 		}
 
-		public T ParseOne(string text)
+		public T Parse(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return exist;
 
 			Int64 num;
@@ -419,11 +499,31 @@ namespace Configuration.GenericView
 
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
+	}
 
-		private T ParseNoCheck(string text)
+	internal class Int64FlagEnumParser<T>: IEnumParser<T> where T: struct
+	{
+		private readonly Dictionary<string, T> _nameMap;
+
+		public Int64FlagEnumParser()
+		{
+			int count = Enum.GetValues(typeof(T)).Length;
+
+			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+
+			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
+			{
+				T exist;
+				string strkey = item.ToString();
+				if (!_nameMap.TryGetValue(strkey, out exist))
+					_nameMap.Add(strkey, item);
+			}
+		}
+		
+		private T ParseOne(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return exist;
 
 			Int64 num;
@@ -439,7 +539,7 @@ namespace Configuration.GenericView
 		private Int64 ParseToNumber(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return (Int64)(ValueType)exist;
 
 			Int64 num;
@@ -452,7 +552,7 @@ namespace Configuration.GenericView
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
 
-		public T ParseFlags(string text)
+		public T Parse(string text)
 		{
 			string[] items = text.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -460,7 +560,7 @@ namespace Configuration.GenericView
 				return default(T);
 
 			if (items.Length == 1)
-				return ParseNoCheck(items[0]);
+				return ParseOne(items[0]);
 
 			Int64 result = 0;
 
@@ -480,13 +580,13 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count);
+			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
 			_numMap = new Dictionary<UInt16, T>(count);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
 			{
 				T exist;
-				string strkey = item.ToString().ToLowerInvariant();
+				string strkey = item.ToString();
 				if (!_nameMap.TryGetValue(strkey, out exist))
 					_nameMap.Add(strkey, item);
 
@@ -496,10 +596,10 @@ namespace Configuration.GenericView
 			}
 		}
 
-		public T ParseOne(string text)
+		public T Parse(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return exist;
 
 			UInt16 num;
@@ -512,11 +612,31 @@ namespace Configuration.GenericView
 
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
+	}
 
-		private T ParseNoCheck(string text)
+	internal class UInt16FlagEnumParser<T>: IEnumParser<T> where T: struct
+	{
+		private readonly Dictionary<string, T> _nameMap;
+
+		public UInt16FlagEnumParser()
+		{
+			int count = Enum.GetValues(typeof(T)).Length;
+
+			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+
+			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
+			{
+				T exist;
+				string strkey = item.ToString();
+				if (!_nameMap.TryGetValue(strkey, out exist))
+					_nameMap.Add(strkey, item);
+			}
+		}
+		
+		private T ParseOne(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return exist;
 
 			UInt16 num;
@@ -532,7 +652,7 @@ namespace Configuration.GenericView
 		private UInt16 ParseToNumber(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return (UInt16)(ValueType)exist;
 
 			UInt16 num;
@@ -545,7 +665,7 @@ namespace Configuration.GenericView
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
 
-		public T ParseFlags(string text)
+		public T Parse(string text)
 		{
 			string[] items = text.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -553,7 +673,7 @@ namespace Configuration.GenericView
 				return default(T);
 
 			if (items.Length == 1)
-				return ParseNoCheck(items[0]);
+				return ParseOne(items[0]);
 
 			UInt16 result = 0;
 
@@ -573,13 +693,13 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count);
+			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
 			_numMap = new Dictionary<UInt32, T>(count);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
 			{
 				T exist;
-				string strkey = item.ToString().ToLowerInvariant();
+				string strkey = item.ToString();
 				if (!_nameMap.TryGetValue(strkey, out exist))
 					_nameMap.Add(strkey, item);
 
@@ -589,10 +709,10 @@ namespace Configuration.GenericView
 			}
 		}
 
-		public T ParseOne(string text)
+		public T Parse(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return exist;
 
 			UInt32 num;
@@ -605,11 +725,31 @@ namespace Configuration.GenericView
 
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
+	}
 
-		private T ParseNoCheck(string text)
+	internal class UInt32FlagEnumParser<T>: IEnumParser<T> where T: struct
+	{
+		private readonly Dictionary<string, T> _nameMap;
+
+		public UInt32FlagEnumParser()
+		{
+			int count = Enum.GetValues(typeof(T)).Length;
+
+			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+
+			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
+			{
+				T exist;
+				string strkey = item.ToString();
+				if (!_nameMap.TryGetValue(strkey, out exist))
+					_nameMap.Add(strkey, item);
+			}
+		}
+		
+		private T ParseOne(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return exist;
 
 			UInt32 num;
@@ -625,7 +765,7 @@ namespace Configuration.GenericView
 		private UInt32 ParseToNumber(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return (UInt32)(ValueType)exist;
 
 			UInt32 num;
@@ -638,7 +778,7 @@ namespace Configuration.GenericView
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
 
-		public T ParseFlags(string text)
+		public T Parse(string text)
 		{
 			string[] items = text.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -646,7 +786,7 @@ namespace Configuration.GenericView
 				return default(T);
 
 			if (items.Length == 1)
-				return ParseNoCheck(items[0]);
+				return ParseOne(items[0]);
 
 			UInt32 result = 0;
 
@@ -666,13 +806,13 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count);
+			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
 			_numMap = new Dictionary<UInt64, T>(count);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
 			{
 				T exist;
-				string strkey = item.ToString().ToLowerInvariant();
+				string strkey = item.ToString();
 				if (!_nameMap.TryGetValue(strkey, out exist))
 					_nameMap.Add(strkey, item);
 
@@ -682,10 +822,10 @@ namespace Configuration.GenericView
 			}
 		}
 
-		public T ParseOne(string text)
+		public T Parse(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return exist;
 
 			UInt64 num;
@@ -698,11 +838,31 @@ namespace Configuration.GenericView
 
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
+	}
 
-		private T ParseNoCheck(string text)
+	internal class UInt64FlagEnumParser<T>: IEnumParser<T> where T: struct
+	{
+		private readonly Dictionary<string, T> _nameMap;
+
+		public UInt64FlagEnumParser()
+		{
+			int count = Enum.GetValues(typeof(T)).Length;
+
+			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+
+			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
+			{
+				T exist;
+				string strkey = item.ToString();
+				if (!_nameMap.TryGetValue(strkey, out exist))
+					_nameMap.Add(strkey, item);
+			}
+		}
+		
+		private T ParseOne(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return exist;
 
 			UInt64 num;
@@ -718,7 +878,7 @@ namespace Configuration.GenericView
 		private UInt64 ParseToNumber(string text)
 		{
 			T exist;
-			if (_nameMap.TryGetValue(text.ToLowerInvariant(), out exist))
+			if (_nameMap.TryGetValue(text, out exist))
 				return (UInt64)(ValueType)exist;
 
 			UInt64 num;
@@ -731,7 +891,7 @@ namespace Configuration.GenericView
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
 
-		public T ParseFlags(string text)
+		public T Parse(string text)
 		{
 			string[] items = text.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -739,7 +899,7 @@ namespace Configuration.GenericView
 				return default(T);
 
 			if (items.Length == 1)
-				return ParseNoCheck(items[0]);
+				return ParseOne(items[0]);
 
 			UInt64 result = 0;
 

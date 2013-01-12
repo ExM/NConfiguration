@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Reflection;
 
 namespace Configuration.GenericView
 {
 	public partial class XmlViewConverter
 	{
 		private readonly CultureInfo _ci;
-		private readonly Dictionary<Type, object> _map = new Dictionary<Type, object>();
+		private readonly Dictionary<Type, object> _funcMap = new Dictionary<Type, object>();
 
 		public XmlViewConverter()
 			: this(CultureInfo.InvariantCulture)
@@ -17,27 +18,40 @@ namespace Configuration.GenericView
 		public XmlViewConverter(CultureInfo ci)
 		{
 			_ci = ci;
-			InitMap();
 		}
 
 		public void SetConvert<T>(Func<string, T> conv)
 		{
-			_map[typeof(T)] = conv;
+			_funcMap[typeof(T)] = conv;
 		}
 
 		public T Convert<T>(string text)
 		{
-			var type = typeof(T);
+			return GetFunction<T>()(text);
+		}
+
+		private Func<string, T> GetFunction<T>()
+		{
+			object func;
+			if (!_funcMap.TryGetValue(typeof(T), out func))
+			{
+				func = CreateFunction(typeof(T));
+				_funcMap.Add(typeof(T), func);
+			}
+
+			return (Func<string, T>)func;
+		}
+
+		private object CreateFunction(Type type)
+		{
 			if (type.IsEnum)
-				return (T)Enum.Parse(type, text, true);
+			{
+				var mi = typeof(EnumHelper<>).MakeGenericType(type).GetMethod("Parse", BindingFlags.Public | BindingFlags.Static);
+				var funcType = typeof(Func<,>).MakeGenericType(typeof(string), type);
+				return Delegate.CreateDelegate(funcType, mi);
+			}
 
-			object conv;
-			if (!_map.TryGetValue(type, out conv))
-				throw new ApplicationException(string.Format("unknown type: {0}", type.FullName));
-
-			var func = (Func<string, T>)conv;
-			
-			return func(text);
+			return CreateByPrimitiveType(type);
 		}
 		
 		public Byte[] ToByteArray(string text)

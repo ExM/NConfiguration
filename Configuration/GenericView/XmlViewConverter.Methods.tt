@@ -24,15 +24,22 @@ namespace Configuration.GenericView
 {
 	public partial class XmlViewConverter
 	{
-		private void InitMap()
+		private object CreateByPrimitiveType(Type type)
 		{
-			_map.Add(typeof(string), (Func<string, string>)ToString);
-			_map.Add(typeof(byte[]), (Func<string, byte[]>)ToByteArray);
+			if(type == typeof(string))
+				return (Func<string, string>)ToString;
+			else if(type == typeof(byte[]))
+				return (Func<string, byte[]>)ToByteArray;
 <#foreach(var type in types){#>
-			_map.Add(typeof(<#= type#>), (Func<string, <#= type#>>)To<#= type#>);
-			_map.Add(typeof(<#= type#>?), (Func<string, <#= type#>?>)ToN<#= type#>);
+			else if(type == typeof(<#= type#>))
+				return (Func<string, <#= type#>>)To<#= type#>;
+			else if(type == typeof(<#= type#>?))
+				return (Func<string, <#= type#>?>)ToN<#= type#>;
 <#}#>
+
+			throw new ApplicationException(string.Format("unexpected type: {0}", type.FullName));
 		}
+
 <#foreach(var type in types){#>
 		
 		public <#= type#>? ToN<#= type#>(string text)
