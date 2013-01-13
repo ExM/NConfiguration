@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 namespace Configuration.GenericView.Deserialization
 {
@@ -15,20 +17,15 @@ namespace Configuration.GenericView.Deserialization
 
 		public GenericMapper()
 		{
-			PrimitiveTypes = InitPrimitiveTypes(
-				typeof(String), typeof(Boolean), typeof(Byte), typeof(SByte), typeof(Char),
-				typeof(Int16), typeof(Int32), typeof(Int64), typeof(UInt16), typeof(UInt32), typeof(UInt64), typeof(Single), typeof(Double),
+			PrimitiveTypes = new HashSet<Type>()
+			{
+				typeof(String), typeof(Boolean), typeof(Char),
+				typeof(Byte), typeof(SByte),
+				typeof(Int16), typeof(Int32), typeof(Int64), typeof(UInt16), typeof(UInt32), typeof(UInt64),
+				typeof(Single), typeof(Double),
 				typeof(TimeSpan), typeof(DateTime),
-				typeof(byte[]));
-		}
-
-		private HashSet<Type> InitPrimitiveTypes(params Type[] types)
-		{
-			var primitiveTypes = new HashSet<Type>();
-			foreach (var t in types)
-				primitiveTypes.Add(t);
-
-			return primitiveTypes;
+				typeof(byte[])
+			};
 		}
 
 		public bool IsPrimitive(Type type)
@@ -55,9 +52,10 @@ namespace Configuration.GenericView.Deserialization
 
 			var genType = type.GetGenericTypeDefinition();
 
-			return genType == typeof(List<>) ||
-				genType == typeof(IList<>) ||
-				genType == typeof(ICollection<>);
+			return genType == typeof(List<>)
+				|| genType == typeof(IList<>)
+				|| genType == typeof(ICollection<>)
+				|| genType == typeof(IEnumerable<>);
 		}
 
 		public virtual object CreateFunction(Type targetType, IGenericDeserializer deserializer)
@@ -111,29 +109,71 @@ namespace Configuration.GenericView.Deserialization
 			}
 		}
 
-		public static bool DataContractAvailable(Type targetType)
+		public enum AttributeState
 		{
-			//TODO: check DataContract attributes
-
-			// DataContractAttribute
-			// DataMemberAttribute
-			// IgnoreDataMemberAttribute
-			// CollectionDataContractAttribute
-			// EnumMemberAttribute
-			return false;
+			Found,
+			NotFound,
+			NotImplemented
 		}
 
-		public static bool XmlAvailable(Type targetType)
+		private static readonly Dictionary<Type, AttributeState> DataContractAttributeStates = new Dictionary<Type, AttributeState>
 		{
-			//TODO: check Xml attributes
+			{typeof(DataContractAttribute), AttributeState.Found}, // not used
+			{typeof(DataMemberAttribute), AttributeState.Found}, // change name, set required
+			{typeof(IgnoreDataMemberAttribute), AttributeState.Found}, // ignore
+			{typeof(CollectionDataContractAttribute), AttributeState.NotImplemented} // not implemented
+		};
 
-			// XmlAttributeAttribute
-			// XmlElementAttribute>(customAttributes);
-			// XmlArrayAttribute
-			// XmlArrayItemAttribute
-			// XmlTextAttribute
-			// XmlIgnoreAttribute
-			return false;
+		public static AttributeState DataContractAvailable(Type targetType)
+		{
+			return CustomAttributesAvailable(targetType, DataContractAttributeStates);
+		}
+
+		private static readonly Dictionary<Type, AttributeState> XmlAttributeStates = new Dictionary<Type, AttributeState>()
+		{
+			{typeof(XmlRootAttribute), AttributeState.Found}, // not used
+			{typeof(XmlAttributeAttribute), AttributeState.Found}, // change name
+			{typeof(XmlElementAttribute), AttributeState.Found}, // change name
+			{typeof(XmlArrayAttribute), AttributeState.NotImplemented}, // not implemented
+			{typeof(XmlArrayItemAttribute), AttributeState.NotImplemented}, // not implemented
+			{typeof(XmlTextAttribute), AttributeState.NotImplemented}, // not implemented
+			{typeof(XmlAnyElementAttribute), AttributeState.NotImplemented}, // not implemented
+			{typeof(XmlIgnoreAttribute), AttributeState.Found}, // ignore
+		};
+
+		public static AttributeState XmlAvailable(Type targetType)
+		{
+			return CustomAttributesAvailable(targetType, XmlAttributeStates);
+		}
+
+		private static AttributeState CustomAttributesAvailable(Type targetType, Dictionary<Type, AttributeState> attrStates)
+		{
+			AttributeState result = AttributeState.NotFound;
+			CheckAttributes(targetType.GetCustomAttributes(true), ref result, attrStates);
+			foreach (var mi in targetType.FindMembers(MemberTypes.Field | MemberTypes.Property, BindingFlags.Public | BindingFlags.Instance, (m, o) => true, null))
+				CheckAttributes(mi.GetCustomAttributes(true), ref result, attrStates);
+			return result;
+		}
+
+		private static void CheckAttributes(object[] attrs, ref AttributeState result, Dictionary<Type, AttributeState> attrStates)
+		{
+			if (result == AttributeState.NotImplemented)
+				return;
+
+			foreach (object attr in attrs)
+			{
+				AttributeState state;
+				if (!attrStates.TryGetValue(attr.GetType(), out state))
+					continue;
+				
+				if (state == AttributeState.NotImplemented)
+				{
+					result = AttributeState.NotImplemented;
+					return;
+				}
+					
+				result = AttributeState.Found;
+			}
 		}
 
 		public static T PrimitiveTarget<T>(ICfgNode node)

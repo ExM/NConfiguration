@@ -67,7 +67,7 @@ namespace Configuration.GenericView
 		public class ComplexTest
 		{
 			public int[] Array { get; set; }
-			public ICollection<sbyte> Coll { get; set; }
+			public IEnumerable<sbyte> Coll { get; set; }
 			public ComplexTest Inner { get; set; }
 			public List<ComplexTest> InnerList { get; set; }
 		}
@@ -111,5 +111,42 @@ namespace Configuration.GenericView
 			CollectionAssert.AreEqual(new int[] { 123, 345 }, tc.Array);
 		}
 
+		[Test]
+		public void ParseCollection()
+		{
+			var root = XmlView.Create(
+@"<Root Coll='5'><Coll>-5</Coll></Root>".ToXDocument());
+			var d = new GenericDeserializer();
+
+			var tc = d.Deserialize<ComplexTest>(root);
+
+			CollectionAssert.AreEqual(new sbyte[] { 5, -5 }, tc.Coll);
+		}
+
+		[Test]
+		public void ParseInner()
+		{
+			var root = XmlView.Create(
+@"<Root><Inner Coll='5'><Coll>-5</Coll></Inner></Root>".ToXDocument());
+			var d = new GenericDeserializer();
+
+			var tc = d.Deserialize<ComplexTest>(root);
+
+			Assert.NotNull(tc.Inner);
+			CollectionAssert.AreEqual(new sbyte[] { 5, -5 }, tc.Inner.Coll);
+		}
+
+		[Test]
+		public void ParseInnerList()
+		{
+			var root = XmlView.Create(
+@"<Root><InnerList Coll='5'><Coll>-5</Coll></InnerList><InnerList Coll='6'><Coll>-6</Coll></InnerList></Root>".ToXDocument());
+			var d = new GenericDeserializer();
+
+			var tc = d.Deserialize<ComplexTest>(root);
+
+			CollectionAssert.AreEqual(new sbyte[] { 5, -5 }, tc.InnerList[0].Coll);
+			CollectionAssert.AreEqual(new sbyte[] { 6, -6 }, tc.InnerList[1].Coll);
+		}
 	}
 }

@@ -66,7 +66,7 @@ namespace Configuration.GenericView.Deserialization
 		{
 			foreach (var fi in _targetType.GetFields(BindingFlags.Instance | BindingFlags.Public))
 			{
-				var right = CreateLoader(fi.FieldType, fi.Name, fi.GetCustomAttributes(true));
+				var right = _frCreator(this, fi.FieldType, fi.Name, fi.GetCustomAttributes(true));
 				if (right == null)
 					continue;
 				var left = Expression.Field(_pResult, fi);
@@ -77,7 +77,7 @@ namespace Configuration.GenericView.Deserialization
 			{
 				if (!pi.CanWrite)
 					continue;
-				var right = CreateLoader(pi.PropertyType, pi.Name, pi.GetCustomAttributes(true));
+				var right = _frCreator(this, pi.PropertyType, pi.Name, pi.GetCustomAttributes(true));
 				if (right == null)
 					continue;
 				var left = Expression.Property(_pResult, pi);
@@ -89,11 +89,6 @@ namespace Configuration.GenericView.Deserialization
 			var delegateType = typeof (Func<,>).MakeGenericType(typeof (ICfgNode), _targetType);
 
 			return Expression.Lambda(delegateType, Expression.Block(new[] { _pResult }, _bodyList), _pCfgNode).Compile();
-		}
-
-		private Expression CreateLoader(Type fieldType, string name, object[] customAttributes)
-		{
-			return _frCreator(this, fieldType, name, customAttributes);
 		}
 	}
 }
