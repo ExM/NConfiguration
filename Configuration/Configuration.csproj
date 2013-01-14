@@ -40,6 +40,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GenericView\Deserialization\AttributeState.cs" />
+    <Compile Include="GenericView\Deserialization\BuildToolkit.cs" />
+    <Compile Include="GenericView\Deserialization\FieldFunctionBuildingEventArgs.cs" />
+    <Compile Include="GenericView\Deserialization\FieldFunctionType.cs" />
     <Compile Include="GenericView\EnumParsing\IEnumParser_1.cs" />
     <Compile Include="GenericView\EnumParsing\EnumHelper_1.cs" />
     <Compile Include="GenericView\EnumParsing\EnumParsers.cs">
@@ -57,7 +61,7 @@
     <Compile Include="GenericView\XmlViewField.cs" />
     <Compile Include="GenericView\IGenericDeserializer.cs" />
     <Compile Include="GenericView\Deserialization\GenericMapper.cs" />
-    <Compile Include="GenericView\Deserialization\MapFunctionBuilder.cs" />
+    <Compile Include="GenericView\Deserialization\ComplexFunctionBuilder.cs" />
     <Compile Include="GenericView\GenericDeserializer.cs" />
     <Compile Include="GenericView\XmlViewConverter.cs" />
     <Compile Include="GenericView\ICfgNode.cs" />
