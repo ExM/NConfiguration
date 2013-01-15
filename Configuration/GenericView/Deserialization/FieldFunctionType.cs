@@ -7,6 +7,7 @@ namespace Configuration.GenericView.Deserialization
 {
 	public enum FieldFunctionType
 	{
+		Unknown,
 		Primitive,
 		Collection,
 		Complex

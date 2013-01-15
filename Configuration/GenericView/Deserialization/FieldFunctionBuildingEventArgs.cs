@@ -19,7 +19,7 @@ namespace Configuration.GenericView.Deserialization
 		{
 			Type = type;
 			CustomAttributes = customAttributes;
-			Function = FieldFunctionType.Primitive;
+			Function = FieldFunctionType.Unknown;
 			Name = name;
 			Required = Type.IsValueType && !BuildToolkit.IsNullable(Type);
 			Ignore = false;

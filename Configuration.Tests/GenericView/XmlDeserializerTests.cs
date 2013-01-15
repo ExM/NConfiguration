@@ -13,6 +13,19 @@ namespace Configuration.GenericView
 	[TestFixture]
 	public class XmlDeserializerTests
 	{
+		public class XmlMapper: GenericMapper
+		{
+			public override ComplexFunctionBuilder CreateComplexFunctionBuilder(Type targetType, IGenericDeserializer deserializer)
+			{
+				if (BuildToolkit.XmlAvailable(targetType) == AttributeState.NotImplemented)
+					throw new NotImplementedException();
+				var builder = new ComplexFunctionBuilder(targetType, deserializer);
+				builder.FieldFunctionBuilding += XmlFieldReader;
+
+				return builder;
+			}
+		}
+
 		public class BadType1
 		{
 			[XmlArray]
@@ -26,13 +39,66 @@ namespace Configuration.GenericView
 		}
 
 		[Test]
-		public void ParseBadType()
+		[ExpectedException(typeof(NotImplementedException))]
+		public void ParseBadType1()
 		{
 			var root = XmlView.Create(
 @"<Root></Root>".ToXDocument());
-			var d = new GenericDeserializer();
+			var d = new GenericDeserializer(new XmlMapper());
 
 			d.Deserialize<BadType1>(root);
+		}
+
+		[Test]
+		[ExpectedException(typeof(NotImplementedException))]
+		public void ParseBadType2()
+		{
+			var root = XmlView.Create(
+@"<Root></Root>".ToXDocument());
+			var d = new GenericDeserializer(new XmlMapper());
+
+			d.Deserialize<BadType2>(root);
+		}
+
+		public class GoodType
+		{
+			[XmlIgnore]
+			public bool Ignored;
+			[XmlAttribute("xmlNInt")]
+			public int? NInt;
+			[XmlElement("xmlInner")]
+			public GoodType Inner { get; set; }
+			[XmlElement("xmlInnerList")]
+			public List<GoodType> InnerList { get; set; }
+		}
+
+		[Test]
+		public void ParseGoodType1()
+		{
+			var root = XmlView.Create(
+@"<Root Ignored='true'><xmlNInt>123</xmlNInt></Root>".ToXDocument());
+			var d = new GenericDeserializer(new XmlMapper());
+
+			var t = d.Deserialize<GoodType>(root);
+
+			Assert.IsFalse(t.Ignored);
+			Assert.AreEqual(123, t.NInt);
+			Assert.IsNull(t.Inner);
+			Assert.AreEqual(0, t.InnerList.Count);
+		}
+
+		[Test]
+		public void ParseGoodType2()
+		{
+			var root = XmlView.Create(
+@"<Root Ignored='1'><xmlInner xmlNInt='321'></xmlInner></Root>".ToXDocument());
+			var d = new GenericDeserializer(new XmlMapper());
+
+			var t = d.Deserialize<GoodType>(root);
+
+			Assert.IsFalse(t.Ignored);
+			Assert.IsNotNull(t.Inner);
+			Assert.AreEqual(321, t.Inner.NInt);
 		}
 	}
 }

@@ -44,6 +44,7 @@
     <Compile Include="GenericView\Deserialization\BuildToolkit.cs" />
     <Compile Include="GenericView\Deserialization\FieldFunctionBuildingEventArgs.cs" />
     <Compile Include="GenericView\Deserialization\FieldFunctionType.cs" />
+    <Compile Include="GenericView\Deserialization\IGenericMapper.cs" />
     <Compile Include="GenericView\EnumParsing\IEnumParser_1.cs" />
     <Compile Include="GenericView\EnumParsing\EnumHelper_1.cs" />
     <Compile Include="GenericView\EnumParsing\EnumParsers.cs">

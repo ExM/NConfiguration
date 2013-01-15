@@ -15,7 +15,6 @@ namespace Configuration.GenericView
 		{
 			public string TextField;
 			public string TextProp {get; set;}
-			public byte[] Dump { get; set; }
 			public TestEn EnProp { get; set; }
 			public bool BoolField;
 			public bool BoolProp { get; set; }
@@ -42,9 +41,9 @@ namespace Configuration.GenericView
 	BoolField='+' BoolProp='false'
 	NBoolField='T' NBoolProp=''
 	ByteField='123' ByteProp='12'
-	NByteField='0' NByteProp=''
+	NByteProp=''
 	EnProp='One'
-><Dump></Dump></Config>".ToXDocument());
+><NByteField>0</NByteField></Config>".ToXDocument());
 			var d = new GenericDeserializer();
 
 			var tc = d.Deserialize<PrimitiveTypeCollection>(root);
@@ -60,7 +59,6 @@ namespace Configuration.GenericView
 			Assert.AreEqual(12, tc.ByteProp);
 			Assert.AreEqual(0, tc.NByteField);
 			Assert.AreEqual(null, tc.NByteProp);
-			Assert.AreEqual(0, tc.Dump.Length);
 			Assert.AreEqual(TestEn.One, tc.EnProp);
 		}
 

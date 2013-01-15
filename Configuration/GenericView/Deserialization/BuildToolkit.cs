@@ -10,6 +10,13 @@ namespace Configuration.GenericView.Deserialization
 {
 	public static class BuildToolkit
 	{
+		public static object CreatePrimitiveFunction(Type type)
+		{
+			var mi = typeof(BuildToolkit).GetMethod("PrimitiveTarget").MakeGenericMethod(type);
+			var funcType = typeof(Func<,>).MakeGenericType(typeof(ICfgNode), type);
+			return Delegate.CreateDelegate(funcType, mi);
+		}
+
 		public static bool IsNullable(Type type)
 		{
 			return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
@@ -128,6 +135,18 @@ namespace Configuration.GenericView.Deserialization
 			return node.GetCollection(name)
 				.Select(deserializer.Deserialize<T>)
 				.ToArray();
+		}
+
+		public static object CreateNativeFunction()
+		{
+			var mi = typeof(BuildToolkit).GetMethod("GetCfgNode");
+			var funcType = typeof(Func<,>).MakeGenericType(typeof(ICfgNode), typeof(ICfgNode));
+			return Delegate.CreateDelegate(funcType, mi);
+		}
+
+		public static ICfgNode GetCfgNode(ICfgNode node)
+		{
+			return node;
 		}
 	}
 }

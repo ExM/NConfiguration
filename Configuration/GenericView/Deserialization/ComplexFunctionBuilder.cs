@@ -34,30 +34,6 @@ namespace Configuration.GenericView.Deserialization
 			return args;
 		}
 
-		public Type TargetType
-		{
-			get
-			{
-				return _targetType;
-			}
-		}
-
-		public Expression Deserializer
-		{
-			get
-			{
-				return Expression.Constant(_deserializer);
-			}
-		}
-
-		public Expression CfgNode
-		{
-			get
-			{
-				return _pCfgNode;
-			}
-		}
-
 		private void SetConstructor()
 		{
 			if (_targetType.IsValueType)
@@ -123,28 +99,28 @@ namespace Configuration.GenericView.Deserialization
 			{
 				var itemType = args.Type.GetElementType();
 				var mi = typeof(BuildToolkit).GetMethod("Array").MakeGenericMethod(itemType);
-				return Expression.Call(null, mi, Expression.Constant(args.Name), CfgNode, Deserializer);
+				return Expression.Call(null, mi, Expression.Constant(args.Name), _pCfgNode, Expression.Constant(_deserializer));
 			}
 
 			if (args.Function == FieldFunctionType.Primitive)
 			{
 				var methodName = args.Required ? "RequiredPrimitiveField" : "OptionalPrimitiveField";
 				var mi = typeof(BuildToolkit).GetMethod(methodName).MakeGenericMethod(args.Type);
-				return Expression.Call(null, mi, Expression.Constant(args.Name), CfgNode);
+				return Expression.Call(null, mi, Expression.Constant(args.Name), _pCfgNode);
 			}
 
 			if (args.Function == FieldFunctionType.Collection)
 			{
 				var itemType = args.Type.GetGenericArguments()[0];
 				var mi = typeof(BuildToolkit).GetMethod("List").MakeGenericMethod(itemType);
-				return Expression.Call(null, mi, Expression.Constant(args.Name), CfgNode, Deserializer);
+				return Expression.Call(null, mi, Expression.Constant(args.Name), _pCfgNode, Expression.Constant(_deserializer));
 			}
 
 			if (args.Function == FieldFunctionType.Complex)
 			{
 				var methodName = args.Required ? "RequiredComplexField" : "OptionalComplexField";
 				var mi = typeof(BuildToolkit).GetMethod(methodName).MakeGenericMethod(args.Type);
-				return Expression.Call(null, mi, Expression.Constant(args.Name), CfgNode, Deserializer);
+				return Expression.Call(null, mi, Expression.Constant(args.Name), _pCfgNode, Expression.Constant(_deserializer));
 			}
 
 			throw new InvalidOperationException("unexpected FieldFunctionType");

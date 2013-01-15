@@ -8,14 +8,14 @@ namespace Configuration.GenericView
 {
 	public class GenericDeserializer: IGenericDeserializer
 	{
-		private GenericMapper _mapper = new GenericMapper();
+		private IGenericMapper _mapper = new GenericMapper();
 		private Dictionary<Type, object> _funcMap = new Dictionary<Type, object>();
 
 		public GenericDeserializer() : this(new GenericMapper())
 		{
 		}
 
-		public GenericDeserializer(GenericMapper mapper)
+		public GenericDeserializer(IGenericMapper mapper)
 		{
 			_mapper = mapper;
 		}

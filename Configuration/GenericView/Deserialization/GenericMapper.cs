@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 
 namespace Configuration.GenericView.Deserialization
 {
-	public class GenericMapper
+	public class GenericMapper : IGenericMapper
 	{
 		protected HashSet<Type> PrimitiveTypes { get; private set; }
 
@@ -51,15 +51,23 @@ namespace Configuration.GenericView.Deserialization
 				|| genType == typeof(IEnumerable<>);
 		}
 
-		public virtual object CreateFunction(Type targetType, IGenericDeserializer deserializer)
+		public object CreateFunction(Type targetType, IGenericDeserializer deserializer)
 		{
+			if (targetType == typeof(ICfgNode))
+				return BuildToolkit.CreateNativeFunction();
+
 			if(IsPrimitive(targetType))
-				return CreatePrimitiveTargetReader(targetType);
+				return BuildToolkit.CreatePrimitiveFunction(targetType);
 
 			if(targetType.IsArray ||
 				IsCollection(targetType))
 				throw new ArgumentOutOfRangeException(string.Format("type '{0}' is collection", targetType.FullName));
 
+			return CreateComplexFunctionBuilder(targetType, deserializer).Compile();
+		}
+
+		public virtual ComplexFunctionBuilder CreateComplexFunctionBuilder(Type targetType, IGenericDeserializer deserializer)
+		{
 			var builder = new ComplexFunctionBuilder(targetType, deserializer);
 
 			if (BuildToolkit.DataContractAvailable(targetType) == AttributeState.Found)
@@ -74,20 +82,8 @@ namespace Configuration.GenericView.Deserialization
 			{ // Native name deserialize
 				builder.FieldFunctionBuilding += NativeNameFieldReader;
 			}
-			
-			return builder.Compile();
-		}
 
-		void builder_FieldFunctionBuilding(object sender, FieldFunctionBuildingEventArgs e)
-		{
-			throw new NotImplementedException();
-		}
-
-		public static object CreatePrimitiveTargetReader(Type type)
-		{
-			var mi = typeof(BuildToolkit).GetMethod("PrimitiveTarget").MakeGenericMethod(type);
-			var funcType = typeof(Func<,>).MakeGenericType(typeof(ICfgNode),type);
-			return Delegate.CreateDelegate(funcType, mi);
+			return builder;
 		}
 
 		public void NativeNameFieldReader(object sender, FieldFunctionBuildingEventArgs e)
