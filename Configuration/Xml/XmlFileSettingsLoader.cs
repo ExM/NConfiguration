@@ -24,7 +24,7 @@ namespace Configuration.Xml.Joining
 
 			args.Handled = true;
 
-			var rpo = args.BaseSettings as IRelativePathOwner;
+			var rpo = args.BaseSettings as IFilePathOwner;
 			var cfg = args.IncludeElement.Deserialize<IncludeFileConfig>();
 
 
@@ -38,12 +38,12 @@ namespace Configuration.Xml.Joining
 				if (rpo == null)
 					throw new InvalidOperationException("can not be searched for a relative path because the settings do not provide an absolute path");
 
-				var found = SearchXmlSettings(rpo.RelativePath, cfg.Path, cfg.Search);
+				var found = SearchXmlSettings(rpo.Path, cfg.Path, cfg.Search);
 
 				if (found.Count == 0)
 				{
 					if (cfg.Required)
-						throw new ApplicationException(string.Format("XML configuration '{0}' not found in '{1}'", cfg.Path, rpo.RelativePath));
+						throw new ApplicationException(string.Format("XML configuration '{0}' not found in '{1}'", cfg.Path, rpo.Path));
 					else
 						return;
 				}

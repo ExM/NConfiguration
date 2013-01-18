@@ -11,7 +11,7 @@ namespace Configuration.Xml
 	/// <summary>
 	/// settings loaded from a file
 	/// </summary>
-	public class XmlFileSettings : XmlSettings, IRelativePathOwner
+	public class XmlFileSettings : XmlSettings, IFilePathOwner
 	{
 		private readonly string _directory;
 		private readonly string _identity;
@@ -23,7 +23,7 @@ namespace Configuration.Xml
 		{
 			try
 			{
-				fileName = Path.GetFullPath(fileName);
+				fileName = System.IO.Path.GetFullPath(fileName);
 
 				using(var s = System.IO.File.OpenRead(fileName))
 					Root = XDocument.Load(s).Root;
@@ -33,8 +33,8 @@ namespace Configuration.Xml
 					_identity = idAttr.Value;
 				else
 					_identity= fileName;
-				
-				_directory = Path.GetDirectoryName(fileName);
+
+				_directory = System.IO.Path.GetDirectoryName(fileName);
 			}
 			catch(SystemException ex)
 			{
@@ -50,7 +50,7 @@ namespace Configuration.Xml
 			}
 		}
 
-		public string RelativePath
+		public string Path
 		{
 			get
 			{

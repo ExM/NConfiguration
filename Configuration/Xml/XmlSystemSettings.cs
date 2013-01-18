@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 
 namespace Configuration.Xml
 {
-	public class XmlSystemSettings : XmlSettings, IRelativePathOwner
+	public class XmlSystemSettings : XmlSettings, IFilePathOwner
 	{
 		private readonly string _sectionName;
 		private readonly string _directory;
@@ -19,8 +19,8 @@ namespace Configuration.Xml
 		{
 			_sectionName = sectionName;
 			var confFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-			confFile = Path.GetFullPath(confFile);
-			_directory = Path.GetDirectoryName(confFile);
+			confFile = System.IO.Path.GetFullPath(confFile);
+			_directory = System.IO.Path.GetDirectoryName(confFile);
 
 			try
 			{
@@ -44,7 +44,7 @@ namespace Configuration.Xml
 			}
 		}
 
-		public string RelativePath
+		public string Path
 		{
 			get
 			{

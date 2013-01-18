@@ -67,7 +67,7 @@
     <Compile Include="GenericView\XmlViewConverter.cs" />
     <Compile Include="GenericView\ICfgNode.cs" />
     <Compile Include="GenericView\XmlView.cs" />
-    <Compile Include="IRelativePathOwner.cs" />
+    <Compile Include="IFilePathOwner.cs" />
     <Compile Include="IAppSettings.cs" />
     <Compile Include="AppSettingExtensions.cs" />
     <Compile Include="Joining\SettingsLoader.cs" />
