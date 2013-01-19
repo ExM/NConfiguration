@@ -13,7 +13,7 @@ namespace Configuration.Xml
 	{
 		public event EventHandler<IncludeXmlElementEventArgs> IncludeXmlElement;
 
-		private IEnumerable<IAppSettings> OnIncludeXmlElement(SettingsLoader loader, IAppSettings baseSettings, XElement element)
+		private IEnumerable<IAppSettingSource> OnIncludeXmlElement(SettingsLoader loader, IAppSettings baseSettings, XElement element)
 		{
 			var copy = IncludeXmlElement;
 			if (copy == null)
@@ -35,7 +35,7 @@ namespace Configuration.Xml
 			if (rootEl == null)
 				return;
 
-			var results = new List<IAppSettings>();
+			var results = new List<IAppSettingSource>();
 
 			foreach (var childEl in rootEl.Elements())
 				results.AddRange(OnIncludeXmlElement(loader, args.Settings, childEl));

@@ -24,9 +24,9 @@ namespace Configuration.Joining
 			Handled = false;
 		}
 
-		private List<IAppSettings> _addedSettings = new List<IAppSettings>();
+		private List<IAppSettingSource> _addedSettings = new List<IAppSettingSource>();
 
-		public IEnumerable<IAppSettings> AddedSettings
+		public IEnumerable<IAppSettingSource> AddedSettings
 		{
 			get
 			{
@@ -34,7 +34,7 @@ namespace Configuration.Joining
 			}
 		}
 
-		public void Add(IAppSettings settings)
+		public void Add(IAppSettingSource settings)
 		{
 			_addedSettings.Add(settings);
 		}

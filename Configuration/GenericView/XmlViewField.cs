@@ -7,9 +7,9 @@ namespace Configuration.GenericView
 	internal class XmlViewField: ICfgNode
 	{
 		private string _text;
-		private XmlViewConverter _converter;
+		private IXmlViewConverter _converter;
 
-		public XmlViewField(XmlViewConverter converter, string text)
+		public XmlViewField(IXmlViewConverter converter, string text)
 		{
 			_converter = converter;
 			_text = text;

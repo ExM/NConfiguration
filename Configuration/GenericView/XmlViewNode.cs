@@ -8,9 +8,9 @@ namespace Configuration.GenericView
 	internal class XmlViewNode: ICfgNode
 	{
 		private XElement _element;
-		private XmlViewConverter _converter;
+		private IXmlViewConverter _converter;
 
-		public XmlViewNode(XmlViewConverter converter, XElement element)
+		public XmlViewNode(IXmlViewConverter converter, XElement element)
 		{
 			_converter = converter;
 			_element = element;

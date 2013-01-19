@@ -27,6 +27,7 @@ namespace Configuration.GenericView
 
 		private Func<ICfgNode, T> GetFunction<T>()
 		{
+			//TODO: tread safe
 			object func;
 			if (!_funcMap.TryGetValue(typeof(T), out func))
 			{

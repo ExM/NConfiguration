@@ -15,7 +15,5 @@ namespace Configuration
 		/// <param name='sectionName'>instance of application settings</param>
 		/// <typeparam name='T'>type of configuration</typeparam>
 		T TryLoad<T>(string sectionName) where T : class;
-
-		string Identity { get; }
 	}
 }

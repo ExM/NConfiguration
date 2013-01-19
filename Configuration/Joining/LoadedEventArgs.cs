@@ -10,9 +10,9 @@ namespace Configuration.Joining
 {
 	public class LoadedEventArgs : EventArgs
 	{
-		public IAppSettings Settings { get; private set; }
+		public IAppSettingSource Settings { get; private set; }
 
-		public LoadedEventArgs(IAppSettings settings)
+		public LoadedEventArgs(IAppSettingSource settings)
 		{
 			Settings = settings;
 		}

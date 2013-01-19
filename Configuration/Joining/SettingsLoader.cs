@@ -35,7 +35,7 @@ namespace Configuration.Joining
 
 		public event EventHandler<LoadedEventArgs> Loaded;
 
-		private void OnLoaded(IAppSettings settings)
+		private void OnLoaded(IAppSettingSource settings)
 		{
 			var copy = Loaded;
 			if (copy == null)
@@ -44,15 +44,15 @@ namespace Configuration.Joining
 			var args = new LoadedEventArgs(settings);
 			copy(this, args);
 		}
-		
-		public SettingsLoader LoadSettings(IAppSettings settings)
+
+		public SettingsLoader LoadSettings(IAppSettingSource settings)
 		{
 			_settings.Add(settings);
 			OnLoaded(settings);
 			return this;
 		}
 
-		private bool CheckLoaded(IAppSettings settings)
+		private bool CheckLoaded(IAppSettingSource settings)
 		{
 			Type type = settings.GetType();
 			HashSet<string> identityLoaded;

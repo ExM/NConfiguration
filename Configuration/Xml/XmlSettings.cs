@@ -11,14 +11,14 @@ namespace Configuration.Xml
 	/// <summary>
 	/// settings loaded from a XML document
 	/// </summary>
-	public abstract class XmlSettings : IXmlEncryptable, IAppSettings
+	public abstract class XmlSettings : IXmlEncryptable, IAppSettingSource
 	{
 		protected XElement Root { get; set; }
 		private IProviderCollection _providers = null;
 
 		private static readonly XNamespace cryptDataNS = XNamespace.Get("http://www.w3.org/2001/04/xmlenc#");
 
-		public XElement GetSection(string name)
+		private XElement GetSection(string name)
 		{
 			if(name == null)
 				throw new ArgumentNullException("name");
@@ -74,6 +74,7 @@ namespace Configuration.Xml
 
 			if(typeof(T) == typeof(XElement))
 				return (T)(object)XElement.Parse(section.ToString());
+
 
 			return section.Deserialize<T>();
 		}

@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Configuration.GenericView
 {
-	public partial class XmlViewConverter
+	public partial class XmlViewConverter : IXmlViewConverter
 	{
 		private readonly CultureInfo _ci;
 		private readonly Dictionary<Type, object> _funcMap = new Dictionary<Type, object>();
@@ -32,6 +32,7 @@ namespace Configuration.GenericView
 
 		private Func<string, T> GetFunction<T>()
 		{
+			//TODO: tread safe
 			object func;
 			if (!_funcMap.TryGetValue(typeof(T), out func))
 			{
