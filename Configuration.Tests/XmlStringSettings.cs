@@ -4,20 +4,31 @@ using System.IO;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using Configuration.Xml;
+using Configuration.GenericView;
 
 namespace Configuration
 {
-	public class XmlStringSettings : XmlSettings
+	public class XmlStringSettings : XmlSettings, IAppSettingSource
 	{
+		private readonly XElement _root;
 		private readonly string _hash;
 
 		public XmlStringSettings(string text)
+			:base(new XmlViewConverter(), new GenericDeserializer())
 		{
 			_hash = text.GetHashCode().ToString();
-			Root = XDocument.Parse(text).Root;
+			_root = XDocument.Parse(text).Root;
 		}
 
-		public override string Identity
+		protected override XElement Root
+		{
+			get
+			{
+				return _root;
+			}
+		}
+
+		public string Identity
 		{
 			get
 			{

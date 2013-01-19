@@ -7,6 +7,7 @@ using Configuration.Xml;
 using Configuration.Joining;
 using Configuration.Examples;
 using Configuration.Xml.Protected;
+using Configuration.GenericView;
 
 namespace Configuration
 {
@@ -18,8 +19,9 @@ namespace Configuration
 		{
 			var loader = new SettingsLoader();
 			var includer = new IncludeInXmlLoader();
+			var xmlFileLoader = new XmlFileSettingsLoader(new XmlViewConverter());
 
-			includer.IncludeXmlElement += XmlFileSettingsLoader.ResolveXmlElement;
+			includer.IncludeXmlElement += xmlFileLoader.ResolveXmlElement;
 			loader.Loaded += includer.Include;
 			loader.Loaded += (s,e) => 
 			{
@@ -44,8 +46,9 @@ namespace Configuration
 			var providerLoader = new ProviderLoader();
 			var loader = new SettingsLoader();
 			var includer = new IncludeInXmlLoader();
+			var xmlFileLoader = new XmlFileSettingsLoader(new XmlViewConverter());
 
-			includer.IncludeXmlElement += XmlFileSettingsLoader.ResolveXmlElement;
+			includer.IncludeXmlElement += xmlFileLoader.ResolveXmlElement;
 			loader.Loaded += includer.Include;
 			loader.Loaded += providerLoader.TryExtractConfigProtectedData;
 			

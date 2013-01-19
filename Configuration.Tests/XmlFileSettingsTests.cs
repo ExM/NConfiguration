@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Configuration;
 using Configuration.Xml;
 using System.IO;
+using Configuration.GenericView;
 
 namespace Configuration
 {
@@ -15,7 +16,7 @@ namespace Configuration
 		[TestFixtureSetUp]
 		public void SetUp()
 		{
-			_settings = new XmlFileSettings("testConfig1.xml");
+			_settings = new XmlFileSettings("testConfig1.xml", new XmlViewConverter(), new GenericDeserializer());
 		}
 		
 		[Test]

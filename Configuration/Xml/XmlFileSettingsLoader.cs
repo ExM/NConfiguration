@@ -7,14 +7,22 @@ using System.Xml.Serialization;
 using System.Collections.Generic;
 using Configuration.Joining;
 using Configuration.Xml.ConfigSections;
+using Configuration.GenericView;
 
 namespace Configuration.Xml.Joining
 {
-	public static class XmlFileSettingsLoader
+	public class XmlFileSettingsLoader
 	{
 		private static readonly XName _elementName = XName.Get("XmlFile", "");
 
-		public static void ResolveXmlElement(object sender, IncludeXmlElementEventArgs args)
+		private readonly IXmlViewConverter _converter;
+
+		public XmlFileSettingsLoader(IXmlViewConverter converter)
+		{
+			_converter = converter;
+		}
+
+		public void ResolveXmlElement(object sender, IncludeXmlElementEventArgs args)
 		{
 			if (args.Handled)
 				return;
@@ -31,14 +39,14 @@ namespace Configuration.Xml.Joining
 			if (Path.IsPathRooted(cfg.Path))
 			{
 				if (File.Exists(cfg.Path) || cfg.Required)
-					args.Add(new XmlFileSettings(cfg.Path));
+					args.Add(new XmlFileSettings(cfg.Path, _converter, args.Loader.Deserializer));
 			}
 			else
 			{
 				if (rpo == null)
 					throw new InvalidOperationException("can not be searched for a relative path because the settings do not provide an absolute path");
 
-				var found = SearchXmlSettings(rpo.Path, cfg.Path, cfg.Search);
+				var found = SearchXmlSettings(rpo.Path, cfg.Path, cfg.Search, args.Loader);
 
 				if (found.Count == 0)
 				{
@@ -58,7 +66,7 @@ namespace Configuration.Xml.Joining
 			}
 		}
 
-		private static List<XmlFileSettings> SearchXmlSettings(string basePath, string fileName, SearchMode mode)
+		private List<XmlFileSettings> SearchXmlSettings(string basePath, string fileName, SearchMode mode, SettingsLoader loader)
 		{
 			var result = new List<XmlFileSettings>();
 
@@ -74,7 +82,7 @@ namespace Configuration.Xml.Joining
 					var fullPath = Path.Combine(basePath, fileName);
 					if (File.Exists(fullPath))
 					{
-						var item = new XmlFileSettings(fullPath);
+						var item = new XmlFileSettings(fullPath, _converter, loader.Deserializer);
 						result.Add(item);
 						var incCfg = item.TryLoad<IncludeConfig>(false);
 						if (incCfg != null && incCfg.FinalSearch)

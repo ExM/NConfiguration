@@ -7,6 +7,9 @@ namespace Configuration.GenericView
 {
 	public partial class XmlViewConverter : IXmlViewConverter
 	{
+		//HACK: remove
+		public static IXmlViewConverter Default = new XmlViewConverter();
+
 		private readonly CultureInfo _ci;
 		private readonly Dictionary<Type, object> _funcMap = new Dictionary<Type, object>();
 

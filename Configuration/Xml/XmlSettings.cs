@@ -5,18 +5,28 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using Configuration.Xml.Protected;
 using System.Security.Cryptography;
+using Configuration.GenericView;
 
 namespace Configuration.Xml
 {
 	/// <summary>
 	/// settings loaded from a XML document
 	/// </summary>
-	public abstract class XmlSettings : IXmlEncryptable, IAppSettingSource
+	public abstract class XmlSettings : IXmlEncryptable, IAppSettings
 	{
-		protected XElement Root { get; set; }
+		private static readonly XNamespace cryptDataNS = XNamespace.Get("http://www.w3.org/2001/04/xmlenc#");
+
+		private readonly IXmlViewConverter _converter;
+		private readonly IGenericDeserializer _deserializer;
 		private IProviderCollection _providers = null;
 
-		private static readonly XNamespace cryptDataNS = XNamespace.Get("http://www.w3.org/2001/04/xmlenc#");
+		protected abstract XElement Root { get; }
+
+		public XmlSettings(IXmlViewConverter converter, IGenericDeserializer deserializer)
+		{
+			_converter = converter;
+			_deserializer = deserializer;
+		}
 
 		private XElement GetSection(string name)
 		{
@@ -76,10 +86,10 @@ namespace Configuration.Xml
 				return (T)(object)XElement.Parse(section.ToString());
 
 
+			//return _deserializer.Deserialize<T>(new XmlViewNode(_converter, section));
+
 			return section.Deserialize<T>();
 		}
-
-		public abstract string Identity { get; }
 	}
 }
 

@@ -46,6 +46,7 @@ namespace Configuration
 				return null;
 			
 			Func<T,T,T> combinator = _combineFactory.GetCombinator<T>();
+			//HACK: cache combinator
 			var node = _list.First;
 			T result = node.Value.TryLoad<T>(sectionName);
 			node = node.Next;
@@ -58,14 +59,6 @@ namespace Configuration
 			}
 			
 			return result;
-		}
-
-		public string Identity
-		{
-			get
-			{
-				return GetHashCode().ToString();
-			}
 		}
 	}
 }

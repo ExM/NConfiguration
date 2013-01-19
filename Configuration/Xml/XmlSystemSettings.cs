@@ -7,15 +7,18 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using Configuration.GenericView;
 
 namespace Configuration.Xml
 {
-	public class XmlSystemSettings : XmlSettings, IFilePathOwner
+	public class XmlSystemSettings : XmlSettings, IFilePathOwner, IAppSettingSource
 	{
+		private readonly XElement _root;
 		private readonly string _sectionName;
 		private readonly string _directory;
 
-		public XmlSystemSettings(string sectionName)
+		public XmlSystemSettings(string sectionName, IXmlViewConverter converter, IGenericDeserializer deserializer)
+			: base(converter, deserializer)
 		{
 			_sectionName = sectionName;
 			var confFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
@@ -28,7 +31,7 @@ namespace Configuration.Xml
 				if(section == null || section.PlainXml == null)
 					throw new FormatException("section not found");
 
-				Root = section.PlainXml.Root;
+				_root = section.PlainXml.Root;
 			}
 			catch(SystemException ex)
 			{
@@ -36,7 +39,15 @@ namespace Configuration.Xml
 			}
 		}
 
-		public override string Identity
+		protected override XElement Root
+		{
+			get
+			{
+				return _root;
+			}
+		}
+
+		public string Identity
 		{
 			get
 			{

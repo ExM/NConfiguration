@@ -5,28 +5,33 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using Configuration.Xml.Protected;
+using Configuration.GenericView;
 
 namespace Configuration.Xml
 {
 	/// <summary>
 	/// settings loaded from a file
 	/// </summary>
-	public class XmlFileSettings : XmlSettings, IFilePathOwner
+	public class XmlFileSettings : XmlSettings, IFilePathOwner, IAppSettingSource
 	{
+		private readonly XElement _root;
 		private readonly string _directory;
 		private readonly string _identity;
 		/// <summary>
 		/// settings loaded from a file
 		/// </summary>
 		/// <param name="fileName">file name</param>
-		public XmlFileSettings(string fileName)
+		/// <param name="converter"></param>
+		/// <param name="deserializer">deserializer</param>
+		public XmlFileSettings(string fileName, IXmlViewConverter converter, IGenericDeserializer deserializer)
+			: base(converter, deserializer)
 		{
 			try
 			{
 				fileName = System.IO.Path.GetFullPath(fileName);
 
 				using(var s = System.IO.File.OpenRead(fileName))
-					Root = XDocument.Load(s).Root;
+					_root = XDocument.Load(s).Root;
 
 				var idAttr = Root.Attribute("Identity");
 				if (idAttr != null && !string.IsNullOrWhiteSpace(idAttr.Value))
@@ -41,8 +46,16 @@ namespace Configuration.Xml
 				throw new ApplicationException(string.Format("Unable to load file `{0}'", fileName), ex);
 			}
 		}
+
+		protected override XElement Root
+		{
+			get
+			{
+				return _root;
+			}
+		}
 		
-		public override string Identity
+		public string Identity
 		{
 			get
 			{
