@@ -188,11 +188,11 @@ namespace Configuration.Xml.Protected
 
 		public void TryExtractConfigProtectedData(object s, LoadedEventArgs e)
 		{
-			XmlFileSettings xmlSettings = e.Settings as XmlFileSettings;
-			if (xmlSettings == null)
-				return;
-			TryLoadAppSettings(xmlSettings);
-			xmlSettings.SetProviderCollection(Providers);
+			TryLoadAppSettings(e.Settings);
+
+			var encr = e.Settings as IXmlEncryptable;
+			if(encr != null)
+				encr.SetProviderCollection(Providers);
 		}
 	}
 }

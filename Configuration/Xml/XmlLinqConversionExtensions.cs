@@ -51,11 +51,6 @@ namespace Configuration.Xml
 		{
 			return XElement.Load(xmlelement.CreateNavigator().ReadSubtree());
 		}
-
-		public static T Deserialize<T>(this XElement element) where T : class
-		{
-			return XmlDeserializer<T>.Deserialize(element);
-		}
 	}
 }
 

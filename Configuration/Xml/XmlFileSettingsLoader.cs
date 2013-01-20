@@ -13,7 +13,7 @@ namespace Configuration.Xml.Joining
 {
 	public class XmlFileSettingsLoader
 	{
-		private static readonly XName _elementName = XName.Get("XmlFile", "");
+		public const string ElementName = "XmlFile";
 
 		private readonly IXmlViewConverter _converter;
 
@@ -22,51 +22,54 @@ namespace Configuration.Xml.Joining
 			_converter = converter;
 		}
 
-		public void ResolveXmlElement(object sender, IncludeXmlElementEventArgs args)
+		public void ResolveXmlFile(object sender, IncludingEventArgs args)
 		{
 			if (args.Handled)
 				return;
 
-			if (args.IncludeElement.Name != _elementName)
+			if (!string.Equals(args.Name, ElementName, StringComparison.InvariantCultureIgnoreCase))
 				return;
 
-			args.Handled = true;
+			args.Settings = new List<IAppSettingSource>();
 
-			var rpo = args.BaseSettings as IFilePathOwner;
-			var cfg = args.IncludeElement.Deserialize<IncludeFileConfig>();
+			var deserializer = ((SettingsLoader)sender).Deserializer;
 
+			var rpo = args.Source as IFilePathOwner;
+			var cfg = deserializer.Deserialize<IncludeFileConfig>(args.Config);
 
-			if (Path.IsPathRooted(cfg.Path))
+			if(Path.IsPathRooted(cfg.Path))
 			{
-				if (File.Exists(cfg.Path) || cfg.Required)
-					args.Add(new XmlFileSettings(cfg.Path, _converter, args.Loader.Deserializer));
+				if (!File.Exists(cfg.Path) && !cfg.Required)
+					return;
+
+				args.Settings.Add( new XmlFileSettings(cfg.Path, _converter, deserializer));
+				return;
 			}
-			else
+
+			// relative path
+			if (rpo == null)
+				throw new InvalidOperationException("can not be searched for a relative path because the settings do not provide an absolute path");
+
+			var found = SearchXmlSettings(rpo.Path, cfg.Path, cfg.Search, deserializer);
+
+			if (found.Count == 0)
 			{
-				if (rpo == null)
-					throw new InvalidOperationException("can not be searched for a relative path because the settings do not provide an absolute path");
-
-				var found = SearchXmlSettings(rpo.Path, cfg.Path, cfg.Search, args.Loader);
-
-				if (found.Count == 0)
-				{
-					if (cfg.Required)
-						throw new ApplicationException(string.Format("XML configuration '{0}' not found in '{1}'", cfg.Path, rpo.Path));
-					else
-						return;
-				}
-
-				if (cfg.Include == IncludeMode.First)
-					args.Add(found.First());
-				else if (cfg.Include == IncludeMode.Last)
-					args.Add(found.Last());
+				if (cfg.Required)
+					throw new ApplicationException(string.Format("XML configuration '{0}' not found in '{1}'", cfg.Path, rpo.Path));
 				else
-					foreach (var item in found)
-						args.Add(item);
+					return;
 			}
+
+			if (cfg.Include == IncludeMode.First)
+				args.Settings.Add(found.First());
+			else if (cfg.Include == IncludeMode.Last)
+				args.Settings.Add(found.Last());
+			else
+				foreach (var item in found)
+					args.Settings.Add(item);
 		}
 
-		private List<XmlFileSettings> SearchXmlSettings(string basePath, string fileName, SearchMode mode, SettingsLoader loader)
+		private List<XmlFileSettings> SearchXmlSettings(string basePath, string fileName, SearchMode mode, IGenericDeserializer deserializer)
 		{
 			var result = new List<XmlFileSettings>();
 
@@ -82,7 +85,7 @@ namespace Configuration.Xml.Joining
 					var fullPath = Path.Combine(basePath, fileName);
 					if (File.Exists(fullPath))
 					{
-						var item = new XmlFileSettings(fullPath, _converter, loader.Deserializer);
+						var item = new XmlFileSettings(fullPath, _converter, deserializer);
 						result.Add(item);
 
 						if (item.TryLoad<IncludeConfig>(true).FinalSearch)

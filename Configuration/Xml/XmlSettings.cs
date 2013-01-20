@@ -82,13 +82,7 @@ namespace Configuration.Xml
 			if(section == null)
 				return null;
 
-			if(typeof(T) == typeof(XElement))
-				return (T)(object)XElement.Parse(section.ToString());
-
-
 			return _deserializer.Deserialize<T>(new XmlViewNode(_converter, section));
-
-			//return section.Deserialize<T>();
 		}
 	}
 }

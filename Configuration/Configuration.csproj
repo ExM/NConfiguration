@@ -72,11 +72,10 @@
     <Compile Include="IFilePathOwner.cs" />
     <Compile Include="IAppSettings.cs" />
     <Compile Include="AppSettingExtensions.cs" />
+    <Compile Include="Joining\IncludingEventArgs.cs" />
     <Compile Include="Joining\SettingsLoader.cs" />
-    <Compile Include="Xml\IncludeInXmlLoader.cs" />
     <Compile Include="Xml\IncludeXmlElementEventArgs.cs" />
     <Compile Include="Xml\SettingsLoaderExtensions.cs" />
-    <Compile Include="Xml\XmlDeserializer.cs" />
     <Compile Include="Xml\XmlFileSettings.cs" />
     <Compile Include="Xml\Protected\IXmlEncryptable.cs" />
     <Compile Include="MultiSettings\ICombinable.cs" />

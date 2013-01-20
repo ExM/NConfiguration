@@ -9,7 +9,7 @@ using Configuration.Joining;
 namespace Configuration.Including
 {
 	[TestFixture]
-	public class ConfigSectionTests
+	public class IncludeSectionTests
 	{
 		private static string _xmlFrm = @"<?xml version='1.0' encoding='utf-8' ?>
 <Config>
@@ -42,19 +42,19 @@ namespace Configuration.Including
 	</Include>
 </Config>".ToXmlSettings();
 
-			var includeLoader = new IncludeInXmlLoader();
-
 			var files = new List<IncludeFileConfig>();
 
-			includeLoader.IncludeXmlElement += (s, e) =>
+			SettingsLoader loader = new SettingsLoader();
+			loader.Including += (s, e) =>
 			{
-				Assert.IsNull(e.Loader);
-				Assert.AreEqual(e.BaseSettings, settings);
-				files.Add(e.IncludeElement.Deserialize<IncludeFileConfig>());
-				e.Handled = true;
+				var deserializer = ((SettingsLoader)s).Deserializer;
+				Assert.AreEqual("XmlFile", e.Name);
+				var fileCfg = deserializer.Deserialize<IncludeFileConfig>(e.Config);
+				files.Add(fileCfg);
+				e.Settings = null;
 			};
 
-			includeLoader.Include(null, new LoadedEventArgs(settings));
+			loader.LoadSettings(settings);
 
 			CollectionAssert.IsNotEmpty(files);
 			

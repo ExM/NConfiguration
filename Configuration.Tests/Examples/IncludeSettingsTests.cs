@@ -18,11 +18,9 @@ namespace Configuration
 		public void Load()
 		{
 			var loader = new SettingsLoader();
-			var includer = new IncludeInXmlLoader();
 			var xmlFileLoader = new XmlFileSettingsLoader(new XmlViewConverter());
 
-			includer.IncludeXmlElement += xmlFileLoader.ResolveXmlElement;
-			loader.Loaded += includer.Include;
+			loader.Including += xmlFileLoader.ResolveXmlFile;
 			loader.Loaded += (s,e) => 
 			{
 				Console.WriteLine("Loaded: {0} ({1})", e.Settings.GetType(), e.Settings.Identity);
@@ -45,11 +43,9 @@ namespace Configuration
 
 			var providerLoader = new ProviderLoader();
 			var loader = new SettingsLoader();
-			var includer = new IncludeInXmlLoader();
 			var xmlFileLoader = new XmlFileSettingsLoader(new XmlViewConverter());
 
-			includer.IncludeXmlElement += xmlFileLoader.ResolveXmlElement;
-			loader.Loaded += includer.Include;
+			loader.Including += xmlFileLoader.ResolveXmlFile;
 			loader.Loaded += providerLoader.TryExtractConfigProtectedData;
 			
 			loader.Loaded += (s, e) =>

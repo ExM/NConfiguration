@@ -1,22 +1,23 @@
 using System;
 using System.Xml.Serialization;
 using Configuration.Joining;
+using System.Runtime.Serialization;
 
 
 namespace Configuration.Xml.ConfigSections
 {
 	public class IncludeFileConfig
 	{
-		[XmlAttribute("Path")]
+		[DataMember(Name = "Path", IsRequired = true)]
 		public string Path { get; set;}
-		
-		[XmlAttribute("Search")]
+
+		[DataMember(Name = "Search", IsRequired = false)]
 		public SearchMode Search { get; set;}
-		
-		[XmlAttribute("Include")]
+
+		[DataMember(Name = "Include", IsRequired = false)]
 		public IncludeMode Include { get; set;}
-		
-		[XmlAttribute("Required")]
+
+		[DataMember(Name = "Required", IsRequired = false)]
 		public bool Required { get; set;}
 	}
 }

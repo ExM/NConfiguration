@@ -31,35 +31,6 @@ namespace Configuration.Xml
 		{
 			return loader.LoadSettings(new XmlSystemSettings(sectionName, converter, loader.Deserializer));
 		}
-
-		public static SettingsLoader IncludeInXml(this SettingsLoader loader, IAppSettings settings, params Func<XElement, IAppSettingSource>[] includeHandlers)
-		{
-			var rootEl = settings.TryLoad<XElement>("Include", false);
-			if (rootEl == null)
-				return loader;
-
-			var results = new List<IAppSettingSource>();
-
-			foreach (var childEl in rootEl.Elements())
-			{
-				IAppSettingSource incSettings = null;
-				foreach (var handler in includeHandlers)
-				{
-					incSettings = handler(childEl);
-					if (incSettings != null)
-						break;
-				}
-
-				if (incSettings == null)
-					throw new ApplicationException(string.Format("unexpected XML element '{0}'", childEl.Name));
-				results.Add(incSettings);
-			}
-
-			foreach (var item in results)
-				loader.LoadSettings(item);
-
-			return loader;
-		}
 	}
 }
 

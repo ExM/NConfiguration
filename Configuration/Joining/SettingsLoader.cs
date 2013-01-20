@@ -46,21 +46,53 @@ namespace Configuration.Joining
 		private void OnLoaded(IAppSettingSource settings)
 		{
 			var copy = Loaded;
-			if (copy == null)
-				return;
-
-			var args = new LoadedEventArgs(settings);
-			copy(this, args);
+			if (copy != null)
+				copy(this, new LoadedEventArgs(settings));
 		}
 
-		public SettingsLoader LoadSettings(IAppSettingSource settings)
+		public SettingsLoader LoadSettings(IAppSettingSource setting)
 		{
-			if (CheckLoaded(settings))
+			if (CheckLoaded(setting))
 				return this;
 			
-			_settings.Add(settings);
-			OnLoaded(settings);
+			_settings.Add(setting);
+			OnLoaded(setting);
+			IncludeSettings(setting);
 			return this;
+		}
+
+		public event EventHandler<IncludingEventArgs> Including;
+
+		private List<IAppSettingSource> OnIncluding(IAppSettingSource source, string name, ICfgNode cfg)
+		{
+			var copy = Including;
+			if (copy != null)
+			{
+				var args = new IncludingEventArgs(source, name, cfg);
+				copy(this, args);
+				if (args.Handled)
+					return args.Settings;
+			}
+
+			throw new InvalidOperationException(string.Format("unknown include type '{0}'", name));
+		}
+
+		private void IncludeSettings(IAppSettingSource setting)
+		{
+			var includeRoot = setting.TryLoad<ICfgNode>("Include", false);
+			if(includeRoot == null)
+				return;
+
+			foreach (var incNode in includeRoot.GetNodes())
+			{
+				if (string.Equals(incNode.Key, "FinalSearch", StringComparison.InvariantCultureIgnoreCase))
+					continue;
+
+				var incSettings = OnIncluding(setting, incNode.Key, incNode.Value);
+				if (incSettings != null)
+					foreach(var incSetting in incSettings)
+						LoadSettings(incSetting);
+			}
 		}
 
 		private bool CheckLoaded(IAppSettingSource settings)
