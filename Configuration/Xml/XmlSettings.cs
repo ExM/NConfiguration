@@ -86,9 +86,9 @@ namespace Configuration.Xml
 				return (T)(object)XElement.Parse(section.ToString());
 
 
-			//return _deserializer.Deserialize<T>(new XmlViewNode(_converter, section));
+			return _deserializer.Deserialize<T>(new XmlViewNode(_converter, section));
 
-			return section.Deserialize<T>();
+			//return section.Deserialize<T>();
 		}
 	}
 }

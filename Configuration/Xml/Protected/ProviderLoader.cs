@@ -7,6 +7,7 @@ using System.Collections.Specialized;
 using System.Xml;
 using Configuration.Xml.ConfigSections;
 using Configuration.Joining;
+using Configuration.GenericView;
 
 namespace Configuration.Xml.Protected
 {
@@ -143,9 +144,9 @@ namespace Configuration.Xml.Protected
 
 		private void LoadConfig(ConfigProtectedData cfg)
 		{
-			foreach (XmlElement el in cfg.Providers.ChildNodes)
+			foreach(var pair in cfg.Providers.GetNodes())
 			{
-				if (el.Name == "clear")
+				if (pair.Key == "clear")
 				{
 					if (OnClearing())
 						continue;
@@ -154,14 +155,22 @@ namespace Configuration.Xml.Protected
 					continue;
 				}
 
-				if (el.Name == "add")
+				if (pair.Key == "add")
 				{
-					Append(el.Attributes.ToNameValueCollection());
+					Append(GetNameValueCollection(pair.Value));
 					continue;
 				}
 
-				throw new InvalidOperationException(string.Format("unexpected element `{0}'", el.Name));
+				throw new InvalidOperationException(string.Format("unexpected element `{0}'", pair.Key));
 			}
+		}
+
+		private static NameValueCollection GetNameValueCollection(ICfgNode node)
+		{
+			var result = new NameValueCollection();
+			foreach (var pair in node.GetNodes())
+				result.Add(pair.Key, pair.Value.As<string>());
+			return result;
 		}
 
 		public static ProviderLoader FromConfigProtectedData()

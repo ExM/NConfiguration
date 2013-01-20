@@ -84,8 +84,8 @@ namespace Configuration.Xml.Joining
 					{
 						var item = new XmlFileSettings(fullPath, _converter, loader.Deserializer);
 						result.Add(item);
-						var incCfg = item.TryLoad<IncludeConfig>(false);
-						if (incCfg != null && incCfg.FinalSearch)
+
+						if (item.TryLoad<IncludeConfig>(true).FinalSearch)
 							break;
 					}
 

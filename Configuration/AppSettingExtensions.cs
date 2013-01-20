@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using System.Xml.Serialization;
+using System.Runtime.Serialization;
 
 
 namespace Configuration
@@ -17,13 +19,21 @@ namespace Configuration
 		public static string GetSectionName<T>()
 			where T : class
 		{
-			object[] attrs = typeof(T).GetCustomAttributes(typeof(XmlRootAttribute), false);
-			if(attrs.Length != 1)
-			{
-				throw new ArgumentException("XmlRoot attribute not set for " + typeof(T).Name);
-			}
-			XmlRootAttribute root = attrs[0] as XmlRootAttribute;
-			return root.ElementName;
+			var dataAttr = typeof(T).GetCustomAttributes(typeof(DataContractAttribute), false)
+				.Select(a => a as DataContractAttribute)
+				.FirstOrDefault(a => a != null);
+
+			if (dataAttr != null)
+				return dataAttr.Name;
+
+			var xmlAttr = typeof(T).GetCustomAttributes(typeof(XmlRootAttribute), false)
+				.Select(a => a as XmlRootAttribute)
+				.FirstOrDefault(a => a != null);
+
+			if (xmlAttr != null)
+				return xmlAttr.ElementName;
+
+			throw new ArgumentException("XmlRoot or DataContract attributes not set for " + typeof(T).Name);
 		}
 		
 		/// <summary>

@@ -3,14 +3,16 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using Configuration.GenericView;
 
 namespace Configuration.Xml.ConfigSections
 {
-	[XmlRoot("configProtectedData")]
+	[DataContract(Name = "configProtectedData")]
 	public class ConfigProtectedData
 	{
-		[XmlAnyElement("providers")]
-		public XmlElement Providers { get; set; }
+		[DataMember(Name = "providers")]
+		public ICfgNode Providers { get; set; }
 	}
 }
 

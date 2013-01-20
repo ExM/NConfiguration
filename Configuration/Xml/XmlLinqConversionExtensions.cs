@@ -56,14 +56,6 @@ namespace Configuration.Xml
 		{
 			return XmlDeserializer<T>.Deserialize(element);
 		}
-
-		public static NameValueCollection ToNameValueCollection(this XmlAttributeCollection attrs)
-		{
-			var result = new NameValueCollection();
-			foreach(XmlAttribute attr in attrs)
-				result.Add(attr.Name, attr.Value);
-			return result;
-		}
 	}
 }
 
