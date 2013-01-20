@@ -22,6 +22,20 @@ namespace Configuration.Xml.Joining
 			_converter = converter;
 		}
 
+		public IXmlViewConverter ViewConverter
+		{
+			get
+			{
+				return _converter;
+			}
+		}
+
+		public void LoadFile(SettingsLoader loader, string fileName)
+		{
+			var setting = new XmlFileSettings(fileName, _converter, loader.Deserializer);
+			loader.LoadSettings(setting);
+		}
+
 		public void ResolveXmlFile(object sender, IncludingEventArgs args)
 		{
 			if (args.Handled)

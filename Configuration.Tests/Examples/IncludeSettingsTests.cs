@@ -25,8 +25,8 @@ namespace Configuration
 			{
 				Console.WriteLine("Loaded: {0} ({1})", e.Settings.GetType(), e.Settings.Identity);
 			};
-			loader.LoadXmlFile("Examples/AppDirectory/main.config");
 
+			xmlFileLoader.LoadFile(loader, "Examples/AppDirectory/main.config");
 
 			IAppSettings settings = loader.Settings;
 
@@ -52,8 +52,8 @@ namespace Configuration
 			{
 				Console.WriteLine("Loaded: {0} ({1})", e.Settings.GetType(), e.Settings.Identity);
 			};
-			loader.LoadXmlFile("Examples/AppDirectory/secureMain.config");
 
+			xmlFileLoader.LoadFile(loader, "Examples/AppDirectory/secureMain.config");
 
 			IAppSettings settings = loader.Settings;
 

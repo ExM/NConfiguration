@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Configuration.GenericView.Deserialization;
+using System.Collections.Concurrent;
 
 namespace Configuration.GenericView
 {
 	public class GenericDeserializer: IGenericDeserializer
 	{
 		private IGenericMapper _mapper = new GenericMapper();
-		private Dictionary<Type, object> _funcMap = new Dictionary<Type, object>();
+		private ConcurrentDictionary<Type, object> _funcMap = new ConcurrentDictionary<Type, object>();
 
 		public GenericDeserializer() : this(new GenericMapper())
 		{
@@ -22,20 +23,17 @@ namespace Configuration.GenericView
 
 		public T Deserialize<T>(ICfgNode cfgNode)
 		{
-			return GetFunction<T>()(cfgNode);
+			return ((Func<ICfgNode, T>)GetFunction(typeof(T)))(cfgNode);
 		}
 
-		private Func<ICfgNode, T> GetFunction<T>()
+		private object GetFunction(Type type)
 		{
-			//TODO: tread safe
-			object func;
-			if (!_funcMap.TryGetValue(typeof(T), out func))
-			{
-				func = _mapper.CreateFunction(typeof (T), this);
-				_funcMap.Add(typeof (T), func);
-			}
+			return _funcMap.GetOrAdd(type, CreateFunction);
+		}
 
-			return (Func<ICfgNode, T>)func;
+		private object CreateFunction(Type type)
+		{
+			return _mapper.CreateFunction(type, this);
 		}
 	}
 }

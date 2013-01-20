@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
+using System.Collections.Concurrent;
 
 namespace Configuration.GenericView
 {
@@ -11,7 +12,7 @@ namespace Configuration.GenericView
 		public static IXmlViewConverter Default = new XmlViewConverter();
 
 		private readonly CultureInfo _ci;
-		private readonly Dictionary<Type, object> _funcMap = new Dictionary<Type, object>();
+		private readonly ConcurrentDictionary<Type, object> _funcMap = new ConcurrentDictionary<Type, object>();
 
 		public XmlViewConverter()
 			: this(CultureInfo.InvariantCulture)
@@ -30,20 +31,12 @@ namespace Configuration.GenericView
 
 		public T Convert<T>(string text)
 		{
-			return GetFunction<T>()(text);
+			return ((Func<string, T>)GetFunction(typeof(T)))(text);
 		}
 
-		private Func<string, T> GetFunction<T>()
+		private object GetFunction(Type type)
 		{
-			//TODO: tread safe
-			object func;
-			if (!_funcMap.TryGetValue(typeof(T), out func))
-			{
-				func = CreateFunction(typeof(T));
-				_funcMap.Add(typeof(T), func);
-			}
-
-			return (Func<string, T>)func;
+			return _funcMap.GetOrAdd(type, CreateFunction);
 		}
 
 		private object CreateFunction(Type type)
