@@ -5,6 +5,7 @@ using System.Configuration;
 using Configuration.Xml;
 using System.IO;
 using Configuration.GenericView;
+using Configuration.Tests;
 
 namespace Configuration
 {
@@ -16,7 +17,7 @@ namespace Configuration
 		[TestFixtureSetUp]
 		public void SetUp()
 		{
-			_settings = new XmlFileSettings("testConfig1.xml", new XmlViewConverter(), new GenericDeserializer());
+			_settings = new XmlFileSettings("testConfig1.xml", Global.XmlViewConverter, Global.GenericDeserializer);
 		}
 		
 		[Test]

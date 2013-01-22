@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Collections.Concurrent;
+using System.Xml.Linq;
 
 namespace Configuration.GenericView
 {
 	public partial class XmlViewConverter : IXmlViewConverter
 	{
-		//HACK: remove
-		public static IXmlViewConverter Default = new XmlViewConverter();
-
 		private readonly CultureInfo _ci;
 		private readonly ConcurrentDictionary<Type, object> _funcMap = new ConcurrentDictionary<Type, object>();
 

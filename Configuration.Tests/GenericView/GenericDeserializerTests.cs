@@ -35,15 +35,14 @@ namespace Configuration.GenericView
 		[Test]
 		public void ParsePrimitiveType()
 		{
-			var root = XmlView.Create(
-@"<Config
+			var root = @"<Config
 	TextField='val1' TextProp='val2'
 	BoolField='+' BoolProp='false'
 	NBoolField='T' NBoolProp=''
 	ByteField='123' ByteProp='12'
 	NByteProp=''
 	EnProp='One'
-><NByteField>0</NByteField></Config>".ToXDocument());
+><NByteField>0</NByteField></Config>".ToXmlView();
 			var d = new GenericDeserializer();
 
 			var tc = d.Deserialize<PrimitiveTypeCollection>(root);
@@ -73,8 +72,8 @@ namespace Configuration.GenericView
 		[Test]
 		public void ParseEmptyCollections()
 		{
-			var root = XmlView.Create(
-@"<Root></Root>".ToXDocument());
+			var root =
+@"<Root></Root>".ToXmlView();
 			var d = new GenericDeserializer();
 
 			var tc = d.Deserialize<ComplexTest>(root);
@@ -88,8 +87,8 @@ namespace Configuration.GenericView
 		[Test]
 		public void ParseArray1()
 		{
-			var root = XmlView.Create(
-@"<Root Array='123'></Root>".ToXDocument());
+			var root =
+@"<Root Array='123'></Root>".ToXmlView();
 			var d = new GenericDeserializer();
 
 			var tc = d.Deserialize<ComplexTest>(root);
@@ -100,8 +99,8 @@ namespace Configuration.GenericView
 		[Test]
 		public void ParseArray2()
 		{
-			var root = XmlView.Create(
-@"<Root Array='123'><Array>345</Array></Root>".ToXDocument());
+			var root =
+@"<Root Array='123'><Array>345</Array></Root>".ToXmlView();
 			var d = new GenericDeserializer();
 
 			var tc = d.Deserialize<ComplexTest>(root);
@@ -112,8 +111,8 @@ namespace Configuration.GenericView
 		[Test]
 		public void ParseCollection()
 		{
-			var root = XmlView.Create(
-@"<Root Coll='5'><Coll>-5</Coll></Root>".ToXDocument());
+			var root =
+@"<Root Coll='5'><Coll>-5</Coll></Root>".ToXmlView();
 			var d = new GenericDeserializer();
 
 			var tc = d.Deserialize<ComplexTest>(root);
@@ -124,8 +123,8 @@ namespace Configuration.GenericView
 		[Test]
 		public void ParseInner()
 		{
-			var root = XmlView.Create(
-@"<Root><Inner Coll='5'><Coll>-5</Coll></Inner></Root>".ToXDocument());
+			var root =
+@"<Root><Inner Coll='5'><Coll>-5</Coll></Inner></Root>".ToXmlView();
 			var d = new GenericDeserializer();
 
 			var tc = d.Deserialize<ComplexTest>(root);
@@ -137,8 +136,8 @@ namespace Configuration.GenericView
 		[Test]
 		public void ParseInnerList()
 		{
-			var root = XmlView.Create(
-@"<Root><InnerList Coll='5'><Coll>-5</Coll></InnerList><InnerList Coll='6'><Coll>-6</Coll></InnerList></Root>".ToXDocument());
+			var root =
+@"<Root><InnerList Coll='5'><Coll>-5</Coll></InnerList><InnerList Coll='6'><Coll>-6</Coll></InnerList></Root>".ToXmlView();
 			var d = new GenericDeserializer();
 
 			var tc = d.Deserialize<ComplexTest>(root);

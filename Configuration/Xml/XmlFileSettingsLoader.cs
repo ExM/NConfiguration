@@ -16,6 +16,11 @@ namespace Configuration.Xml.Joining
 		public const string ElementName = "XmlFile";
 
 		private readonly IXmlViewConverter _converter;
+		
+		public XmlFileSettingsLoader()
+			: this(new XmlViewConverter())
+		{
+		}
 
 		public XmlFileSettingsLoader(IXmlViewConverter converter)
 		{

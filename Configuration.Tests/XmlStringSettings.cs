@@ -5,6 +5,7 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using Configuration.Xml;
 using Configuration.GenericView;
+using Configuration.Tests;
 
 namespace Configuration
 {
@@ -14,7 +15,7 @@ namespace Configuration
 		private readonly string _hash;
 
 		public XmlStringSettings(string text)
-			:base(new XmlViewConverter(), new GenericDeserializer())
+			:base(Global.XmlViewConverter, Global.GenericDeserializer)
 		{
 			_hash = text.GetHashCode().ToString();
 			_root = XDocument.Parse(text).Root;

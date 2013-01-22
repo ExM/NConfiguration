@@ -14,7 +14,7 @@ namespace Configuration.GenericView
 		[Test]
 		public void GenericNavigate()
 		{
-			var root = XmlView.Create(_doc1);
+			var root = _doc1.ToXmlView();
 			Assert.IsNull(root.GetChild("noitem"));
 
 			Assert.IsNotNull(root.GetChild("item1"));
@@ -47,7 +47,7 @@ namespace Configuration.GenericView
 		[TestCase(null, "")]
 		public void ParseBoolean(object expected, string text)
 		{
-			var root = XmlView.Create(string.Format("<Config>{0}</Config>", text).ToXDocument());
+			var root = string.Format("<Config>{0}</Config>", text).ToXmlView();
 			Assert.AreEqual(expected, root.As<bool?>());
 		}
 	}

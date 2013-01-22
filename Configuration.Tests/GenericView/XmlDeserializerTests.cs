@@ -42,8 +42,7 @@ namespace Configuration.GenericView
 		[ExpectedException(typeof(NotImplementedException))]
 		public void ParseBadType1()
 		{
-			var root = XmlView.Create(
-@"<Root></Root>".ToXDocument());
+			var root = @"<Root></Root>".ToXmlView();
 			var d = new GenericDeserializer(new XmlMapper());
 
 			d.Deserialize<BadType1>(root);
@@ -53,8 +52,7 @@ namespace Configuration.GenericView
 		[ExpectedException(typeof(NotImplementedException))]
 		public void ParseBadType2()
 		{
-			var root = XmlView.Create(
-@"<Root></Root>".ToXDocument());
+			var root = @"<Root></Root>".ToXmlView();
 			var d = new GenericDeserializer(new XmlMapper());
 
 			d.Deserialize<BadType2>(root);
@@ -75,8 +73,8 @@ namespace Configuration.GenericView
 		[Test]
 		public void ParseGoodType1()
 		{
-			var root = XmlView.Create(
-@"<Root Ignored='true'><xmlNInt>123</xmlNInt></Root>".ToXDocument());
+			var root = 
+@"<Root Ignored='true'><xmlNInt>123</xmlNInt></Root>".ToXmlView();
 			var d = new GenericDeserializer(new XmlMapper());
 
 			var t = d.Deserialize<GoodType>(root);
@@ -90,8 +88,8 @@ namespace Configuration.GenericView
 		[Test]
 		public void ParseGoodType2()
 		{
-			var root = XmlView.Create(
-@"<Root Ignored='1'><xmlInner xmlNInt='321'></xmlInner></Root>".ToXDocument());
+			var root = 
+@"<Root Ignored='1'><xmlInner xmlNInt='321'></xmlInner></Root>".ToXmlView();
 			var d = new GenericDeserializer(new XmlMapper());
 
 			var t = d.Deserialize<GoodType>(root);

@@ -54,8 +54,8 @@ namespace Configuration.GenericView
 		[ExpectedException(typeof(FormatException))]
 		public void BadParse1()
 		{
-			var root = XmlView.Create(
-@"<Root></Root>".ToXDocument());
+			var root =
+@"<Root></Root>".ToXmlView();
 			var d = new GenericDeserializer();
 
 			d.Deserialize<TestType1>(root);
@@ -65,8 +65,8 @@ namespace Configuration.GenericView
 		[ExpectedException(typeof(FormatException))]
 		public void BadParse2()
 		{
-			var root = XmlView.Create(
-@"<Root NInt2=''></Root>".ToXDocument());
+			var root =
+@"<Root NInt2=''></Root>".ToXmlView();
 			var d = new GenericDeserializer();
 
 			d.Deserialize<TestType1>(root);
@@ -76,8 +76,8 @@ namespace Configuration.GenericView
 		[ExpectedException(typeof(FormatException))]
 		public void BadParse3()
 		{
-			var root = XmlView.Create(
-@"<Root NInt2='' Int2=''></Root>".ToXDocument());
+			var root =
+@"<Root NInt2='' Int2=''></Root>".ToXmlView();
 			var d = new GenericDeserializer();
 
 			d.Deserialize<TestType1>(root);
@@ -86,8 +86,8 @@ namespace Configuration.GenericView
 		[Test]
 		public void RequiredNullable()
 		{
-			var root = XmlView.Create(
-@"<Root NInt=''></Root>".ToXDocument());
+			var root =
+@"<Root NInt=''></Root>".ToXmlView();
 			var d = new GenericDeserializer();
 
 			var t = d.Deserialize<TestType2>(root);
@@ -98,8 +98,8 @@ namespace Configuration.GenericView
 		[Test]
 		public void EmptyParse()
 		{
-			var root = XmlView.Create(
-@"<Root Ignored='true' NInt2='' Int2='123' CfgNode2='' ><Inner2 NInt=''/></Root>".ToXDocument());
+			var root =
+@"<Root Ignored='true' NInt2='' Int2='123' CfgNode2='' ><Inner2 NInt=''/></Root>".ToXmlView();
 			var d = new GenericDeserializer();
 
 			var t = d.Deserialize<TestType1>(root);
