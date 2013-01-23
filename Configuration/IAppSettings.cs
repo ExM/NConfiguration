@@ -1,4 +1,6 @@
 
+using System.Collections.Generic;
+
 namespace Configuration
 {
 	/// <summary>
@@ -6,14 +8,6 @@ namespace Configuration
 	/// </summary>
 	public interface IAppSettings
 	{
-		/// <summary>
-		/// Trying to load the configuration.
-		/// </summary>
-		/// <returns>
-		/// Instance of the configuration, or null if no section name
-		/// </returns>
-		/// <param name='sectionName'>instance of application settings</param>
-		/// <typeparam name='T'>type of configuration</typeparam>
-		T TryLoad<T>(string sectionName) where T : class;
+		IEnumerable<T> LoadCollection<T>(string sectionName);
 	}
 }

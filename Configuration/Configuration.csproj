@@ -87,8 +87,6 @@
     <Compile Include="Xml\Protected\ProviderCollection.cs" />
     <Compile Include="SectionNotFoundException.cs" />
     <Compile Include="MultiSettings\MultiSettings.cs" />
-    <Compile Include="MultiSettings\ICombineFactory.cs" />
-    <Compile Include="MultiSettings\CombineFactory.cs" />
     <Compile Include="Xml\PlainXmlSection.cs" />
     <Compile Include="Xml\XmlSystemSettings.cs" />
     <Compile Include="Xml\XmlLinqConversionExtensions.cs" />

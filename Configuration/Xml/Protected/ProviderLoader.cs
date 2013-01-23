@@ -128,7 +128,7 @@ namespace Configuration.Xml.Protected
 
 		public ProviderLoader TryLoadAppSettings(IAppSettings settings)
 		{
-			var cfg = settings.TryLoad<ConfigProtectedData>(false);
+			var cfg = settings.TryFirst<ConfigProtectedData>(false);
 			if (cfg == null)
 				return this;
 
@@ -138,7 +138,7 @@ namespace Configuration.Xml.Protected
 
 		public ProviderLoader LoadAppSettings(IAppSettings settings)
 		{
-			LoadConfig(settings.Load<ConfigProtectedData>());
+			LoadConfig(settings.TryFirst<ConfigProtectedData>());
 			return this;
 		}
 

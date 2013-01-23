@@ -145,7 +145,7 @@ iaWGZaw==
 			var providers = ProviderLoader.FromAppSettings(settings).Providers;
 			var cryptedsettings = EncryptedCfg.ToXmlSettings(providers);
 
-			var cfg = cryptedsettings.Load<MyXmlConfig>();
+			var cfg = cryptedsettings.First<MyXmlConfig>();
 
 			Assert.AreEqual("SecureMessage", cfg.AttrField);
 			Assert.IsNull(cfg.ElemField);
@@ -160,7 +160,7 @@ iaWGZaw==
 			var providers = ProviderLoader.FromAppSettings(settings).Providers;
 			var cryptedsettings = EncryptedCfg.ToXmlSettings(providers);
 
-			Assert.Throws<CryptographicException>(() => cryptedsettings.Load<MyXmlConfig>());
+			Assert.Throws<CryptographicException>(() => cryptedsettings.First<MyXmlConfig>());
 		}
 
 		[Test]
@@ -186,9 +186,9 @@ iaWGZaw==
 				@"<Config><MyXmlCfg configProtectionProvider='RsaTestProvider'>{0}</MyXmlCfg></Config>",
 				encryptedXml
 			).ToXmlSettings(providers);
-			
 
-			var cfg = cryptedsettings.Load<MyXmlConfig>();
+
+			var cfg = cryptedsettings.First<MyXmlConfig>();
 
 			Assert.AreEqual("SecureMessage", cfg.AttrField);
 			Assert.IsNull(cfg.ElemField);

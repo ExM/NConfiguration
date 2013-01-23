@@ -107,7 +107,7 @@ namespace Configuration.Xml.Joining
 						var item = new XmlFileSettings(fullPath, _converter, deserializer);
 						result.Add(item);
 
-						if (item.TryLoad<IncludeConfig>(true).FinalSearch)
+						if (item.TryFirst<IncludeConfig>(true).FinalSearch)
 							break;
 					}
 

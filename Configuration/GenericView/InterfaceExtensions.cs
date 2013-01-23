@@ -13,6 +13,11 @@ namespace Configuration.GenericView
 		{
 			return new XmlViewNode(converter, doc.Root);
 		}
+
+		public static ICfgNode CreateView(this IXmlViewConverter converter, XElement el)
+		{
+			return new XmlViewNode(converter, el);
+		}
 	}
 }
 

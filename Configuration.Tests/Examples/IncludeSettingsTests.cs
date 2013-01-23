@@ -9,7 +9,7 @@ using Configuration.Examples;
 using Configuration.Xml.Protected;
 using Configuration.GenericView;
 
-namespace Configuration
+namespace Configuration.Examples
 {
 	[TestFixture]
 	public class IncludeSettingsTests
@@ -30,7 +30,7 @@ namespace Configuration
 
 			IAppSettings settings = loader.Settings;
 
-			var addCfg = settings.TryLoad<ExampleCombineConfig>("AdditionalConfig");
+			var addCfg = settings.TryCombine<ExampleCombineConfig>("AdditionalConfig");
 
 			Assert.IsNotNull(addCfg);
 			Assert.AreEqual("InAppDirectory", addCfg.F);
@@ -57,15 +57,13 @@ namespace Configuration
 
 			IAppSettings settings = loader.Settings;
 
-			var addCfg = settings.TryLoad<ExampleCombineConfig>("AdditionalConfig");
+			var addCfg = settings.TryCombine<ExampleCombineConfig>("AdditionalConfig");
 
 			Assert.IsNotNull(addCfg);
 			Assert.AreEqual("InUpDirectory", addCfg.F);
 
-			var extConn = settings.TryLoad<ConnectionConfig>("MyExtConnection");
-
-			Assert.AreEqual("Server=localhost;Database=workDb;User ID=admin;Password=pass;", settings.TryLoad<ConnectionConfig>("MyExtConnection").ConnectionString);
-			Assert.AreEqual("Server=localhost;Database=workDb;User ID=admin;Password=pass;", settings.TryLoad<ConnectionConfig>("MySecuredConnection").ConnectionString);
+			Assert.AreEqual("Server=localhost;Database=workDb;User ID=admin;Password=pass;", settings.TryFirst<ConnectionConfig>("MyExtConnection").ConnectionString);
+			Assert.AreEqual("Server=localhost;Database=workDb;User ID=admin;Password=pass;", settings.TryFirst<ConnectionConfig>("MySecuredConnection").ConnectionString);
 
 			KeyManager.Delete();
 		}

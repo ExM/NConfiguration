@@ -14,8 +14,7 @@ namespace Configuration
 			s.Add(GetXmlSettings("ACfg"));
 
 
-			var cfg = s.TryLoad<CombineConfig>("ACfg");
-			Assert.IsNotNull(cfg);
+			var cfg = s.Combine<CombineConfig>("ACfg");
 			Assert.AreEqual("A", cfg.F);
 		}
 		
@@ -92,8 +91,7 @@ namespace Configuration
 			foreach(var name in confFiles)
 				s.Add(GetXmlSettings(name));
 
-			var cfg = s.TryLoad<CombineConfig>("ACfg");
-			Assert.IsNotNull(cfg);
+			var cfg = s.Combine<CombineConfig>("ACfg");
 			Assert.AreEqual(expected, cfg.F);
 		}
 
@@ -105,7 +103,7 @@ namespace Configuration
 			for(int i =0; i<3 ; i++)
 				s.Add(GetXmlSettings("Empty"));
 
-			var cfg = s.TryLoad<CombineConfig>("ACfg");
+			var cfg = s.TryCombine<CombineConfig>("ACfg");
 			Assert.IsNull(cfg);
 		}
 	}

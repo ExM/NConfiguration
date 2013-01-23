@@ -20,8 +20,8 @@ namespace Configuration.Joining
 		{
 		}
 
-		public SettingsLoader(IGenericDeserializer deserializer, ICombineFactory combineFactory)
-			: this(deserializer, new MultiSettings(combineFactory))
+		public SettingsLoader(IGenericDeserializer deserializer)
+			: this(deserializer, new MultiSettings())
 		{
 		}
 
@@ -79,7 +79,7 @@ namespace Configuration.Joining
 
 		private void IncludeSettings(IAppSettingSource setting)
 		{
-			var includeRoot = setting.TryLoad<ICfgNode>("Include", false);
+			var includeRoot = setting.TryFirst<ICfgNode>("Include", false);
 			if(includeRoot == null)
 				return;
 

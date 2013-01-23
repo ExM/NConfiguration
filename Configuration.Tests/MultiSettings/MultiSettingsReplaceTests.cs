@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 namespace Configuration
 {
@@ -14,7 +15,7 @@ namespace Configuration
 			s.Add(GetXmlSettings("ACfg"));
 			
 			
-			var cfg = s.TryLoad<ReplacedConfig>("ACfg");
+			var cfg = s.LoadCollection<ReplacedConfig>("ACfg").LastOrDefault();
 			Assert.IsNotNull(cfg);
 			Assert.IsNull(cfg.F);
 		}
@@ -54,7 +55,7 @@ namespace Configuration
 			foreach(var name in confFiles)
 				s.Add(GetXmlSettings(name));
 
-			var cfg = s.TryLoad<ReplacedConfig>("ACfg");
+			var cfg = s.LoadCollection<ReplacedConfig>("ACfg").LastOrDefault();
 			Assert.IsNotNull(cfg);
 			Assert.AreEqual(expected, cfg.F);
 		}
@@ -67,7 +68,7 @@ namespace Configuration
 			for(int i =0; i<3 ; i++)
 				s.Add(GetXmlSettings("Empty"));
 
-			var cfg = s.TryLoad<ReplacedConfig>("ACfg");
+			var cfg = s.LoadCollection<ReplacedConfig>("ACfg").LastOrDefault();
 			Assert.IsNull(cfg);
 		}
 	}

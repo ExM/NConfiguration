@@ -3,7 +3,6 @@ using System.Linq;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
 
-
 namespace Configuration
 {
 	/// <summary>
@@ -12,7 +11,7 @@ namespace Configuration
 	public static class AppSettingExtensions
 	{
 		/// <summary>
-		/// Gets the name of the section in XmlRootAttribute.
+		/// Gets the name of the section in XmlRootAttribute or DataContractAttribute
 		/// </summary>
 		/// <returns>The section name.</returns>
 		/// <typeparam name='T'>type of configuration</typeparam>
@@ -37,33 +36,35 @@ namespace Configuration
 		}
 		
 		/// <summary>
-		/// Load the load the configuration object.
-		/// Resolve the section name in XmlRootAttribute
+		/// Load the first configuration object.
+		/// Resolve the section name in XmlRootAttribute or DataContractAttribute
 		/// </summary>
 		/// <param name='settings'>instance of application settings</param>
 		/// <typeparam name='T'>type of configuration</typeparam>
-		public static T Load<T>(this IAppSettings settings) where T : class
+		public static T First<T>(this IAppSettings settings) where T : class
 		{
-			return settings.Load<T>(GetSectionName<T>());
+			return settings.First<T>(GetSectionName<T>());
 		}
 		
 		/// <summary>
-		/// Load the load the configuration object.
+		/// Load the first configuration object by name.
 		/// </summary>
 		/// <param name='settings'>instance of application settings</param>
 		/// <param name='sectionName'>Section name.</param>
 		/// <typeparam name='T'>type of configuration</typeparam>
-		public static T Load<T>(this IAppSettings settings, string sectionName) where T : class
+		public static T First<T>(this IAppSettings settings, string sectionName) where T : class
 		{
-			var result = settings.TryLoad<T>(sectionName);
+			var result = settings
+				.LoadCollection<T>(sectionName)
+				.FirstOrDefault();
 			if(result == null)
 				throw new SectionNotFoundException(sectionName, typeof(T));
 			return result;
 		}
 		
 		/// <summary>
-		/// Trying to load the configuration.
-		/// Resolve the section name in XmlRootAttribute..
+		/// Trying to load the first configuration.
+		/// Resolve the section name in XmlRootAttribute or DataContractAttribute
 		/// </summary>
 		/// <returns>
 		/// Instance of configuration or null or default instance
@@ -71,13 +72,18 @@ namespace Configuration
 		/// <param name='settings'>instance of application settings</param>
 		/// <param name='createDefaultInstance'>Create default instance.</param>
 		/// <typeparam name='T'>type of configuration</typeparam>
-		public static T TryLoad<T>(this IAppSettings settings, bool createDefaultInstance) where T : class
+		public static T TryFirst<T>(this IAppSettings settings, bool createDefaultInstance) where T : class
 		{
-			return settings.TryLoad<T>(GetSectionName<T>(), createDefaultInstance);
+			var result = settings
+				.LoadCollection<T>(GetSectionName<T>())
+				.FirstOrDefault();
+			if (result == null && createDefaultInstance)
+				result = Activator.CreateInstance<T>();
+			return result;
 		}
 		
 		/// <summary>
-		/// Trying to load the configuration
+		/// Trying to load the first configuration by name.
 		/// </summary>
 		/// <returns>
 		/// Instance of configuration or null or default instance
@@ -86,12 +92,110 @@ namespace Configuration
 		/// <param name='sectionName'>Section name.</param>
 		/// <param name='createDefaultInstance'>Create default instance.</param>
 		/// <typeparam name='T'>type of configuration</typeparam>
-		public static T TryLoad<T>(this IAppSettings settings, string sectionName, bool createDefaultInstance) where T : class
+		public static T TryFirst<T>(this IAppSettings settings, string sectionName, bool createDefaultInstance) where T : class
 		{
-			var result = settings.TryLoad<T>(sectionName);
+			var result = settings
+				.LoadCollection<T>(sectionName)
+				.FirstOrDefault();
 			if(result == null && createDefaultInstance)
 				result = Activator.CreateInstance<T>();
 			return result;
+		}
+
+		/// <summary>
+		/// Trying to load the first configuration by name.
+		/// </summary>
+		/// <returns>
+		/// Instance of configuration or null or default instance
+		/// </returns>
+		/// <param name='settings'>instance of application settings</param>
+		/// <param name='sectionName'>Section name.</param>
+		/// <typeparam name='T'>type of configuration</typeparam>
+		public static T TryFirst<T>(this IAppSettings settings, string sectionName) where T : class
+		{
+			return settings
+				.LoadCollection<T>(sectionName)
+				.FirstOrDefault();
+		}
+
+		/// <summary>
+		/// Trying to load the first configuration.
+		/// Resolve the section name in XmlRootAttribute or DataContractAttribute
+		/// </summary>
+		/// <returns>
+		/// Instance of configuration or null or default instance
+		/// </returns>
+		/// <param name='settings'>instance of application settings</param>
+		/// <typeparam name='T'>type of configuration</typeparam>
+		public static T TryFirst<T>(this IAppSettings settings) where T : class
+		{
+			return settings
+				.LoadCollection<T>(GetSectionName<T>())
+				.FirstOrDefault();
+		}
+
+		public static T TryCombine<T>(this IAppSettings settings) where T : class, ICombinable
+		{
+			return TryCombine<T>(settings, GetSectionName<T>());
+		}
+
+		public static T TryCombine<T>(this IAppSettings settings, string sectionName) where T : class, ICombinable
+		{
+			T sum = null;
+			foreach(var cfg in settings.LoadCollection<T>(sectionName))
+			{
+				if(sum == null)
+					sum = cfg;
+				else
+					sum.Combine(cfg);
+			}
+
+			return sum;
+		}
+
+		public static T Combine<T>(this IAppSettings settings) where T : class, ICombinable
+		{
+			return Combine<T>(settings, GetSectionName<T>());
+		}
+
+		public static T Combine<T>(this IAppSettings settings, string sectionName) where T : class, ICombinable
+		{
+			T sum = null;
+			foreach (var cfg in settings.LoadCollection<T>(sectionName))
+			{
+				if (sum == null)
+					sum = cfg;
+				else
+					sum.Combine(cfg);
+			}
+
+			if (sum == null)
+				throw new SectionNotFoundException(sectionName, typeof(T));
+
+			return sum;
+		}
+
+		public static T Combine<T>(this IAppSettings settings, string sectionName, Func<T, T, T> combine) where T : class
+		{
+			T sum = settings.LoadCollection<T>(sectionName).Aggregate(null, combine);
+			if (sum == null)
+				throw new SectionNotFoundException(sectionName, typeof(T));
+			return sum;
+		}
+
+		public static T Combine<T>(this IAppSettings settings, Func<T, T, T> combine) where T : class
+		{
+			return Combine<T>(settings, GetSectionName<T>(), combine);
+		}
+
+		public static T TryCombine<T>(this IAppSettings settings, string sectionName, Func<T, T, T> combine) where T : class
+		{
+			return settings.LoadCollection<T>(sectionName).Aggregate(null, combine);
+		}
+
+		public static T TryCombine<T>(this IAppSettings settings, Func<T, T, T> combine) where T : class
+		{
+			return TryCombine<T>(settings, GetSectionName<T>(), combine);
 		}
 	}
 }

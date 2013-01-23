@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 namespace Configuration
 {
-	public class FullCombineConfig : ICombinable<FullCombineConfig>
+	public class FullCombineConfig
 	{
 		[XmlAttribute]
 		public string F = null;
 
-		public FullCombineConfig Combine(FullCombineConfig prev, FullCombineConfig next)
+		public static FullCombineConfig Combine(FullCombineConfig prev, FullCombineConfig next)
 		{
 			if(prev == null)
 				return next;

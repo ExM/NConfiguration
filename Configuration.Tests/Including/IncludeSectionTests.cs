@@ -23,8 +23,8 @@ namespace Configuration.Including
 		public void FinalSearch(string elText, bool expected)
 		{
 			var settings = string.Format(_xmlFrm, elText).ToXmlSettings();
-			
-			var cfg = settings.TryLoad<IncludeConfig>(true);
+
+			var cfg = settings.TryFirst<IncludeConfig>(true);
 			
 			Assert.AreEqual(expected, cfg.FinalSearch);
 		}
