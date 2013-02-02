@@ -72,6 +72,15 @@
     <Compile Include="IFilePathOwner.cs" />
     <Compile Include="IAppSettings.cs" />
     <Compile Include="AppSettingExtensions.cs" />
+    <Compile Include="Ini\Section.cs" />
+    <Compile Include="Ini\Parsing\Token.cs" />
+    <Compile Include="Ini\Parsing\TokenType.cs" />
+    <Compile Include="Ini\Parsing\ParseState.cs" />
+    <Compile Include="Ini\Parsing\ParseContext.cs" />
+    <Compile Include="Ini\IniSettings.cs" />
+    <Compile Include="Ini\ViewField.cs" />
+    <Compile Include="Ini\ViewSection.cs" />
+    <Compile Include="Ini\IniFileSettings.cs" />
     <Compile Include="Joining\IncludingEventArgs.cs" />
     <Compile Include="Joining\SettingsLoader.cs" />
     <Compile Include="Xml\IncludeXmlElementEventArgs.cs" />
