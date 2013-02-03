@@ -14,6 +14,7 @@ namespace Configuration.Ini.Parsing
 		private char KeyValueSeparator = '=';
 		private char NewLine = '\n';
 		private char CarriageReturn = '\r';
+		private char TextQuote = '\"';
 
 		private LinkedList<Section> _sections = new LinkedList<Section>();
 
@@ -42,19 +43,24 @@ namespace Configuration.Ini.Parsing
 			switch (_state)
 			{
 				case ParseState.BeginLine:
-					return;
-
 				case ParseState.EmptyLine:
-					return;
-
 				case ParseState.Comment:
+				case ParseState.SectionEnd:
 					return;
 
 				case ParseState.SectionName:
 					throw new FormatException("unexpected end in section name");
 
-				case ParseState.SectionEnd:
+				case ParseState.KeyName:
+				case ParseState.EndKeyName:
+					throw new FormatException("unexpected end line in key name");
+
+				case ParseState.BeginValue:
+				case ParseState.SimpleValue:
+					EndValue();
 					return;
+
+				
 
 				default:
 					throw new NotImplementedException("unexpected state: " + _state.ToString());
@@ -63,6 +69,8 @@ namespace Configuration.Ini.Parsing
 
 		private ParseState AppendChar(char ch)
 		{
+			Console.WriteLine("{0} <{1}>", _state, ch);
+
 			switch (_state)
 			{
 				case ParseState.BeginLine:
@@ -80,9 +88,109 @@ namespace Configuration.Ini.Parsing
 				case ParseState.SectionEnd:
 					return SectionEnd(ch);
 
+				case ParseState.KeyName:
+					return KeyName(ch);
+
+				case ParseState.EndKeyName:
+					return EndKeyName(ch);
+
+				case ParseState.BeginValue:
+					return BeginValue(ch);
+
+				case ParseState.SimpleValue:
+					return SimpleValue(ch);
+
 				default:
 					throw new NotImplementedException("unexpected state: " + _state.ToString());
 			}
+		}
+
+		private ParseState SimpleValue(char ch)
+		{
+			if (ch == BeginComment)
+			{
+				EndValue();
+				return ParseState.Comment;
+			}
+
+			if (ch == NewLine || ch == CarriageReturn)
+			{
+				EndValue();
+				return ParseState.BeginLine;
+			}
+
+			// *
+			_tokenValue.Append(ch);
+			return ParseState.SimpleValue;
+		}
+
+		private ParseState BeginValue(char ch)
+		{
+			if (Char.IsWhiteSpace(ch))
+				return ParseState.BeginValue;
+
+			if (ch == NewLine || ch == CarriageReturn)
+			{
+				EndValue();
+				return ParseState.BeginLine;
+			}
+
+			if (ch == TextQuote)
+				return ParseState.QuotedValue;
+
+			// *
+			_tokenValue.Append(ch);
+			return ParseState.SimpleValue;
+		}
+
+		private void EndValue()
+		{
+			var value = _tokenValue.ToString();
+			_tokenValue.Clear();
+
+			_sections.Last.Value.Pairs.Add(new KeyValuePair<string,string>(_curentKey, value));
+		}
+
+		private ParseState EndKeyName(char ch)
+		{
+			if (ch == NewLine || ch == CarriageReturn)
+				throw new FormatException("unexpected end line in key name");
+
+			if (Char.IsWhiteSpace(ch))
+				return ParseState.EndKeyName;
+
+			if (ch == KeyValueSeparator)
+				return ParseState.BeginValue;
+
+			throw new FormatException(string.Format("unexpected char '{0}' before '{1}'", ch, KeyValueSeparator));
+		}
+
+		private ParseState KeyName(char ch)
+		{
+			if (ch == NewLine || ch == CarriageReturn)
+				throw new FormatException("unexpected end line in key name");
+
+			if (Char.IsWhiteSpace(ch))
+			{
+				KeyNameEnd();
+				return ParseState.EndKeyName;
+			}
+
+			if (ch == KeyValueSeparator)
+			{
+				KeyNameEnd();
+				return ParseState.BeginValue;
+			}
+
+			// *
+			_tokenValue.Append(ch);
+			return ParseState.KeyName;
+		}
+
+		private void KeyNameEnd()
+		{
+			_curentKey = _tokenValue.ToString();
+			_tokenValue.Clear();
 		}
 
 		private ParseState SectionEnd(char ch)
@@ -102,30 +210,24 @@ namespace Configuration.Ini.Parsing
 		private ParseState SectionName(char ch)
 		{
 			if (ch == NewLine || ch == CarriageReturn)
-				throw new FormatException("end line in section name");
+				throw new FormatException("unexpected end line in section name");
 
 
 			if (ch == EndSection)
 			{
-				AppendToEndSectionName(ch);
-				return ParseState.SectionName;
+				EndSectionName();
+				return ParseState.SectionEnd;
 			}
 
-			AppendToSectionName(ch);
+			_tokenValue.Append(ch);
 			return ParseState.SectionName;
 		}
 
-		private void AppendToSectionName(char ch)
+		private void EndSectionName()
 		{
-			_tokenValue.Append(ch);
-		}
-
-		private void AppendToEndSectionName(char ch)
-		{
-			_tokenValue.Append(ch);
 			var sectionName = _tokenValue.ToString();
 			_sections.AddLast(new Section(sectionName));
-			_tokenValue = new StringBuilder();
+			_tokenValue.Clear();
 		}
 
 		private ParseState Comment(char ch)
@@ -165,13 +267,8 @@ namespace Configuration.Ini.Parsing
 				return ParseState.SectionName;
 
 			// *
-			AppendToKeyName(ch);
-			return ParseState.KeyName;
-		}
-
-		private void AppendToKeyName(char ch)
-		{
 			_tokenValue.Append(ch);
+			return ParseState.KeyName;
 		}
 
 		public IEnumerable<Section> Sections

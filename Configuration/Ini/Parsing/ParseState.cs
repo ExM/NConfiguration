@@ -13,6 +13,7 @@ namespace Configuration.Ini.Parsing
 		SectionName,
 		SectionEnd,
 		KeyName,
+		EndKeyName,
 		BeginValue,
 		SimpleValue,
 		QuotedValue,

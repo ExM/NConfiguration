@@ -51,6 +51,8 @@
     <Compile Include="GenericView\XmlViewTests.cs" />
     <Compile Include="GenericView\GenericMapperTests.cs" />
     <Compile Include="Global.cs" />
+    <Compile Include="Ini\IniStringSettings.cs" />
+    <Compile Include="Ini\IniParsingTests.cs" />
     <Compile Include="KeyManager.cs" />
     <Compile Include="MultiSettings\CombineConfig.cs" />
     <Compile Include="MultiSettings\MultiSettingsCombineTests.cs" />

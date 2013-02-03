@@ -4,6 +4,9 @@ using Configuration.Xml.Protected;
 using Configuration.Xml;
 using Configuration.GenericView;
 using Configuration.Tests;
+using Configuration.Ini;
+using System.Collections.Generic;
+using Configuration.Ini.Parsing;
 
 namespace Configuration
 {
@@ -17,6 +20,18 @@ namespace Configuration
 		public static IAppSettingSource ToXmlSettings(this string text)
 		{
 			return new XmlStringSettings(text);
+		}
+
+		public static IniStringSettings ToIniSettings(this string text)
+		{
+			return new IniStringSettings(text);
+		}
+
+		public static List<Section> ToIniSections(this string text)
+		{
+			var context = new ParseContext();
+			context.ParseSource(text);
+			return new List<Section>(context.Sections);
 		}
 
 		public static IAppSettingSource ToXmlSettings(this string text, IProviderCollection providers)
