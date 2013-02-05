@@ -1,4 +1,5 @@
 using System;
+using Configuration.Tests;
 using NUnit.Framework;
 using System.Linq;
 using Configuration.Xml.ConfigSections;
@@ -47,9 +48,8 @@ namespace Configuration.Including
 			SettingsLoader loader = new SettingsLoader();
 			loader.Including += (s, e) =>
 			{
-				var deserializer = ((SettingsLoader)s).Deserializer;
 				Assert.AreEqual("XmlFile", e.Name);
-				var fileCfg = deserializer.Deserialize<IncludeFileConfig>(e.Config);
+				var fileCfg = Global.GenericDeserializer.Deserialize<IncludeFileConfig>(e.Config);
 				files.Add(fileCfg);
 				e.Settings = null;
 			};

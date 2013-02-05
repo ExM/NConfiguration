@@ -72,8 +72,7 @@ namespace Configuration.Ini.Parsing
 
 		private ParseState AppendChar(char ch)
 		{
-			Console.WriteLine("{0} <{1}>", _state, ch);
-
+			//Console.WriteLine("{0} <{1}>", _state, ch);
 			switch (_state)
 			{
 				case ParseState.BeginLine:

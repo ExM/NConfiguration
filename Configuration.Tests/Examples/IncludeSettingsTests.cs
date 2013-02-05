@@ -1,5 +1,5 @@
 using System;
-using Configuration.Xml.Joining;
+using Configuration.Tests;
 using NUnit.Framework;
 using System.Collections.Specialized;
 using System.Configuration;
@@ -18,7 +18,7 @@ namespace Configuration.Examples
 		public void Load()
 		{
 			var loader = new SettingsLoader();
-			var xmlFileLoader = new XmlFileSettingsLoader();
+			var xmlFileLoader = new XmlFileSettingsLoader(Global.GenericDeserializer, Global.XmlViewConverter);
 
 			loader.Including += xmlFileLoader.ResolveXmlFile;
 			loader.Loaded += (s,e) => 
@@ -26,7 +26,7 @@ namespace Configuration.Examples
 				Console.WriteLine("Loaded: {0} ({1})", e.Settings.GetType(), e.Settings.Identity);
 			};
 
-			xmlFileLoader.LoadFile(loader, "Examples/AppDirectory/main.config");
+			loader.LoadSettings(xmlFileLoader.LoadFile("Examples/AppDirectory/main.config"));
 
 			IAppSettings settings = loader.Settings;
 
@@ -43,7 +43,7 @@ namespace Configuration.Examples
 
 			var providerLoader = new ProviderLoader();
 			var loader = new SettingsLoader();
-			var xmlFileLoader = new XmlFileSettingsLoader();
+			var xmlFileLoader = new XmlFileSettingsLoader(Global.GenericDeserializer, Global.XmlViewConverter);
 
 			loader.Including += xmlFileLoader.ResolveXmlFile;
 			loader.Loaded += providerLoader.TryExtractConfigProtectedData;
@@ -53,7 +53,7 @@ namespace Configuration.Examples
 				Console.WriteLine("Loaded: {0} ({1})", e.Settings.GetType(), e.Settings.Identity);
 			};
 
-			xmlFileLoader.LoadFile(loader, "Examples/AppDirectory/secureMain.config");
+			loader.LoadSettings(xmlFileLoader.LoadFile("Examples/AppDirectory/secureMain.config"));
 
 			IAppSettings settings = loader.Settings;
 

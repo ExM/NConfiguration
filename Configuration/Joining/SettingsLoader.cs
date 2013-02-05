@@ -11,34 +11,22 @@ namespace Configuration.Joining
 {
 	public class SettingsLoader
 	{
-		private IGenericDeserializer _deserializer;
 		private MultiSettings _settings;
 		private HashSet<IdentityKey> _loaded = new HashSet<IdentityKey>();
 
 		public SettingsLoader()
-			: this(new GenericDeserializer(), new MultiSettings())
+			: this(new MultiSettings())
 		{
 		}
 
-		public SettingsLoader(IGenericDeserializer deserializer)
-			: this(deserializer, new MultiSettings())
+		public SettingsLoader(MultiSettings settings)
 		{
-		}
-
-		public SettingsLoader(IGenericDeserializer deserializer, MultiSettings settings)
-		{
-			_deserializer = deserializer;
 			_settings = settings;
 		}
 
 		public MultiSettings Settings
 		{
 			get { return _settings; }
-		}
-
-		public IGenericDeserializer Deserializer
-		{
-			get { return _deserializer; }
 		}
 
 		public event EventHandler<LoadedEventArgs> Loaded;

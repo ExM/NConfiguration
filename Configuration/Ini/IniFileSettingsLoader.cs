@@ -9,34 +9,34 @@ using Configuration.Joining;
 using Configuration.Xml.ConfigSections;
 using Configuration.GenericView;
 
-namespace Configuration.Xml
+namespace Configuration.Ini
 {
-	public class XmlFileSettingsLoader : FileSearcher
+	public class IniFileSettingsLoader : FileSearcher
 	{
 		private readonly IXmlViewConverter _converter;
 		
-		public XmlFileSettingsLoader(IGenericDeserializer deserializer, IXmlViewConverter converter)
+		public IniFileSettingsLoader(IGenericDeserializer deserializer, IXmlViewConverter converter)
 			: base(deserializer)
 		{
 			_converter = converter;
 		}
 
-		public IAppSettingSource LoadFile(string fileName)
+		public IAppSettingSource LoadFile(string path)
 		{
-			return new XmlFileSettings(fileName, _converter, Deserializer);
+			return new IniFileSettings(path, _converter, Deserializer);
 		}
 
 		public override string Tag
 		{
 			get
 			{
-				return "XmlFile";
+				return "IniFile";
 			}
 		}
 
 		public override IAppSettingSource CreateAppSetting(string path)
 		{
-			return new XmlFileSettings(path, _converter, Deserializer);
+			return new IniFileSettings(path, _converter, Deserializer);
 		}
 	}
 }
