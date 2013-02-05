@@ -46,6 +46,7 @@ namespace Configuration.Ini.Parsing
 				case ParseState.EmptyLine:
 				case ParseState.Comment:
 				case ParseState.SectionEnd:
+				case ParseState.EndQuotedValue:
 					return;
 
 				case ParseState.SectionName:
@@ -57,10 +58,12 @@ namespace Configuration.Ini.Parsing
 
 				case ParseState.BeginValue:
 				case ParseState.SimpleValue:
+				case ParseState.EscValue:
 					EndValue();
 					return;
 
-				
+				case ParseState.QuotedValue:
+					throw new FormatException("unexpected end line in quoted value");
 
 				default:
 					throw new NotImplementedException("unexpected state: " + _state.ToString());
@@ -74,38 +77,100 @@ namespace Configuration.Ini.Parsing
 			switch (_state)
 			{
 				case ParseState.BeginLine:
-					return BeginLine(ch);
+					return ProcessBeginLine(ch);
 
 				case ParseState.EmptyLine:
-					return EmptyLine(ch);
+					return ProcessEmptyLine(ch);
 
 				case ParseState.Comment:
-					return Comment(ch);
+					return ProcessComment(ch);
 
 				case ParseState.SectionName:
-					return SectionName(ch);
+					return ProcessSectionName(ch);
 
 				case ParseState.SectionEnd:
-					return SectionEnd(ch);
+					return ProcessSectionEnd(ch);
 
 				case ParseState.KeyName:
-					return KeyName(ch);
+					return ProcessKeyName(ch);
 
 				case ParseState.EndKeyName:
-					return EndKeyName(ch);
+					return ProcessEndKeyName(ch);
 
 				case ParseState.BeginValue:
-					return BeginValue(ch);
+					return ProcessBeginValue(ch);
 
 				case ParseState.SimpleValue:
-					return SimpleValue(ch);
+					return ProcessSimpleValue(ch);
+
+				case ParseState.QuotedValue:
+					return ProcessQuotedValue(ch);
+
+				case ParseState.EscValue:
+					return ProcessEscValue(ch);
+
+				case ParseState.EndQuotedValue:
+					return ProcessEndQuotedValue(ch);
 
 				default:
 					throw new NotImplementedException("unexpected state: " + _state.ToString());
 			}
 		}
 
-		private ParseState SimpleValue(char ch)
+		private ParseState ProcessEndQuotedValue(char ch)
+		{
+			if(ch == BeginComment)
+				return ParseState.Comment;
+
+			if(ch == NewLine || ch == CarriageReturn)
+				return ParseState.BeginLine;
+
+			if(Char.IsWhiteSpace(ch))
+				return ParseState.EndQuotedValue;
+
+			throw new FormatException(string.Format("unexpected char '{0}' after '{1}'", ch, TextQuote));
+		}
+
+		private ParseState ProcessEscValue(char ch)
+		{
+			if(ch == TextQuote)
+			{
+				_tokenValue.Append(ch);
+				return ParseState.QuotedValue;
+			}
+
+			if(ch == BeginComment)
+			{
+				EndValue();
+				return ParseState.Comment;
+			}
+
+			if(ch == NewLine || ch == CarriageReturn)
+			{
+				EndValue();
+				return ParseState.BeginLine;
+			}
+
+			if(Char.IsWhiteSpace(ch))
+			{
+				EndValue();
+				return ParseState.EndQuotedValue;
+			}
+
+			throw new FormatException(string.Format("unexpected char '{0}' after '{1}'", ch, TextQuote));
+		}
+
+		private ParseState ProcessQuotedValue(char ch)
+		{
+			if(ch == TextQuote)
+				return ParseState.EscValue;
+
+			// *
+			_tokenValue.Append(ch);
+			return ParseState.QuotedValue;
+		}
+
+		private ParseState ProcessSimpleValue(char ch)
 		{
 			if (ch == BeginComment)
 			{
@@ -124,7 +189,7 @@ namespace Configuration.Ini.Parsing
 			return ParseState.SimpleValue;
 		}
 
-		private ParseState BeginValue(char ch)
+		private ParseState ProcessBeginValue(char ch)
 		{
 			if (Char.IsWhiteSpace(ch))
 				return ParseState.BeginValue;
@@ -151,7 +216,7 @@ namespace Configuration.Ini.Parsing
 			_sections.Last.Value.Pairs.Add(new KeyValuePair<string,string>(_curentKey, value));
 		}
 
-		private ParseState EndKeyName(char ch)
+		private ParseState ProcessEndKeyName(char ch)
 		{
 			if (ch == NewLine || ch == CarriageReturn)
 				throw new FormatException("unexpected end line in key name");
@@ -165,7 +230,7 @@ namespace Configuration.Ini.Parsing
 			throw new FormatException(string.Format("unexpected char '{0}' before '{1}'", ch, KeyValueSeparator));
 		}
 
-		private ParseState KeyName(char ch)
+		private ParseState ProcessKeyName(char ch)
 		{
 			if (ch == NewLine || ch == CarriageReturn)
 				throw new FormatException("unexpected end line in key name");
@@ -193,7 +258,7 @@ namespace Configuration.Ini.Parsing
 			_tokenValue.Clear();
 		}
 
-		private ParseState SectionEnd(char ch)
+		private ParseState ProcessSectionEnd(char ch)
 		{
 			if (ch == NewLine || ch == CarriageReturn)
 				return ParseState.BeginLine;
@@ -207,7 +272,7 @@ namespace Configuration.Ini.Parsing
 			throw new FormatException(string.Format("non white char '{0}' after section name", ch));
 		}
 
-		private ParseState SectionName(char ch)
+		private ParseState ProcessSectionName(char ch)
 		{
 			if (ch == NewLine || ch == CarriageReturn)
 				throw new FormatException("unexpected end line in section name");
@@ -230,7 +295,7 @@ namespace Configuration.Ini.Parsing
 			_tokenValue.Clear();
 		}
 
-		private ParseState Comment(char ch)
+		private ParseState ProcessComment(char ch)
 		{
 			if (ch == NewLine)
 				return ParseState.BeginLine;
@@ -238,7 +303,7 @@ namespace Configuration.Ini.Parsing
 			return ParseState.Comment;
 		}
 
-		private ParseState EmptyLine(char ch)
+		private ParseState ProcessEmptyLine(char ch)
 		{
 			if (ch == NewLine)
 				return ParseState.BeginLine;
@@ -249,7 +314,7 @@ namespace Configuration.Ini.Parsing
 			throw new FormatException(string.Format("non white char '{0}' in empty line", ch));
 		}
 
-		private ParseState BeginLine(char ch)
+		private ParseState ProcessBeginLine(char ch)
 		{
 			if (ch == NewLine)
 				return ParseState.BeginLine;

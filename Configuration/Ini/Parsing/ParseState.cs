@@ -18,6 +18,6 @@ namespace Configuration.Ini.Parsing
 		SimpleValue,
 		QuotedValue,
 		EscValue,
-		EndValue
+		EndQuotedValue
 	}
 }
