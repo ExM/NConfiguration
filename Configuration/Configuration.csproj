@@ -40,6 +40,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GenericView\IPlainMapper.cs" />
+    <Compile Include="GenericView\PlainMapper.cs" />
+    <Compile Include="GenericView\PlainConverter.cs" />
+    <Compile Include="GenericView\IPlainConverter.cs" />
+    <Compile Include="GenericView\IViewConverterFactory.cs" />
+    <Compile Include="GenericView\IViewConverter.cs" />
     <Compile Include="GenericView\InterfaceExtensions.cs" />
     <Compile Include="IAppSettingSource.cs" />
     <Compile Include="GenericView\Deserialization\AttributeState.cs" />
