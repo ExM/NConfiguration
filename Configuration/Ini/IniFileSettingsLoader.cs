@@ -13,9 +13,9 @@ namespace Configuration.Ini
 {
 	public class IniFileSettingsLoader : FileSearcher
 	{
-		private readonly IXmlViewConverter _converter;
-		
-		public IniFileSettingsLoader(IGenericDeserializer deserializer, IXmlViewConverter converter)
+		private readonly IPlainConverter _converter;
+
+		public IniFileSettingsLoader(IGenericDeserializer deserializer, IPlainConverter converter)
 			: base(deserializer)
 		{
 			_converter = converter;

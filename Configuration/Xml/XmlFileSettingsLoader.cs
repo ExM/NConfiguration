@@ -13,9 +13,9 @@ namespace Configuration.Xml
 {
 	public class XmlFileSettingsLoader : FileSearcher
 	{
-		private readonly IXmlViewConverter _converter;
-		
-		public XmlFileSettingsLoader(IGenericDeserializer deserializer, IXmlViewConverter converter)
+		private readonly IPlainConverter _converter;
+
+		public XmlFileSettingsLoader(IGenericDeserializer deserializer, IPlainConverter converter)
 			: base(deserializer)
 		{
 			_converter = converter;

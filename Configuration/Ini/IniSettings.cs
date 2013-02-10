@@ -8,10 +8,10 @@ namespace Configuration.Ini
 {
 	public abstract class IniSettings : IAppSettings
 	{
-		private readonly IXmlViewConverter _converter;
+		private readonly IPlainConverter _converter;
 		private readonly IGenericDeserializer _deserializer;
 
-		public IniSettings(IXmlViewConverter converter, IGenericDeserializer deserializer)
+		public IniSettings(IPlainConverter converter, IGenericDeserializer deserializer)
 		{
 			_converter = converter;
 			_deserializer = deserializer;
@@ -28,7 +28,7 @@ namespace Configuration.Ini
 
 				if (section.Name == string.Empty)
 					foreach(var pair in section.Pairs.Where(p => p.Key == sectionName))
-						yield return _deserializer.Deserialize<T>(new ViewField(_converter, pair.Value));
+						yield return _deserializer.Deserialize<T>(new ViewPlainField<string>(_converter, pair.Value));
 			}
 		}
 	}

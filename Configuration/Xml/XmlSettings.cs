@@ -18,13 +18,13 @@ namespace Configuration.Xml
 	{
 		private static readonly XNamespace cryptDataNS = XNamespace.Get("http://www.w3.org/2001/04/xmlenc#");
 
-		private readonly IXmlViewConverter _converter;
+		private readonly IPlainConverter _converter;
 		private readonly IGenericDeserializer _deserializer;
 		private IProviderCollection _providers = null;
 
 		protected abstract XElement Root { get; }
 
-		public XmlSettings(IXmlViewConverter converter, IGenericDeserializer deserializer)
+		public XmlSettings(IPlainConverter converter, IGenericDeserializer deserializer)
 		{
 			_converter = converter;
 			_deserializer = deserializer;

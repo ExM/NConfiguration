@@ -3,18 +3,19 @@ using System.Linq;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
 using System.Xml.Linq;
+using Configuration.GenericView;
 
 
-namespace Configuration.GenericView
+namespace Configuration.Xml
 {
 	public static class InterfaceExtensions
 	{
-		public static ICfgNode CreateView(this IXmlViewConverter converter, XDocument doc)
+		public static ICfgNode CreateView(this IPlainConverter converter, XDocument doc)
 		{
 			return new XmlViewNode(converter, doc.Root);
 		}
 
-		public static ICfgNode CreateView(this IXmlViewConverter converter, XElement el)
+		public static ICfgNode CreateView(this IPlainConverter converter, XElement el)
 		{
 			return new XmlViewNode(converter, el);
 		}

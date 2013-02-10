@@ -40,13 +40,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GenericView\ViewPlainField.cs" />
+    <Compile Include="GenericView\PlainMapper.StringMethods.cs">
+      <DependentUpon>PlainMapper.StringMethods.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="GenericView\IPlainMapper.cs" />
     <Compile Include="GenericView\PlainMapper.cs" />
     <Compile Include="GenericView\PlainConverter.cs" />
     <Compile Include="GenericView\IPlainConverter.cs" />
-    <Compile Include="GenericView\IViewConverterFactory.cs" />
-    <Compile Include="GenericView\IViewConverter.cs" />
-    <Compile Include="GenericView\InterfaceExtensions.cs" />
+    <Compile Include="Xml\InterfaceExtensions.cs" />
     <Compile Include="IAppSettingSource.cs" />
     <Compile Include="GenericView\Deserialization\AttributeState.cs" />
     <Compile Include="GenericView\Deserialization\BuildToolkit.cs" />
@@ -61,19 +65,11 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="GenericView\IgnoreCaseEqualityComparer.cs" />
-    <Compile Include="GenericView\IXmlViewConverter.cs" />
-    <Compile Include="GenericView\XmlViewConverter.Methods.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>XmlViewConverter.Methods.tt</DependentUpon>
-    </Compile>
-    <Compile Include="GenericView\XmlViewNode.cs" />
-    <Compile Include="GenericView\XmlViewField.cs" />
+    <Compile Include="Xml\XmlViewNode.cs" />
     <Compile Include="GenericView\IGenericDeserializer.cs" />
     <Compile Include="GenericView\Deserialization\GenericMapper.cs" />
     <Compile Include="GenericView\Deserialization\ComplexFunctionBuilder.cs" />
     <Compile Include="GenericView\GenericDeserializer.cs" />
-    <Compile Include="GenericView\XmlViewConverter.cs" />
     <Compile Include="GenericView\ICfgNode.cs" />
     <Compile Include="IFilePathOwner.cs" />
     <Compile Include="IAppSettings.cs" />
@@ -84,7 +80,6 @@
     <Compile Include="Ini\Parsing\ParseState.cs" />
     <Compile Include="Ini\Parsing\ParseContext.cs" />
     <Compile Include="Ini\IniSettings.cs" />
-    <Compile Include="Ini\ViewField.cs" />
     <Compile Include="Ini\ViewSection.cs" />
     <Compile Include="Ini\IniFileSettings.cs" />
     <Compile Include="Ini\IniFileSettingsLoader.cs" />
@@ -116,13 +111,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <None Include="GenericView\PlainMapper.StringMethods.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PlainMapper.StringMethods.cs</LastGenOutput>
+    </None>
     <None Include="GenericView\EnumParsing\EnumParsers.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>EnumParsers.cs</LastGenOutput>
-    </None>
-    <None Include="GenericView\XmlViewConverter.Methods.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>XmlViewConverter.Methods.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

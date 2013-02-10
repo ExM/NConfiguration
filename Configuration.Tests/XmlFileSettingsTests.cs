@@ -17,7 +17,7 @@ namespace Configuration
 		[TestFixtureSetUp]
 		public void SetUp()
 		{
-			_settings = new XmlFileSettings("testConfig1.xml", Global.XmlViewConverter, Global.GenericDeserializer);
+			_settings = new XmlFileSettings("testConfig1.xml", Global.PlainConverter, Global.GenericDeserializer);
 		}
 		
 		[Test]

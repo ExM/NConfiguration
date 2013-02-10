@@ -15,7 +15,7 @@ namespace Configuration
 		private readonly string _hash;
 
 		public XmlStringSettings(string text)
-			:base(Global.XmlViewConverter, Global.GenericDeserializer)
+			:base(Global.PlainConverter, Global.GenericDeserializer)
 		{
 			_hash = text.GetHashCode().ToString();
 			_root = XDocument.Parse(text).Root;

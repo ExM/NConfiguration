@@ -9,7 +9,7 @@ namespace Configuration.MongoDB
 {
 	internal static class ViewCreater
 	{
-		public static ICfgNode CreateByBsonValue(IViewConverterFactory converters, BsonValue val)
+		public static ICfgNode CreateByBsonValue(IPlainConverter converter, BsonValue val)
 		{
 			if (val == null)
 				return null;
@@ -20,10 +20,10 @@ namespace Configuration.MongoDB
 					return null;
 
 				case BsonType.Document:
-					return new ViewDocument(converters, (BsonDocument)val);
+					return new ViewDocument(converter, (BsonDocument)val);
 
 				case BsonType.String:
-					return new ViewString(converters.GetConverter<string>(), ((BsonString)val).Value);
+					return new ViewString(converter, ((BsonString)val).Value);
 
 
 				default:

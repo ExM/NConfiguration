@@ -9,12 +9,12 @@ namespace Configuration.MongoDB
 {
 	public class ViewDocument: ICfgNode
 	{
-		private IViewConverterFactory _converters;
+		private IPlainConverter _converter;
 		private BsonDocument _doc;
 
-		public ViewDocument(IViewConverterFactory converters, BsonDocument doc)
+		public ViewDocument(IPlainConverter converter, BsonDocument doc)
 		{
-			_converters = converters;
+			_converter = converter;
 			_doc = doc;
 		}
 
@@ -24,21 +24,21 @@ namespace Configuration.MongoDB
 			if (el == null)
 				return null;
 
-			return ViewCreater.CreateByBsonValue(_converters, ViewCreater.FlatArray(el.Value).FirstOrDefault());
+			return ViewCreater.CreateByBsonValue(_converter, ViewCreater.FlatArray(el.Value).FirstOrDefault());
 		}
 
 		public IEnumerable<ICfgNode> GetCollection(string name)
 		{
 			return _doc.Elements.Where(el => el.Name == name)
 				.SelectMany(el => ViewCreater.FlatArray(el.Value))
-				.Select(el => ViewCreater.CreateByBsonValue(_converters, el));
+				.Select(el => ViewCreater.CreateByBsonValue(_converter, el));
 		}
 
 		public IEnumerable<KeyValuePair<string, ICfgNode>> GetNodes()
 		{
 			foreach(var el in _doc.Elements)
 				foreach(var val in ViewCreater.FlatArray(el.Value))
-					yield return new KeyValuePair<string, ICfgNode>(el.Name, ViewCreater.CreateByBsonValue(_converters, val));
+					yield return new KeyValuePair<string, ICfgNode>(el.Name, ViewCreater.CreateByBsonValue(_converter, val));
 		}
 
 		public T As<T>()

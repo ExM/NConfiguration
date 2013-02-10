@@ -17,7 +17,7 @@ namespace Configuration.Ini
 		private readonly string _directory;
 		private readonly string _identity;
 
-		public IniFileSettings(string fileName, IXmlViewConverter converter, IGenericDeserializer deserializer)
+		public IniFileSettings(string fileName, IPlainConverter converter, IGenericDeserializer deserializer)
 			: base(converter, deserializer)
 		{
 			try

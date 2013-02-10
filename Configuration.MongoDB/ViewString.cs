@@ -8,10 +8,10 @@ namespace Configuration.MongoDB
 {
 	internal class ViewString : ICfgNode
 	{
-		private IViewConverter<string> _converter;
+		private IPlainConverter _converter;
 		private string _text;
 
-		public ViewString(IViewConverter<string> converter, string text)
+		public ViewString(IPlainConverter converter, string text)
 		{
 			_converter = converter;
 			_text = text;
@@ -29,7 +29,7 @@ namespace Configuration.MongoDB
 
 		public T As<T>()
 		{
-			return _converter.Convert<T>(_text);
+			return _converter.Convert<string, T>(_text);
 		}
 
 		public IEnumerable<KeyValuePair<string, ICfgNode>> GetNodes()

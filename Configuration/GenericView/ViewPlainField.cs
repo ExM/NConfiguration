@@ -1,19 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
-using Configuration.GenericView;
 
-namespace Configuration.Ini
+namespace Configuration.GenericView
 {
-	internal class ViewField: ICfgNode
+	public class ViewPlainField<TSrc>: ICfgNode
 	{
-		private string _text;
-		private IXmlViewConverter _converter;
+		private TSrc _source;
+		private IPlainConverter _converter;
 
-		public ViewField(IXmlViewConverter converter, string text)
+		public ViewPlainField(IPlainConverter converter, TSrc source)
 		{
 			_converter = converter;
-			_text = text;
+			_source = source;
 		}
 
 		public ICfgNode GetChild(string name)
@@ -26,9 +25,9 @@ namespace Configuration.Ini
 			yield break;
 		}
 
-		public T As<T>()
+		public TDst As<TDst>()
 		{
-			return _converter.Convert<T>(_text);
+			return _converter.Convert<TSrc, TDst>(_source);
 		}
 
 		public IEnumerable<KeyValuePair<string, ICfgNode>> GetNodes()

@@ -18,7 +18,7 @@ namespace Configuration.Examples
 		public void Load()
 		{
 			var loader = new SettingsLoader();
-			var xmlFileLoader = new XmlFileSettingsLoader(Global.GenericDeserializer, Global.XmlViewConverter);
+			var xmlFileLoader = new XmlFileSettingsLoader(Global.GenericDeserializer, Global.PlainConverter);
 
 			loader.Including += xmlFileLoader.ResolveXmlFile;
 			loader.Loaded += (s,e) => 
@@ -43,7 +43,7 @@ namespace Configuration.Examples
 
 			var providerLoader = new ProviderLoader();
 			var loader = new SettingsLoader();
-			var xmlFileLoader = new XmlFileSettingsLoader(Global.GenericDeserializer, Global.XmlViewConverter);
+			var xmlFileLoader = new XmlFileSettingsLoader(Global.GenericDeserializer, Global.PlainConverter);
 
 			loader.Including += xmlFileLoader.ResolveXmlFile;
 			loader.Loaded += providerLoader.TryExtractConfigProtectedData;

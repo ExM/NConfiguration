@@ -9,12 +9,12 @@ namespace Configuration.MongoDB
 {
 	public abstract class BsonSettings : IAppSettings
 	{
-		private readonly IViewConverterFactory _converters;
+		private readonly IPlainConverter _converter;
 		private readonly IGenericDeserializer _deserializer;
 
-		public BsonSettings(IViewConverterFactory converters, IGenericDeserializer deserializer)
+		public BsonSettings(IPlainConverter converter, IGenericDeserializer deserializer)
 		{
-			_converters = converters;
+			_converter = converter;
 			_deserializer = deserializer;
 		}
 
@@ -23,7 +23,7 @@ namespace Configuration.MongoDB
 		public IEnumerable<T> LoadCollection<T>(string sectionName)
 		{
 			return GetDocuments(sectionName)
-				.Select(d => _deserializer.Deserialize<T>(new ViewDocument(_converters, d)));
+				.Select(d => _deserializer.Deserialize<T>(new ViewDocument(_converter, d)));
 		}
 	}
 }

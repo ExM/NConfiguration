@@ -16,7 +16,7 @@ namespace Configuration.Ini
 		private readonly List<Section> _sections;
 
 		public IniStringSettings(string text)
-			:base(Global.XmlViewConverter, Global.GenericDeserializer)
+			:base(Global.PlainConverter, Global.GenericDeserializer)
 		{
 			var context = new ParseContext();
 			context.ParseSource(text);

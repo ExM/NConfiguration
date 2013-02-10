@@ -14,7 +14,7 @@ namespace Configuration
 	{
 		public static ICfgNode ToXmlView(this XDocument doc)
 		{
-			return Global.XmlViewConverter.CreateView(doc);
+			return Global.PlainConverter.CreateView(doc);
 		}
 
 		public static IAppSettingSource ToXmlSettings(this string text)

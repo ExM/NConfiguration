@@ -17,7 +17,7 @@ namespace Configuration.Xml
 		private readonly string _sectionName;
 		private readonly string _directory;
 
-		public XmlSystemSettings(string sectionName, IXmlViewConverter converter, IGenericDeserializer deserializer)
+		public XmlSystemSettings(string sectionName, IPlainConverter converter, IGenericDeserializer deserializer)
 			: base(converter, deserializer)
 		{
 			_sectionName = sectionName;

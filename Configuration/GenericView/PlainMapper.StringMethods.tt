@@ -22,9 +22,9 @@ using System.Globalization;
 
 namespace Configuration.GenericView
 {
-	public partial class XmlViewConverter
+	public partial class PlainMapper
 	{
-		private object CreateByPrimitiveType(Type type)
+		private object CreateConverterFromString(Type type)
 		{
 			if(type == typeof(string))
 				return (Func<string, string>)ToString;
