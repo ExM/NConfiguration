@@ -19,6 +19,7 @@ namespace Configuration.Json.Parsing
 					continue;
 				if(cur == end)
 					return true;
+				throw new FormatException(string.Format("unexpected symbol '{0}'", cur));
 			}
 
 			return false;
@@ -48,6 +49,8 @@ namespace Configuration.Json.Parsing
 				for (int i = 0; i < N; i++)
 					if (cur == ends[i])
 						return true;
+
+				throw new FormatException(string.Format("unexpected symbol '{0}'", cur));
 			}
 
 			return false;
@@ -218,6 +221,8 @@ namespace Configuration.Json.Parsing
 				if (!chars.MoveNext())
 					throw new FormatException("unexpected end in the reading of number");
 			}
+
+			//TODO: fix parsing
 
 			while (true)
 			{
