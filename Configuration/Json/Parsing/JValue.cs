@@ -14,7 +14,7 @@ namespace Configuration.Json.Parsing
 			if (string.IsNullOrWhiteSpace(text))
 				throw new ArgumentNullException("text");
 
-			var chars = new StringSource(text);
+			var chars = new CharEnumerator(text);
 			var result = Tools.ParseValue(chars, true);
 
 			if(chars.MoveNext())

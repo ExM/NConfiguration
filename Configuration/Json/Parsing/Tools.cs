@@ -5,58 +5,13 @@ using Configuration.GenericView;
 using System.Collections.Generic;
 using System.Text;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace Configuration.Json.Parsing
 {
-	public static class Tools
+	internal static class Tools
 	{
-		public static bool MoveTo(this ICharEnumerator chars, Char end)
-		{
-			while (chars.MoveNext())
-			{
-				var cur = chars.Current;
-				if (Char.IsWhiteSpace(cur))
-					continue;
-				if(cur == end)
-					return true;
-				throw new FormatException(string.Format("unexpected symbol '{0}'", cur));
-			}
-
-			return false;
-		}
-
-		public static bool MoveToNoWhite(this ICharEnumerator chars)
-		{
-			while (chars.MoveNext())
-			{
-				if (!Char.IsWhiteSpace(chars.Current))
-					return true;
-			}
-
-			return false;
-		}
-
-		public static bool MoveTo(this ICharEnumerator chars, params Char[] ends)
-		{
-			int N = ends.Length;
-
-			while (chars.MoveNext())
-			{
-				var cur = chars.Current;
-				if (Char.IsWhiteSpace(cur))
-					continue;
-
-				for (int i = 0; i < N; i++)
-					if (cur == ends[i])
-						return true;
-
-				throw new FormatException(string.Format("unexpected symbol '{0}'", cur));
-			}
-
-			return false;
-		}
-
-		internal static JString ParseString(ICharEnumerator chars)
+		internal static JString ParseString(CharEnumerator chars)
 		{
 			StringBuilder text = new StringBuilder();
 
@@ -85,7 +40,7 @@ namespace Configuration.Json.Parsing
 			}
 		}
 
-		private static char ParseEscapeSymbol(ICharEnumerator chars)
+		private static char ParseEscapeSymbol(CharEnumerator chars)
 		{
 			if (!chars.MoveNext())
 				throw new FormatException("unexpected end in the reading of string");
@@ -115,7 +70,7 @@ namespace Configuration.Json.Parsing
 			}
 		}
 
-		private static char ReadUnicodeSymbol(ICharEnumerator chars)
+		private static char ReadUnicodeSymbol(CharEnumerator chars)
 		{
 			StringBuilder text = new StringBuilder(4);
 
@@ -143,7 +98,7 @@ namespace Configuration.Json.Parsing
 			return false;
 		}
 
-		internal static JArray ParseArray(ICharEnumerator chars)
+		internal static JArray ParseArray(CharEnumerator chars)
 		{
 			var result = new JArray();
 
@@ -173,7 +128,7 @@ namespace Configuration.Json.Parsing
 			}
 		}
 
-		internal static JBoolean ParseBoolean(ICharEnumerator chars)
+		internal static JBoolean ParseBoolean(CharEnumerator chars)
 		{
 			if (chars.Current == 't')
 			{
@@ -194,7 +149,7 @@ namespace Configuration.Json.Parsing
 			}
 		}
 
-		internal static JNull ParseNull(ICharEnumerator chars)
+		internal static JNull ParseNull(CharEnumerator chars)
 		{
 			chars.ExpectedRead('u', "null");
 			chars.ExpectedRead('l', "null");
@@ -203,49 +158,13 @@ namespace Configuration.Json.Parsing
 			return JNull.Instance;
 		}
 
-		private static void ExpectedRead(this ICharEnumerator chars, char ch, string tokenName)
+
+		internal static JNumber ParseNumber(CharEnumerator chars)
 		{
-			if (!chars.MoveNext())
-				throw new FormatException(string.Format("unexpected end in the reading of {0}", tokenName));
-			if (chars.Current != ch)
-				throw new FormatException(string.Format("unexpected symbol '{0}' in the reading of {1}", chars.Current, tokenName));
+			return new JNumber(chars.ReadNumber());
 		}
 
-		internal static JNumber ParseNumber(ICharEnumerator chars)
-		{
-			StringBuilder text = new StringBuilder();
-
-			if (chars.Current == '-')
-			{
-				text.Append('-');
-				if (!chars.MoveNext())
-					throw new FormatException("unexpected end in the reading of number");
-			}
-
-			//TODO: fix parsing
-
-			while (true)
-			{
-				if (('0' <= chars.Current && chars.Current <= '9') ||
-					chars.Current == 'E' ||
-					chars.Current == 'e' ||
-					chars.Current == '.' ||
-					chars.Current == '-' ||
-					chars.Current == '+')
-				{
-					text.Append(chars.Current);
-					if (!chars.MoveNext())
-						throw new FormatException("unexpected end in the reading of number");
-				}
-				else
-				{
-					chars.MovePrev();
-					return new JNumber(text.ToString());
-				}
-			}
-		}
-
-		internal static JObject ParseObject(ICharEnumerator chars)
+		internal static JObject ParseObject(CharEnumerator chars)
 		{
 			var result = new JObject();
 
@@ -277,7 +196,7 @@ namespace Configuration.Json.Parsing
 			}
 		}
 
-		public static JValue ParseValue(ICharEnumerator chars, bool move)
+		public static JValue ParseValue(CharEnumerator chars, bool move)
 		{
 			if(move && !chars.MoveNext())
 				throw new FormatException("unexpected end in the reading of value");

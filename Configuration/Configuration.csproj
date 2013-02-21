@@ -50,8 +50,7 @@
     <Compile Include="GenericView\PlainMapper.cs" />
     <Compile Include="GenericView\PlainConverter.cs" />
     <Compile Include="GenericView\IPlainConverter.cs" />
-    <Compile Include="Json\Parsing\StringSource.cs" />
-    <Compile Include="Json\Parsing\ICharEnumerator.cs" />
+    <Compile Include="Json\Parsing\CharEnumerator.cs" />
     <Compile Include="Json\Parsing\JArray.cs" />
     <Compile Include="Json\Parsing\JNumber.cs" />
     <Compile Include="Json\Parsing\JNull.cs" />

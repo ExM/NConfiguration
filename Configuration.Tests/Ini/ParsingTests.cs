@@ -84,7 +84,8 @@ key4 = ""xxx""""XXX""""xxx""
 			Assert.That(ini[0].Pairs[1].Key, Is.EqualTo("key2"));
 			Assert.That(ini[0].Pairs[1].Value, Is.EqualTo("value2	"));
 			Assert.That(ini[0].Pairs[2].Key, Is.EqualTo("key3"));
-			Assert.That(ini[0].Pairs[2].Value, Is.EqualTo("value3;ygwsofw\r\nkey4=value4"));
+			Assert.That(ini[0].Pairs[2].Value, Is.EqualTo(@"value3;ygwsofw
+key4=value4"));
 			Assert.That(ini[0].Pairs[3].Key, Is.EqualTo("key4"));
 			Assert.That(ini[0].Pairs[3].Value, Is.EqualTo("xxx\"XXX\"xxx"));
 		}
