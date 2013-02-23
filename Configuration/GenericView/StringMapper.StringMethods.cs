@@ -68,6 +68,10 @@ namespace Configuration.GenericView
 				return (Func<string, DateTime>)ToDateTime;
 			else if(type == typeof(DateTime?))
 				return (Func<string, DateTime?>)ToNDateTime;
+			else if(type == typeof(Guid))
+				return (Func<string, Guid>)ToGuid;
+			else if(type == typeof(Guid?))
+				return (Func<string, Guid?>)ToNGuid;
 			
 			return DefaultConverter(type);
 		}
@@ -183,6 +187,14 @@ namespace Configuration.GenericView
 				return null;
 
 			return ToDateTime(text);
+		}
+		
+		public Guid? ToNGuid(string text)
+		{
+			if (string.IsNullOrWhiteSpace(text))
+				return null;
+
+			return ToGuid(text);
 		}
 		
 	}

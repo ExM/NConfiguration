@@ -17,7 +17,8 @@ namespace Configuration.Json
 	{
 		""Item1"":""item1.value1"",
 		""Item2"": 1231232,
-		""nullItem"":null
+		""nullItem"":null,
+		""Item3"":""09d89405-59b4-4a4b-af2e-c8a134a4860a""
 	},
 	""Section2"":
 	{
@@ -38,6 +39,7 @@ namespace Configuration.Json
 			public string Item1 { get; set; }
 			public long Item2 { get; set; }
 			public int? nullItem { get; set; }
+			public Guid Item3 { get; set; }
 		}
 
 		public class Section2
@@ -57,6 +59,7 @@ namespace Configuration.Json
 			Assert.That(section.Item1, Is.EqualTo("item1.value1"));
 			Assert.That(section.Item2, Is.EqualTo(1231232));
 			Assert.That(section.nullItem, Is.Null);
+			Assert.That(section.Item3, Is.EqualTo(new Guid("09d89405-59b4-4a4b-af2e-c8a134a4860a")));
 		}
 
 		[Test]

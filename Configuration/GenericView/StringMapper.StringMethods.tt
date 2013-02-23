@@ -14,7 +14,8 @@
 	"Single",
 	"Double",
 	"TimeSpan",
-	"DateTime"
+	"DateTime",
+	"Guid"
 };#>
 using System;
 using System.Collections.Generic;

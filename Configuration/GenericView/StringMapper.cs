@@ -141,6 +141,11 @@ namespace Configuration.GenericView
 			return TimeSpan.Parse(text, _ci);
 		}
 
+		public Guid ToGuid(string text)
+		{
+			return Guid.Parse(text);
+		}
+
 		public DateTime ToDateTime(string text)
 		{
 			return DateTime.Parse(text, _ci,

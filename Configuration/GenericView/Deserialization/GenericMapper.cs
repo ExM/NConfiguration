@@ -21,7 +21,7 @@ namespace Configuration.GenericView.Deserialization
 				typeof(Byte), typeof(SByte),
 				typeof(Int16), typeof(Int32), typeof(Int64), typeof(UInt16), typeof(UInt32), typeof(UInt64),
 				typeof(Single), typeof(Double),
-				typeof(TimeSpan), typeof(DateTime),
+				typeof(TimeSpan), typeof(DateTime), typeof(Guid),
 				typeof(byte[])
 			};
 		}
