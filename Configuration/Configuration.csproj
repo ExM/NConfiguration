@@ -50,6 +50,9 @@
     <Compile Include="GenericView\PlainMapper.cs" />
     <Compile Include="GenericView\PlainConverter.cs" />
     <Compile Include="GenericView\IPlainConverter.cs" />
+    <Compile Include="Json\JsonFileSettings.cs" />
+    <Compile Include="Json\JsonFileSettingsLoader.cs" />
+    <Compile Include="Json\JsonSettings.cs" />
     <Compile Include="Json\Parsing\CharEnumerator.cs" />
     <Compile Include="Json\Parsing\JArray.cs" />
     <Compile Include="Json\Parsing\JNumber.cs" />
@@ -59,6 +62,7 @@
     <Compile Include="Json\Parsing\JString.cs" />
     <Compile Include="Json\Parsing\JObject.cs" />
     <Compile Include="Json\Parsing\TokenType.cs" />
+    <Compile Include="Json\ViewObject.cs" />
     <Compile Include="Xml\InterfaceExtensions.cs" />
     <Compile Include="IAppSettingSource.cs" />
     <Compile Include="GenericView\Deserialization\AttributeState.cs" />

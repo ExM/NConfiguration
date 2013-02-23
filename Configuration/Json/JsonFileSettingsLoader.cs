@@ -1,0 +1,43 @@
+using System;
+using System.Xml;
+using System.IO;
+using System.Linq;
+using System.Xml.Linq;
+using System.Xml.Serialization;
+using System.Collections.Generic;
+using Configuration.Joining;
+using Configuration.Xml.ConfigSections;
+using Configuration.GenericView;
+
+namespace Configuration.Json
+{
+	public class JsonFileSettingsLoader : FileSearcher
+	{
+		private readonly IPlainConverter _converter;
+
+		public JsonFileSettingsLoader(IGenericDeserializer deserializer, IPlainConverter converter)
+			: base(deserializer)
+		{
+			_converter = converter;
+		}
+
+		public IAppSettingSource LoadFile(string path)
+		{
+			return new JsonFileSettings(path, _converter, Deserializer);
+		}
+
+		public override string Tag
+		{
+			get
+			{
+				return "JsonFile";
+			}
+		}
+
+		public override IAppSettingSource CreateAppSetting(string path)
+		{
+			return new JsonFileSettings(path, _converter, Deserializer);
+		}
+	}
+}
+

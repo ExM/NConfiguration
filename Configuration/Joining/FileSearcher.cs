@@ -24,7 +24,7 @@ namespace Configuration.Joining
 
 		public abstract IAppSettingSource CreateAppSetting(string path);
 
-		public void ResolveXmlFile(object sender, IncludingEventArgs args)
+		public void ResolveFile(object sender, IncludingEventArgs args)
 		{
 			if (args.Handled)
 				return;
@@ -50,7 +50,7 @@ namespace Configuration.Joining
 			if (rpo == null)
 				throw new InvalidOperationException("can not be searched for a relative path because the settings do not provide an absolute path");
 
-			var found = SearchXmlSettings(rpo.Path, cfg.Path, cfg.Search);
+			var found = SearchSettings(rpo.Path, cfg.Path, cfg.Search);
 
 			if (found.Count == 0)
 			{
@@ -69,7 +69,7 @@ namespace Configuration.Joining
 					args.Settings.Add(item);
 		}
 
-		private List<IAppSettingSource> SearchXmlSettings(string basePath, string fileName, SearchMode mode)
+		private List<IAppSettingSource> SearchSettings(string basePath, string fileName, SearchMode mode)
 		{
 			var result = new List<IAppSettingSource>();
 

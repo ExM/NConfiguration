@@ -53,6 +53,8 @@
     <Compile Include="Global.cs" />
     <Compile Include="Ini\IniStringSettings.cs" />
     <Compile Include="Ini\ParsingTests.cs" />
+    <Compile Include="Json\DeserializeTests.cs" />
+    <Compile Include="Json\JsonStringSettings.cs" />
     <Compile Include="Json\ParsingTests.cs" />
     <Compile Include="KeyManager.cs" />
     <Compile Include="MultiSettings\CombineConfig.cs" />
@@ -76,6 +78,14 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Examples\Additional.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\AppDirectory\Additional.json">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\AppDirectory\mainJson.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

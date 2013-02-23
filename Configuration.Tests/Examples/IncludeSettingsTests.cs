@@ -8,6 +8,7 @@ using Configuration.Joining;
 using Configuration.Examples;
 using Configuration.Xml.Protected;
 using Configuration.GenericView;
+using Configuration.Json;
 
 namespace Configuration.Examples
 {
@@ -20,7 +21,7 @@ namespace Configuration.Examples
 			var loader = new SettingsLoader();
 			var xmlFileLoader = new XmlFileSettingsLoader(Global.GenericDeserializer, Global.PlainConverter);
 
-			loader.Including += xmlFileLoader.ResolveXmlFile;
+			loader.Including += xmlFileLoader.ResolveFile;
 			loader.Loaded += (s,e) => 
 			{
 				Console.WriteLine("Loaded: {0} ({1})", e.Settings.GetType(), e.Settings.Identity);
@@ -37,6 +38,30 @@ namespace Configuration.Examples
 		}
 
 		[Test]
+		public void LoadJson()
+		{
+			var loader = new SettingsLoader();
+			var xmlFileLoader = new XmlFileSettingsLoader(Global.GenericDeserializer, Global.PlainConverter);
+			var jsonFileLoader = new JsonFileSettingsLoader(Global.GenericDeserializer, Global.PlainConverter);
+
+			loader.Including += xmlFileLoader.ResolveFile;
+			loader.Including += jsonFileLoader.ResolveFile;
+			loader.Loaded += (s, e) =>
+			{
+				Console.WriteLine("Loaded: {0} ({1})", e.Settings.GetType(), e.Settings.Identity);
+			};
+
+			loader.LoadSettings(xmlFileLoader.LoadFile("Examples/AppDirectory/mainJson.config"));
+
+			IAppSettings settings = loader.Settings;
+
+			var addCfg = settings.TryCombine<ExampleCombineConfig>("AdditionalConfig");
+
+			Assert.IsNotNull(addCfg);
+			Assert.AreEqual("InAppDirectory_json", addCfg.F);
+		}
+
+		[Test]
 		public void SecureLoad()
 		{
 			KeyManager.Create();
@@ -45,7 +70,7 @@ namespace Configuration.Examples
 			var loader = new SettingsLoader();
 			var xmlFileLoader = new XmlFileSettingsLoader(Global.GenericDeserializer, Global.PlainConverter);
 
-			loader.Including += xmlFileLoader.ResolveXmlFile;
+			loader.Including += xmlFileLoader.ResolveFile;
 			loader.Loaded += providerLoader.TryExtractConfigProtectedData;
 			
 			loader.Loaded += (s, e) =>
