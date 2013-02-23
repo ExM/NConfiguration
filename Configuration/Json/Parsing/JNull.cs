@@ -20,5 +20,10 @@ namespace Configuration.Json.Parsing
 				return TokenType.Null;
 			}
 		}
+
+		public override string ToString()
+		{
+			return "null";
+		}
 	}
 }

@@ -14,6 +14,17 @@ namespace Configuration.Json.Parsing
 			Properties = new List<KeyValuePair<string, JValue>>();
 		}
 
+		public JValue this[string name]
+		{
+			get
+			{
+				return Properties
+					.Where(p => p.Key == name)
+					.Select(p => p.Value)
+					.FirstOrDefault();
+			}
+		}
+
 		public override TokenType Type
 		{
 			get

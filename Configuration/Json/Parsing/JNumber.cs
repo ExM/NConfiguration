@@ -21,5 +21,10 @@ namespace Configuration.Json.Parsing
 				return TokenType.Number;
 			}
 		}
+
+		public override string ToString()
+		{
+			return Value;
+		}
 	}
 }

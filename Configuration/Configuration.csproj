@@ -57,7 +57,6 @@
     <Compile Include="Json\Parsing\JBoolean.cs" />
     <Compile Include="Json\Parsing\JValue.cs" />
     <Compile Include="Json\Parsing\JString.cs" />
-    <Compile Include="Json\Parsing\Tools.cs" />
     <Compile Include="Json\Parsing\JObject.cs" />
     <Compile Include="Json\Parsing\TokenType.cs" />
     <Compile Include="Xml\InterfaceExtensions.cs" />

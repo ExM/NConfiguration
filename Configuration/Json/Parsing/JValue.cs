@@ -15,10 +15,10 @@ namespace Configuration.Json.Parsing
 				throw new ArgumentNullException("text");
 
 			var chars = new CharEnumerator(text);
-			var result = Tools.ParseValue(chars, true);
+			var result = chars.ReadValue(true);
 
-			if(chars.MoveNext())
-				throw new FormatException(string.Format("unexpected symbol '{0}' in the reading of end", chars.Current));
+			if(chars.MoveToNoWhite())
+				throw new FormatException(string.Format("unexpected symbols '{0}' in the reading of end", chars.Tail));
 
 			return result;
 		}

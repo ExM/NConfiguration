@@ -7,11 +7,11 @@ namespace Configuration.Json.Parsing
 {
 	public class JBoolean: JValue
 	{
-		public string Value { get; private set; }
+		public bool Value { get; private set; }
 
-		public JBoolean(string text)
+		public JBoolean(bool val)
 		{
-			Value = text;
+			Value = val;
 		}
 
 		public override TokenType Type
@@ -20,6 +20,11 @@ namespace Configuration.Json.Parsing
 			{
 				return TokenType.Boolean;
 			}
+		}
+
+		public override string ToString()
+		{
+			return Value?"true":"false";
 		}
 	}
 }
