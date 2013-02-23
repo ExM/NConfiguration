@@ -10,12 +10,12 @@ namespace Configuration.Xml
 {
 	public static class InterfaceExtensions
 	{
-		public static ICfgNode CreateView(this IPlainConverter converter, XDocument doc)
+		public static ICfgNode CreateView(this IStringConverter converter, XDocument doc)
 		{
 			return new XmlViewNode(converter, doc.Root);
 		}
 
-		public static ICfgNode CreateView(this IPlainConverter converter, XElement el)
+		public static ICfgNode CreateView(this IStringConverter converter, XElement el)
 		{
 			return new XmlViewNode(converter, el);
 		}

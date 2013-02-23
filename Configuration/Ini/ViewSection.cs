@@ -10,9 +10,9 @@ namespace Configuration.Ini
 	internal class ViewSection: ICfgNode
 	{
 		private List<KeyValuePair<string, string>> _pairs;
-		private IPlainConverter _converter;
+		private IStringConverter _converter;
 
-		public ViewSection(IPlainConverter converter, Section section)
+		public ViewSection(IStringConverter converter, Section section)
 		{
 			_converter = converter;
 			_pairs = section.Pairs;
@@ -25,7 +25,7 @@ namespace Configuration.Ini
 				.Select(p => p.Value)
 				.FirstOrDefault();
 			if(value != null)
-				return new ViewPlainField<string>(_converter, value);
+				return new ViewPlainField(_converter, value);
 
 			return null;
 		}
@@ -33,7 +33,7 @@ namespace Configuration.Ini
 		public IEnumerable<ICfgNode> GetCollection(string name)
 		{
 			foreach (var value in _pairs.Where(p => p.Key == name).Select(p => p.Value))
-				yield return new ViewPlainField<string>(_converter, value);
+				yield return new ViewPlainField(_converter, value);
 		}
 
 		public T As<T>()
@@ -44,7 +44,7 @@ namespace Configuration.Ini
 		public IEnumerable<KeyValuePair<string, ICfgNode>> GetNodes()
 		{
 			foreach (var pair in _pairs)
-				yield return new KeyValuePair<string, ICfgNode>(pair.Key, new ViewPlainField<string>(_converter, pair.Value));
+				yield return new KeyValuePair<string, ICfgNode>(pair.Key, new ViewPlainField(_converter, pair.Value));
 		}
 	}
 }

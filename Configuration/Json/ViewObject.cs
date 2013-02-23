@@ -9,10 +9,10 @@ namespace Configuration.Json
 {
 	public class ViewObject: ICfgNode
 	{
-		private IPlainConverter _converter;
+		private IStringConverter _converter;
 		private JObject _obj;
 
-		public ViewObject(IPlainConverter converter, JObject obj)
+		public ViewObject(IStringConverter converter, JObject obj)
 		{
 			_converter = converter;
 			_obj = obj;
@@ -46,7 +46,7 @@ namespace Configuration.Json
 			throw new NotSupportedException("BsonDocument can't contain value");
 		}
 
-		internal static ICfgNode CreateByJsonValue(IPlainConverter converter, JValue val)
+		internal static ICfgNode CreateByJsonValue(IStringConverter converter, JValue val)
 		{
 			if (val == null)
 				return null;
@@ -54,7 +54,7 @@ namespace Configuration.Json
 			switch (val.Type)
 			{
 				case TokenType.Null:
-					return new ViewPlainField<string>(converter, null);
+					return new ViewPlainField(converter, null);
 
 				case TokenType.Object:
 					return new ViewObject(converter, (JObject)val);
@@ -62,7 +62,7 @@ namespace Configuration.Json
 				case TokenType.String:
 				case TokenType.Boolean:
 				case TokenType.Number:
-					return new ViewPlainField<string>(converter, val.ToString());
+					return new ViewPlainField(converter, val.ToString());
 				
 				default:
 					throw new NotSupportedException(string.Format("JSON type {0} not supported", val.Type));

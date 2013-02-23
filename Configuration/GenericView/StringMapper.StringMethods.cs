@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace Configuration.GenericView
 {
-	public partial class PlainMapper
+	public partial class StringMapper
 	{
 		private object CreateConverterFromString(Type type)
 		{
@@ -68,8 +68,8 @@ namespace Configuration.GenericView
 				return (Func<string, DateTime>)ToDateTime;
 			else if(type == typeof(DateTime?))
 				return (Func<string, DateTime?>)ToNDateTime;
-
-			throw new ApplicationException(string.Format("unexpected type: {0}", type.FullName));
+			
+			return DefaultConverter(type);
 		}
 
 		

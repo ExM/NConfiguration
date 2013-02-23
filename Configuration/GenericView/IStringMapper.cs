@@ -7,9 +7,9 @@ using System.Xml.Linq;
 
 namespace Configuration.GenericView
 {
-	public interface IPlainMapper
+	public interface IStringMapper
 	{
-		object CreateFunction(Type src, Type dst);
+		object CreateFunction(Type type);
 	}
 }
 

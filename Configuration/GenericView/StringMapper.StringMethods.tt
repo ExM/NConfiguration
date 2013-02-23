@@ -22,7 +22,7 @@ using System.Globalization;
 
 namespace Configuration.GenericView
 {
-	public partial class PlainMapper
+	public partial class StringMapper
 	{
 		private object CreateConverterFromString(Type type)
 		{
@@ -36,8 +36,8 @@ namespace Configuration.GenericView
 			else if(type == typeof(<#= type#>?))
 				return (Func<string, <#= type#>?>)ToN<#= type#>;
 <#}#>
-
-			throw new ApplicationException(string.Format("unexpected type: {0}", type.FullName));
+			
+			return DefaultConverter(type);
 		}
 
 <#foreach(var type in types){#>

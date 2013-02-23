@@ -17,7 +17,7 @@ namespace Configuration.Json
 		private readonly string _directory;
 		private readonly string _identity;
 
-		public JsonFileSettings(string fileName, IPlainConverter converter, IGenericDeserializer deserializer)
+		public JsonFileSettings(string fileName, IStringConverter converter, IGenericDeserializer deserializer)
 			: base(converter, deserializer)
 		{
 			try

@@ -41,15 +41,15 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="GenericView\ViewPlainField.cs" />
-    <Compile Include="GenericView\PlainMapper.StringMethods.cs">
-      <DependentUpon>PlainMapper.StringMethods.tt</DependentUpon>
+    <Compile Include="GenericView\StringMapper.StringMethods.cs">
+      <DependentUpon>StringMapper.StringMethods.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="GenericView\IPlainMapper.cs" />
-    <Compile Include="GenericView\PlainMapper.cs" />
-    <Compile Include="GenericView\PlainConverter.cs" />
-    <Compile Include="GenericView\IPlainConverter.cs" />
+    <Compile Include="GenericView\IStringMapper.cs" />
+    <Compile Include="GenericView\StringMapper.cs" />
+    <Compile Include="GenericView\StringConverter.cs" />
+    <Compile Include="GenericView\IStringConverter.cs" />
     <Compile Include="Json\JsonFileSettings.cs" />
     <Compile Include="Json\JsonFileSettingsLoader.cs" />
     <Compile Include="Json\JsonSettings.cs" />
@@ -123,9 +123,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <None Include="GenericView\PlainMapper.StringMethods.tt">
+    <None Include="GenericView\StringMapper.StringMethods.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>PlainMapper.StringMethods.cs</LastGenOutput>
+      <LastGenOutput>StringMapper.StringMethods.cs</LastGenOutput>
     </None>
     <None Include="GenericView\EnumParsing\EnumParsers.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

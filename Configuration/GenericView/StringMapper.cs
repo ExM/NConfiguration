@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace Configuration.GenericView
 {
-	public partial class PlainMapper : IPlainMapper
+	public partial class StringMapper : IStringMapper
 	{
 		private CultureInfo _ci;
 
@@ -19,12 +19,12 @@ namespace Configuration.GenericView
 			}
 		}
 
-		public PlainMapper()
+		public StringMapper()
 			:this(CultureInfo.InvariantCulture)
 		{
 		}
 
-		public PlainMapper(CultureInfo ci)
+		public StringMapper(CultureInfo ci)
 		{
 			if (ci == null)
 				throw new ArgumentNullException("ci");
@@ -32,53 +32,45 @@ namespace Configuration.GenericView
 			_ci = ci;
 		}
 
-		public virtual object CreateFunction(Type src, Type dst)
+		public virtual object CreateFunction(Type type)
 		{
-			if (src == dst)
-				return CreateNativeConverter(src);
+			if (type == typeof(string))
+				return CreateNativeConverter();
 
-			if (src == typeof(string) && dst.IsEnum)
-				return CreateStringToEnum(dst);
-
-			if (src == typeof(string))
-			{
-				if(dst.IsEnum)
-					return CreateStringToEnum(dst);
-				else
-					return CreateConverterFromString(dst);
-			}
-
-			return DefaultConverter(src, dst);
+			if (type.IsEnum)
+				return CreateStringToEnum(type);
+			else
+				return CreateConverterFromString(type);
 		}
 
-		private object DefaultConverter(Type src, Type dst)
+		private object DefaultConverter(Type type)
 		{
-			var mi = typeof(PlainMapper).GetMethod("DefaultConverter", BindingFlags.NonPublic | BindingFlags.Static).MakeGenericMethod(src, dst);
-			var funcType = typeof(Func<,>).MakeGenericType(src, dst);
+			var mi = typeof(StringMapper).GetMethod("DefaultConverter", BindingFlags.NonPublic | BindingFlags.Static).MakeGenericMethod(type);
+			var funcType = typeof(Func<,>).MakeGenericType(typeof(string), type);
 			return Delegate.CreateDelegate(funcType, mi);
 		}
 
-		private static TDest DefaultConverter<TSrc, TDest>(TSrc val)
+		private static T DefaultConverter<T>(string val)
 		{
-			return (TDest)Convert.ChangeType(val, typeof(TDest));
+			return (T)Convert.ChangeType(val, typeof(T));
 		}
 
-		private object CreateNativeConverter(Type src)
+		private object CreateNativeConverter()
 		{
-			var mi = typeof(PlainMapper).GetMethod("NativeConverter", BindingFlags.NonPublic | BindingFlags.Static).MakeGenericMethod(src);
-			var funcType = typeof(Func<,>).MakeGenericType(src, src);
+			var mi = typeof(StringMapper).GetMethod("NativeConverter", BindingFlags.NonPublic | BindingFlags.Static);
+			var funcType = typeof(Func<string, string>);
 			return Delegate.CreateDelegate(funcType, mi);
 		}
 
-		private static T NativeConverter<T>(T val)
+		private static string NativeConverter(string val)
 		{
 			return val;
 		}
 
-		private object CreateStringToEnum(Type dst)
+		private object CreateStringToEnum(Type type)
 		{
-			var mi = typeof(EnumHelper<>).MakeGenericType(dst).GetMethod("Parse", BindingFlags.Public | BindingFlags.Static);
-			var funcType = typeof(Func<,>).MakeGenericType(typeof(string), dst);
+			var mi = typeof(EnumHelper<>).MakeGenericType(type).GetMethod("Parse", BindingFlags.Public | BindingFlags.Static);
+			var funcType = typeof(Func<,>).MakeGenericType(typeof(string), type);
 			return Delegate.CreateDelegate(funcType, mi);
 		}
 

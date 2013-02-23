@@ -13,9 +13,9 @@ namespace Configuration.Json
 {
 	public class JsonFileSettingsLoader : FileSearcher
 	{
-		private readonly IPlainConverter _converter;
+		private readonly IStringConverter _converter;
 
-		public JsonFileSettingsLoader(IGenericDeserializer deserializer, IPlainConverter converter)
+		public JsonFileSettingsLoader(IGenericDeserializer deserializer, IStringConverter converter)
 			: base(deserializer)
 		{
 			_converter = converter;

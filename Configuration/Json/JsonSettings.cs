@@ -9,10 +9,10 @@ namespace Configuration.Json
 {
 	public abstract class JsonSettings : IAppSettings
 	{
-		private readonly IPlainConverter _converter;
+		private readonly IStringConverter _converter;
 		private readonly IGenericDeserializer _deserializer;
 
-		public JsonSettings(IPlainConverter converter, IGenericDeserializer deserializer)
+		public JsonSettings(IStringConverter converter, IGenericDeserializer deserializer)
 		{
 			_converter = converter;
 			_deserializer = deserializer;

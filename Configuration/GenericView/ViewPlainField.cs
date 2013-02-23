@@ -4,15 +4,15 @@ using System.Xml.Linq;
 
 namespace Configuration.GenericView
 {
-	public class ViewPlainField<TSrc>: ICfgNode
+	public class ViewPlainField: ICfgNode
 	{
-		private TSrc _source;
-		private IPlainConverter _converter;
+		private string _text;
+		private IStringConverter _converter;
 
-		public ViewPlainField(IPlainConverter converter, TSrc source)
+		public ViewPlainField(IStringConverter converter, string text)
 		{
 			_converter = converter;
-			_source = source;
+			_text = text;
 		}
 
 		public ICfgNode GetChild(string name)
@@ -25,9 +25,9 @@ namespace Configuration.GenericView
 			yield break;
 		}
 
-		public TDst As<TDst>()
+		public T As<T>()
 		{
-			return _converter.Convert<TSrc, TDst>(_source);
+			return _converter.Convert<T>(_text);
 		}
 
 		public IEnumerable<KeyValuePair<string, ICfgNode>> GetNodes()

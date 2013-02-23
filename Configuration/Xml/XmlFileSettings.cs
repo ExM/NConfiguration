@@ -23,7 +23,7 @@ namespace Configuration.Xml
 		/// <param name="fileName">file name</param>
 		/// <param name="converter"></param>
 		/// <param name="deserializer">deserializer</param>
-		public XmlFileSettings(string fileName, IPlainConverter converter, IGenericDeserializer deserializer)
+		public XmlFileSettings(string fileName, IStringConverter converter, IGenericDeserializer deserializer)
 			: base(converter, deserializer)
 		{
 			try
