@@ -77,7 +77,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="GenericView\IgnoreCaseEqualityComparer.cs" />
+    <Compile Include="GenericView\NameComparer.cs" />
     <Compile Include="Xml\XmlViewNode.cs" />
     <Compile Include="GenericView\IGenericDeserializer.cs" />
     <Compile Include="GenericView\Deserialization\GenericMapper.cs" />

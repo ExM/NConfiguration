@@ -28,7 +28,7 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+			_nameMap = new Dictionary<string, T>(count, NameComparer.Instance);
 			_numMap = new Dictionary<<#= type#>, T>(count);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
@@ -70,7 +70,7 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+			_nameMap = new Dictionary<string, T>(count, NameComparer.Instance);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
 			{

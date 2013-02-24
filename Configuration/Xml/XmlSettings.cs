@@ -30,18 +30,6 @@ namespace Configuration.Xml
 			_deserializer = deserializer;
 		}
 
-		private IEnumerable<XElement> GetSections(string name)
-		{
-			if(name == null)
-				throw new ArgumentNullException("name");
-
-			if(Root == null)
-				yield break;
-
-			foreach(var el in Root.Elements(XNamespace.None + name))
-				yield return Decrypt(el);
-		}
-
 		private XElement Decrypt(XElement el)
 		{
 			if (el == null)
@@ -82,10 +70,20 @@ namespace Configuration.Xml
 			_providers = collection;
 		}
 
-		public IEnumerable<T> LoadCollection<T>(string sectionName)
+		public IEnumerable<T> LoadCollection<T>(string name)
 		{
-			return GetSections(sectionName)
-				.Select(el => _deserializer.Deserialize<T>(_converter.CreateView(el)));
+			if (name == null)
+				throw new ArgumentNullException("name");
+
+			if (Root == null)
+				yield break;
+
+			foreach (var at in Root.Attributes().Where(a => NameComparer.Equals(name, a.Name.LocalName)))
+				yield return _deserializer.Deserialize<T>(new ViewPlainField(_converter, at.Value));
+
+
+			foreach (var el in Root.Elements().Where(e => NameComparer.Equals(name, e.Name.LocalName)))
+				yield return _deserializer.Deserialize<T>(new XmlViewNode(_converter, Decrypt(el)));
 		}
 	}
 }

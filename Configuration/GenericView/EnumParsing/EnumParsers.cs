@@ -15,7 +15,7 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+			_nameMap = new Dictionary<string, T>(count, NameComparer.Instance);
 			_numMap = new Dictionary<Byte, T>(count);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
@@ -57,7 +57,7 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+			_nameMap = new Dictionary<string, T>(count, NameComparer.Instance);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
 			{
@@ -128,7 +128,7 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+			_nameMap = new Dictionary<string, T>(count, NameComparer.Instance);
 			_numMap = new Dictionary<SByte, T>(count);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
@@ -170,7 +170,7 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+			_nameMap = new Dictionary<string, T>(count, NameComparer.Instance);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
 			{
@@ -241,7 +241,7 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+			_nameMap = new Dictionary<string, T>(count, NameComparer.Instance);
 			_numMap = new Dictionary<Int16, T>(count);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
@@ -283,7 +283,7 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+			_nameMap = new Dictionary<string, T>(count, NameComparer.Instance);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
 			{
@@ -354,7 +354,7 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+			_nameMap = new Dictionary<string, T>(count, NameComparer.Instance);
 			_numMap = new Dictionary<Int32, T>(count);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
@@ -396,7 +396,7 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+			_nameMap = new Dictionary<string, T>(count, NameComparer.Instance);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
 			{
@@ -467,7 +467,7 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+			_nameMap = new Dictionary<string, T>(count, NameComparer.Instance);
 			_numMap = new Dictionary<Int64, T>(count);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
@@ -509,7 +509,7 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+			_nameMap = new Dictionary<string, T>(count, NameComparer.Instance);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
 			{
@@ -580,7 +580,7 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+			_nameMap = new Dictionary<string, T>(count, NameComparer.Instance);
 			_numMap = new Dictionary<UInt16, T>(count);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
@@ -622,7 +622,7 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+			_nameMap = new Dictionary<string, T>(count, NameComparer.Instance);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
 			{
@@ -693,7 +693,7 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+			_nameMap = new Dictionary<string, T>(count, NameComparer.Instance);
 			_numMap = new Dictionary<UInt32, T>(count);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
@@ -735,7 +735,7 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+			_nameMap = new Dictionary<string, T>(count, NameComparer.Instance);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
 			{
@@ -806,7 +806,7 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+			_nameMap = new Dictionary<string, T>(count, NameComparer.Instance);
 			_numMap = new Dictionary<UInt64, T>(count);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
@@ -848,7 +848,7 @@ namespace Configuration.GenericView
 		{
 			int count = Enum.GetValues(typeof(T)).Length;
 
-			_nameMap = new Dictionary<string, T>(count, IgnoreCaseEqualityComparer.Instance);
+			_nameMap = new Dictionary<string, T>(count, NameComparer.Instance);
 
 			foreach (T item in Enum.GetValues(typeof(T)).Cast<T>())
 			{

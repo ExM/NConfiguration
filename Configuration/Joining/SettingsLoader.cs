@@ -73,7 +73,7 @@ namespace Configuration.Joining
 
 			foreach (var incNode in includeRoot.GetNodes())
 			{
-				if (string.Equals(incNode.Key, "FinalSearch", StringComparison.InvariantCultureIgnoreCase))
+				if (NameComparer.Equals(incNode.Key, "FinalSearch"))
 					continue;
 
 				var incSettings = OnIncluding(setting, incNode.Key, incNode.Value);

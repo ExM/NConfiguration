@@ -100,7 +100,7 @@ namespace Configuration.GenericView
 		public void ParseArray2()
 		{
 			var root =
-@"<Root Array='123'><Array>345</Array></Root>".ToXmlView();
+@"<root array='123'><array>345</array></root>".ToXmlView();
 			var d = new GenericDeserializer();
 
 			var tc = d.Deserialize<ComplexTest>(root);
@@ -112,7 +112,7 @@ namespace Configuration.GenericView
 		public void ParseCollection()
 		{
 			var root =
-@"<Root Coll='5'><Coll>-5</Coll></Root>".ToXmlView();
+@"<root coll='5'><coll>-5</coll></root>".ToXmlView();
 			var d = new GenericDeserializer();
 
 			var tc = d.Deserialize<ComplexTest>(root);
@@ -124,7 +124,7 @@ namespace Configuration.GenericView
 		public void ParseInner()
 		{
 			var root =
-@"<Root><Inner Coll='5'><Coll>-5</Coll></Inner></Root>".ToXmlView();
+@"<root><inner coll='5'><coll>-5</coll></inner></root>".ToXmlView();
 			var d = new GenericDeserializer();
 
 			var tc = d.Deserialize<ComplexTest>(root);
@@ -137,7 +137,7 @@ namespace Configuration.GenericView
 		public void ParseInnerList()
 		{
 			var root =
-@"<Root><InnerList Coll='5'><Coll>-5</Coll></InnerList><InnerList Coll='6'><Coll>-6</Coll></InnerList></Root>".ToXmlView();
+@"<root><innerlist coll='5'><coll>-5</coll></innerlist><innerlist coll='6'><coll>-6</coll></innerlist></root>".ToXmlView();
 			var d = new GenericDeserializer();
 
 			var tc = d.Deserialize<ComplexTest>(root);

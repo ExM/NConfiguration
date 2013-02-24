@@ -49,7 +49,7 @@ namespace Configuration.Ini
 			if (_sections[0].Name != string.Empty)
 				return null;
 
-			return _sections[0].Pairs.Where(p => p.Key == "Identity").Select(p => p.Value).FirstOrDefault();
+			return _sections[0].Pairs.Where(p => NameComparer.Equals(p.Key, "Identity")).Select(p => p.Value).FirstOrDefault();
 		}
 
 		protected override IEnumerable<Section> Sections

@@ -19,11 +19,11 @@ namespace Configuration.Xml
 
 		public ICfgNode GetChild(string name)
 		{
-			var attr = _element.Attributes().FirstOrDefault(a => name.Equals(a.Name.LocalName, StringComparison.InvariantCultureIgnoreCase));
+			var attr = _element.Attributes().FirstOrDefault(a => NameComparer.Equals(name, a.Name.LocalName));
 			if (attr != null)
 				return new ViewPlainField(_converter, attr.Value);
 
-			var el = _element.Elements().FirstOrDefault(e => name.Equals(e.Name.LocalName, StringComparison.InvariantCultureIgnoreCase));
+			var el = _element.Elements().FirstOrDefault(e => NameComparer.Equals(name, e.Name.LocalName));
 			if (el != null)
 				return new XmlViewNode(_converter, el);
 
@@ -32,10 +32,10 @@ namespace Configuration.Xml
 
 		public IEnumerable<ICfgNode> GetCollection(string name)
 		{
-			foreach(var attr in _element.Attributes().Where(a => name.Equals(a.Name.LocalName, StringComparison.InvariantCultureIgnoreCase)))
+			foreach(var attr in _element.Attributes().Where(a => NameComparer.Equals(name, a.Name.LocalName)))
 				yield return new ViewPlainField(_converter, attr.Value);
 
-			foreach(var el in _element.Elements().Where(e => name.Equals(e.Name.LocalName, StringComparison.InvariantCultureIgnoreCase)))
+			foreach(var el in _element.Elements().Where(e => NameComparer.Equals(name, e.Name.LocalName)))
 				yield return new XmlViewNode(_converter, el);
 		}
 

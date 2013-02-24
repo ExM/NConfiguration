@@ -21,7 +21,7 @@ namespace Configuration.Ini
 		public ICfgNode GetChild(string name)
 		{
 			var value = _pairs
-				.Where(p => p.Key == name)
+				.Where(p => NameComparer.Equals(p.Key, name))
 				.Select(p => p.Value)
 				.FirstOrDefault();
 			if(value != null)
@@ -32,7 +32,7 @@ namespace Configuration.Ini
 
 		public IEnumerable<ICfgNode> GetCollection(string name)
 		{
-			foreach (var value in _pairs.Where(p => p.Key == name).Select(p => p.Value))
+			foreach (var value in _pairs.Where(p => NameComparer.Equals(p.Key, name)).Select(p => p.Value))
 				yield return new ViewPlainField(_converter, value);
 		}
 

@@ -23,11 +23,11 @@ namespace Configuration.Ini
 		{
 			foreach (var section in Sections)
 			{
-				if (section.Name == sectionName)
+				if (NameComparer.Equals(section.Name, sectionName))
 					yield return _deserializer.Deserialize<T>(new ViewSection(_converter, section));
 
 				if (section.Name == string.Empty)
-					foreach(var pair in section.Pairs.Where(p => p.Key == sectionName))
+					foreach(var pair in section.Pairs.Where(p => NameComparer.Equals(p.Key, sectionName)))
 						yield return _deserializer.Deserialize<T>(new ViewPlainField(_converter, pair.Value));
 			}
 		}

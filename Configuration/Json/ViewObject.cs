@@ -20,7 +20,10 @@ namespace Configuration.Json
 
 		public ICfgNode GetChild(string name)
 		{
-			var val = _obj.Properties.Where(p => p.Key == name).Select(p => p.Value).FirstOrDefault();
+			var val = _obj.Properties
+				.Where(p => NameComparer.Equals(p.Key, name))
+				.Select(p => p.Value)
+				.FirstOrDefault();
 			if (val == null)
 				return null;
 
@@ -29,7 +32,7 @@ namespace Configuration.Json
 
 		public IEnumerable<ICfgNode> GetCollection(string name)
 		{
-			return _obj.Properties.Where(p => p.Key == name)
+			return _obj.Properties.Where(p => NameComparer.Equals(p.Key, name))
 				.SelectMany(p => FlatArray(p.Value))
 				.Select(p => CreateByJsonValue(_converter, p));
 		}

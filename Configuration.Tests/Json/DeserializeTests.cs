@@ -36,10 +36,10 @@ namespace Configuration.Json
 
 		public class Section1
 		{
-			public string Item1 { get; set; }
-			public long Item2 { get; set; }
+			public string item1 { get; set; }
+			public long item2 { get; set; }
 			public int? nullItem { get; set; }
-			public Guid Item3 { get; set; }
+			public Guid item3 { get; set; }
 		}
 
 		public class Section2
@@ -56,10 +56,10 @@ namespace Configuration.Json
 		public void Simple()
 		{
 			var section = settings.First<Section1>("Section1");
-			Assert.That(section.Item1, Is.EqualTo("item1.value1"));
-			Assert.That(section.Item2, Is.EqualTo(1231232));
+			Assert.That(section.item1, Is.EqualTo("item1.value1"));
+			Assert.That(section.item2, Is.EqualTo(1231232));
 			Assert.That(section.nullItem, Is.Null);
-			Assert.That(section.Item3, Is.EqualTo(new Guid("09d89405-59b4-4a4b-af2e-c8a134a4860a")));
+			Assert.That(section.item3, Is.EqualTo(new Guid("09d89405-59b4-4a4b-af2e-c8a134a4860a")));
 		}
 
 		[Test]

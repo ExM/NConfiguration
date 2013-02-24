@@ -160,7 +160,7 @@ namespace Configuration.GenericView
 			return text;
 		}
 
-		private static Dictionary<string, bool> _booleanMap = new Dictionary<string, bool>(IgnoreCaseEqualityComparer.Instance)
+		private static Dictionary<string, bool> _booleanMap = new Dictionary<string, bool>(NameComparer.Instance)
 		{
 			{"true", true},
 			{"yes", true},

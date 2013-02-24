@@ -45,7 +45,7 @@ namespace Configuration.Json
 
 		private string GetCustomIdentity()
 		{
-			var val = _obj.Properties.Where(p => p.Key == "Identity").Select(p => p.Value).FirstOrDefault();
+			var val = _obj.Properties.Where(p => NameComparer.Equals(p.Key, "Identity")).Select(p => p.Value).FirstOrDefault();
 			if (val == null)
 				return null;
 
@@ -59,7 +59,7 @@ namespace Configuration.Json
 		protected override IEnumerable<JValue> GetValue(string name)
 		{
 			return _obj.Properties
-				.Where(p => p.Key == name)
+				.Where(p => NameComparer.Equals(p.Key, name))
 				.Select(p => p.Value);
 		}
 		

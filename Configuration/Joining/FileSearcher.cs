@@ -29,7 +29,7 @@ namespace Configuration.Joining
 			if (args.Handled)
 				return;
 
-			if(!string.Equals(args.Name, Tag, StringComparison.InvariantCultureIgnoreCase))
+			if(!NameComparer.Equals(args.Name, Tag))
 				return;
 
 			args.Settings = new List<IAppSettingSource>();

@@ -99,7 +99,7 @@ namespace Configuration.GenericView
 		public void EmptyParse()
 		{
 			var root =
-@"<Root Ignored='true' NInt2='' Int2='123' CfgNode2='' ><Inner2 NInt=''/></Root>".ToXmlView();
+@"<root ignored='true' nint2='' int2='123' cfgNode2='' ><inner2 NInt=''/></root>".ToXmlView();
 			var d = new GenericDeserializer();
 
 			var t = d.Deserialize<TestType1>(root);
