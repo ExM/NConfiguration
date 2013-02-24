@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Xml;
 using System.IO;
 using System.Xml.Linq;
@@ -16,7 +17,8 @@ namespace Configuration.Joining
 		public string Name { get; private set; }
 		public ICfgNode Config { get; private set; }
 
-		private List<IAppSettingSource> _settings = null;
+		private List<IAppSettingSource> _settings = new List<IAppSettingSource>();
+		private bool _handled = false;
 
 		public IncludingEventArgs(IAppSettingSource source, string name, ICfgNode cfg)
 		{
@@ -25,21 +27,32 @@ namespace Configuration.Joining
 			Config = cfg;
 		}
 
-		public bool Handled { get; private set; }
+		public bool IsHandled
+		{
+			get
+			{
+				return _handled;
+			}
+		}
+
+		public void Handle()
+		{
+			if (_handled)
+				throw new InvalidOperationException("event already handled");
+			_handled = true;
+		}
 
 		public List<IAppSettingSource> Settings
 		{
 			get
 			{
-				return _settings;
+				return _settings.ToList();
 			}
-			set
-			{
-				if (Handled)
-					throw new InvalidOperationException("event already handled");
-				Handled = true;
-				_settings = value;
-			}
+		}
+
+		public void Add(IAppSettingSource settings)
+		{
+			_settings.Add(settings);
 		}
 	}
 }

@@ -30,7 +30,6 @@ namespace Configuration.Including
 			Assert.AreEqual(expected, cfg.FinalSearch);
 		}
 		
-		
 		[Test]
 		public void GetFiles()
 		{
@@ -51,7 +50,7 @@ namespace Configuration.Including
 				Assert.AreEqual("XmlFile", e.Name);
 				var fileCfg = Global.GenericDeserializer.Deserialize<IncludeFileConfig>(e.Config);
 				files.Add(fileCfg);
-				e.Settings = null;
+				e.Handle();
 			};
 
 			loader.LoadSettings(settings);

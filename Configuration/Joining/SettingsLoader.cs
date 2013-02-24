@@ -58,7 +58,7 @@ namespace Configuration.Joining
 			{
 				var args = new IncludingEventArgs(source, name, cfg);
 				copy(this, args);
-				if (args.Handled)
+				if (args.IsHandled)
 					return args.Settings;
 			}
 

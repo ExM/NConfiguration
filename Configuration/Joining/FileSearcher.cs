@@ -26,13 +26,13 @@ namespace Configuration.Joining
 
 		public void ResolveFile(object sender, IncludingEventArgs args)
 		{
-			if (args.Handled)
+			if (args.IsHandled)
 				return;
 
 			if(!NameComparer.Equals(args.Name, Tag))
 				return;
 
-			args.Settings = new List<IAppSettingSource>();
+			args.Handle();
 
 			var rpo = args.Source as IFilePathOwner;
 			var cfg = Deserializer.Deserialize<IncludeFileConfig>(args.Config);
@@ -42,7 +42,7 @@ namespace Configuration.Joining
 				if (!File.Exists(cfg.Path) && !cfg.Required)
 					return;
 
-				args.Settings.Add(CreateAppSetting(cfg.Path));
+				args.Add(CreateAppSetting(cfg.Path));
 				return;
 			}
 
@@ -61,12 +61,12 @@ namespace Configuration.Joining
 			}
 
 			if (cfg.Include == IncludeMode.First)
-				args.Settings.Add(found.First());
+				args.Add(found.First());
 			else if (cfg.Include == IncludeMode.Last)
-				args.Settings.Add(found.Last());
+				args.Add(found.Last());
 			else
 				foreach (var item in found)
-					args.Settings.Add(item);
+					args.Add(item);
 		}
 
 		private List<IAppSettingSource> SearchSettings(string basePath, string fileName, SearchMode mode)
