@@ -10,6 +10,13 @@ namespace Configuration
 	/// </summary>
 	public static class AppSettingExtensions
 	{
+
+		internal static string GetIdentitySource(this IAppSettings settings, string defaultIdentity)
+		{
+			var result = settings.TryFirst<string>("Identity");
+			return string.IsNullOrWhiteSpace(result) ? defaultIdentity : result;
+		}
+
 		/// <summary>
 		/// Gets the name of the section in XmlRootAttribute or DataContractAttribute
 		/// </summary>

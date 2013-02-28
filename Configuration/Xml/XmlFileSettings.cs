@@ -15,8 +15,7 @@ namespace Configuration.Xml
 	public class XmlFileSettings : XmlSettings, IFilePathOwner, IAppSettingSource
 	{
 		private readonly XElement _root;
-		private readonly string _directory;
-		private readonly string _identity;
+
 		/// <summary>
 		/// settings loaded from a file
 		/// </summary>
@@ -33,13 +32,8 @@ namespace Configuration.Xml
 				using(var s = System.IO.File.OpenRead(fileName))
 					_root = XDocument.Load(s).Root;
 
-				var idAttr = Root.Attribute("Identity");
-				if (idAttr != null && !string.IsNullOrWhiteSpace(idAttr.Value))
-					_identity = idAttr.Value;
-				else
-					_identity= fileName;
-
-				_directory = System.IO.Path.GetDirectoryName(fileName);
+				Identity = this.GetIdentitySource(fileName);
+				Path = System.IO.Path.GetDirectoryName(fileName);
 			}
 			catch(SystemException ex)
 			{
@@ -54,22 +48,10 @@ namespace Configuration.Xml
 				return _root;
 			}
 		}
-		
-		public string Identity
-		{
-			get
-			{
-				return _identity;
-			}
-		}
 
-		public string Path
-		{
-			get
-			{
-				return _directory;
-			}
-		}
+		public string Identity { get; private set; }
+
+		public string Path { get; private set; }
 	}
 }
 

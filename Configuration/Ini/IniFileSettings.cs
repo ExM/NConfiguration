@@ -14,8 +14,6 @@ namespace Configuration.Ini
 	public class IniFileSettings : IniSettings, IFilePathOwner, IAppSettingSource
 	{
 		private readonly List<Section> _sections;
-		private readonly string _directory;
-		private readonly string _identity;
 
 		public IniFileSettings(string fileName, IStringConverter converter, IGenericDeserializer deserializer)
 			: base(converter, deserializer)
@@ -29,27 +27,13 @@ namespace Configuration.Ini
 				context.ParseSource(text);
 				_sections = new List<Section>(context.Sections);
 
-				_identity = GetCustomIdentity();
-				if (_identity == null)
-					_identity = fileName;
-
-				_directory = System.IO.Path.GetDirectoryName(fileName);
+				Identity = this.GetIdentitySource(fileName);
+				Path = System.IO.Path.GetDirectoryName(fileName);
 			}
 			catch(SystemException ex)
 			{
 				throw new ApplicationException(string.Format("Unable to load file `{0}'", fileName), ex);
 			}
-		}
-
-		private string GetCustomIdentity()
-		{
-			if (_sections.Count == 0)
-				return null;
-
-			if (_sections[0].Name != string.Empty)
-				return null;
-
-			return _sections[0].Pairs.Where(p => NameComparer.Equals(p.Key, "Identity")).Select(p => p.Value).FirstOrDefault();
 		}
 
 		protected override IEnumerable<Section> Sections
@@ -60,21 +44,9 @@ namespace Configuration.Ini
 			}
 		}
 		
-		public string Identity
-		{
-			get
-			{
-				return _identity;
-			}
-		}
+		public string Identity {get; private set;}
 
-		public string Path
-		{
-			get
-			{
-				return _directory;
-			}
-		}
+		public string Path {get; private set;}
 	}
 }
 
