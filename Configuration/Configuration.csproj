@@ -105,7 +105,7 @@
     <Compile Include="Xml\XmlFileSettings.cs" />
     <Compile Include="Xml\Protected\IXmlEncryptable.cs" />
     <Compile Include="MultiSettings\ICombinable.cs" />
-    <Compile Include="Xml\ConfigSections\ConfigProtectedData.cs" />
+    <Compile Include="Xml\Protected\ConfigProtectedData.cs" />
     <Compile Include="Joining\LoadedEventArgs.cs" />
     <Compile Include="Xml\XmlFileSettingsLoader.cs" />
     <Compile Include="CancelableEventArgs.cs" />
@@ -117,8 +117,8 @@
     <Compile Include="Xml\PlainXmlSection.cs" />
     <Compile Include="Xml\XmlSystemSettings.cs" />
     <Compile Include="Xml\XmlLinqConversionExtensions.cs" />
-    <Compile Include="Xml\ConfigSections\IncludeConfig.cs" />
-    <Compile Include="Xml\ConfigSections\IncludeFileConfig.cs" />
+    <Compile Include="Joining\IncludeConfig.cs" />
+    <Compile Include="Joining\IncludeFileConfig.cs" />
     <Compile Include="Joining\SearchMode.cs" />
     <Compile Include="Joining\IncludeMode.cs" />
     <Compile Include="Xml\XmlSettings.cs" />

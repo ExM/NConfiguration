@@ -1,13 +1,7 @@
 using System;
-using System.Linq;
-using System.Xml;
-using System.IO;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using System.Configuration;
-using System.Collections.Specialized;
-using Configuration.GenericView;
 using System.Collections.Generic;
+using System.Linq;
+using Configuration.GenericView;
 
 namespace Configuration.Joining
 {

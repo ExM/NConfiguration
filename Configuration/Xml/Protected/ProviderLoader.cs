@@ -5,7 +5,6 @@ using System.Text;
 using System.Configuration;
 using System.Collections.Specialized;
 using System.Xml;
-using Configuration.Xml.ConfigSections;
 using Configuration.Joining;
 using Configuration.GenericView;
 

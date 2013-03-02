@@ -1,10 +1,6 @@
-using System;
-using System.Linq;
-using System.Xml.Serialization;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace Configuration.Xml.ConfigSections
+namespace Configuration.Joining
 {
 	[DataContract(Name = "Include")]
 	public class IncludeConfig

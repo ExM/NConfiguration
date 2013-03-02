@@ -1,12 +1,7 @@
-using System;
-using System.Linq;
-using System.Xml;
-using System.Xml.Serialization;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Configuration.GenericView;
 
-namespace Configuration.Xml.ConfigSections
+namespace Configuration.Xml.Protected
 {
 	[DataContract(Name = "configProtectedData")]
 	public class ConfigProtectedData

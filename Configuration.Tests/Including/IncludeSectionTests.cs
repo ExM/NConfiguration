@@ -2,7 +2,6 @@ using System;
 using Configuration.Tests;
 using NUnit.Framework;
 using System.Linq;
-using Configuration.Xml.ConfigSections;
 using Configuration.Xml;
 using System.Collections.Generic;
 using Configuration.Joining;

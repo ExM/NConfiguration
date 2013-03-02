@@ -6,7 +6,6 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using Configuration.Joining;
-using Configuration.Xml.ConfigSections;
 using Configuration.GenericView;
 
 namespace Configuration.Ini
