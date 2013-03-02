@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Monitoring\FileMonitor.cs" />
     <Compile Include="GenericView\ViewPlainField.cs" />
     <Compile Include="GenericView\StringMapper.StringMethods.cs">
       <DependentUpon>StringMapper.StringMethods.tt</DependentUpon>
@@ -63,6 +64,8 @@
     <Compile Include="Json\Parsing\JObject.cs" />
     <Compile Include="Json\Parsing\TokenType.cs" />
     <Compile Include="Json\ViewObject.cs" />
+    <Compile Include="Monitoring\WatchFileConfig.cs" />
+    <Compile Include="Monitoring\WatchMode.cs" />
     <Compile Include="Xml\InterfaceExtensions.cs" />
     <Compile Include="IAppSettingSource.cs" />
     <Compile Include="GenericView\Deserialization\AttributeState.cs" />
