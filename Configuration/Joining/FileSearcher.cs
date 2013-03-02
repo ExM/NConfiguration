@@ -55,7 +55,7 @@ namespace Configuration.Joining
 			if (found.Count == 0)
 			{
 				if (cfg.Required)
-					throw new ApplicationException(string.Format("XML configuration '{0}' not found in '{1}'", cfg.Path, rpo.Path));
+					throw new ApplicationException(string.Format("configuration file '{0}' not found in '{1}'", cfg.Path, rpo.Path));
 
 				return;
 			}
@@ -89,6 +89,7 @@ namespace Configuration.Joining
 					if (!Directory.Exists(basePath))
 						break;
 					var fullPath = Path.Combine(basePath, fileName);
+
 					if (File.Exists(fullPath))
 					{
 						var item = CreateAppSetting(fullPath);
