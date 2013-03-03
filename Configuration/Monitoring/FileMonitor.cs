@@ -53,7 +53,7 @@ namespace Configuration.Monitoring
 		private void SetTimer(TimeSpan delay)
 		{
 			_delay = (int)delay.TotalMilliseconds;
-			if (_delay <= 100 || _delay > 24 * 60 * 60 * 1000)
+			if (_delay < 100 || _delay > 24 * 60 * 60 * 1000)
 				throw new ArgumentOutOfRangeException("delay must be greater than 100 ms and less than 1 day");
 
 			_timer = new Timer(OnReviewTime, null, _delay, -1);
