@@ -33,7 +33,13 @@ namespace Configuration.Monitoring
 				var fs = File.OpenRead(fileName);
 				if (fs.Length == expected.Length)
 				{
-					new AsyncComparer(fs, expected, completed);
+					if (expected.Length != 0)
+					{
+						new AsyncComparer(fs, expected, completed);
+						return;
+					}
+
+					ThreadPool.QueueUserWorkItem(TrueResultWork, completed);
 					return;
 				}
 				
@@ -44,6 +50,11 @@ namespace Configuration.Monitoring
 			}
 
 			ThreadPool.QueueUserWorkItem(FalseResultWork, completed);
+		}
+
+		private static void TrueResultWork(object arg)
+		{
+			((Action<bool>)arg)(true);
 		}
 
 		private static void FalseResultWork(object arg)
@@ -68,7 +79,7 @@ namespace Configuration.Monitoring
 					_totalBytes++;
 				}
 
-				if (readed > 0 && !result)
+				if(result && readed > 0)
 				{
 					_src.BeginRead(_buffer, 0, ChunkSize, OnRead, null);
 					return;

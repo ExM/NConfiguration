@@ -58,6 +58,7 @@
     <Compile Include="Json\JsonStringSettings.cs" />
     <Compile Include="Json\ParsingTests.cs" />
     <Compile Include="KeyManager.cs" />
+    <Compile Include="Monitoring\AsyncComparerTests.cs" />
     <Compile Include="MultiSettings\CombineConfig.cs" />
     <Compile Include="MultiSettings\MultiSettingsCombineTests.cs" />
     <Compile Include="Protected\XmlCryptoProvidersTests.cs" />

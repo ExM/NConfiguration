@@ -130,8 +130,15 @@ namespace Configuration.Monitoring
 
 		private void AsyncReview()
 		{
-			//TODO review content of file
-			// WaitToNextReview()
+			AsyncComparer.Compare(_fileName, _content, RewiewResult);
+		}
+
+		private void RewiewResult(bool equal)
+		{
+			if(equal)
+				WaitToNextReview();
+			else
+				OnChanged();
 		}
 
 		private void WatcherOnModify(object sender, FileSystemEventArgs e)
