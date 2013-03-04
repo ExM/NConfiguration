@@ -30,7 +30,7 @@ namespace Configuration.Monitoring
 		{
 			try
 			{
-				var fs = File.OpenRead(fileName);
+				var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 				if (fs.Length == expected.Length)
 				{
 					if (expected.Length != 0)

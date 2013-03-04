@@ -33,6 +33,17 @@ namespace Configuration.Monitoring
 			Assert.That(result, Is.EqualTo(false));
 		}
 
+		[Test]
+		public void NoEqualLenght()
+		{
+			string file = Path.GetTempFileName();
+			File.WriteAllBytes(file, new byte[3]{1, 2, 3});
+
+			bool result = SyncCompare(file, new byte[2]{1, 2});
+
+			Assert.That(result, Is.EqualTo(false));
+		}
+
 		[TestCase(5, -1)]
 		[TestCase(5, 0)]
 		[TestCase(5, 2)]

@@ -67,8 +67,10 @@ namespace Configuration.Monitoring
 					return;
 
 				if (_timer != null)
+				{
 					_timer.Dispose();
-				_timer = new Timer(OnReviewTime, null, _delay, -1);
+					_timer = new Timer(OnReviewTime, null, _delay, -1);
+				}
 			}
 		}
 
@@ -153,8 +155,10 @@ namespace Configuration.Monitoring
 			{
 				if(_changed)
 					return;
-				copy = _changedHandler;
+
 				_changed = true;
+				copy = _changedHandler;
+				_changedHandler = null;
 
 				if (_watcher != null)
 				{
@@ -199,9 +203,7 @@ namespace Configuration.Monitoring
 
 		private void AsyncChangedWork(object arg)
 		{
-			var copy = arg as EventHandler;
-			if (copy != null)
-				copy(this, EventArgs.Empty);
+			((EventHandler)arg)(this, EventArgs.Empty);
 		}
 	}
 }

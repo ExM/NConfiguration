@@ -102,7 +102,6 @@
     <Compile Include="Joining\IncludingEventArgs.cs" />
     <Compile Include="Joining\SettingsLoader.cs" />
     <Compile Include="Joining\FileSearcher.cs" />
-    <Compile Include="Xml\IncludeXmlElementEventArgs.cs" />
     <Compile Include="Xml\XmlFileSettings.cs" />
     <Compile Include="Xml\Protected\IXmlEncryptable.cs" />
     <Compile Include="MultiSettings\ICombinable.cs" />
