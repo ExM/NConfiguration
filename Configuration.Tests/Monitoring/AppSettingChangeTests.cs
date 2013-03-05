@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Configuration.Xml;
 using Configuration.Tests;
 using Configuration.Examples;
+using Configuration.Joining;
 
 namespace Configuration.Monitoring
 {
@@ -53,5 +54,45 @@ namespace Configuration.Monitoring
 			Assert.That(settings.First<ExampleCombineConfig>("AdditionalConfig").F, Is.EqualTo("Modify"));
 		}
 
+		private string _xmlCfgMain = @"<?xml version='1.0' encoding='utf-8' ?>
+<configuration>
+	<WatchFile Mode='Auto' />
+	<include>
+		<XmlFile Path='{0}' Search='Exact' Include='First' Required='true'/>
+	</include>
+	<AdditionalConfig F='InMain'/>
+</configuration>";
+
+		[Test]
+		public void MultiChange()
+		{
+			var xmlFileLoader = new XmlFileSettingsLoader(Global.GenericDeserializer, Global.PlainConverter);
+
+			string cfgMainFile = Path.GetTempFileName();
+			string cfgAdditionalFile = Path.GetTempFileName();
+
+
+			File.WriteAllText(cfgAdditionalFile, _xmlCfgAutoOrigin);
+			File.WriteAllText(cfgMainFile, string.Format(_xmlCfgMain, cfgAdditionalFile));
+
+			var loader = new SettingsLoader();
+			loader.Including += xmlFileLoader.ResolveFile;
+			loader.LoadSettings(xmlFileLoader.LoadFile(cfgMainFile));
+
+			IAppSettings settings = loader.Settings;
+
+
+			var wait = new ManualResetEvent(false);
+			((IChangeable)settings).Changed += (s, e) => { wait.Set(); };
+
+			var t = Task.Factory.StartNew(() =>
+			{
+				File.WriteAllText(cfgAdditionalFile, _xmlCfgAutoModify);
+			}, TaskCreationOptions.LongRunning);
+
+			Task.WaitAll(t);
+
+			Assert.IsTrue(wait.WaitOne(10000), "10 sec elapsed");
+		}
 	}
 }
