@@ -13,7 +13,7 @@ using System.Text;
 
 namespace Configuration.Json
 {
-	public class JsonFileSettings : JsonSettings, IFilePathOwner, IAppSettingSource, IChangeable
+	public class JsonFileSettings : JsonSettings, IFilePathOwner, IIdentifiedSource, IChangeable
 	{
 		private readonly JObject _obj;
 		private readonly FileMonitor _fm;

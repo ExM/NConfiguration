@@ -7,14 +7,14 @@ namespace Configuration.Joining
 {
 	public class IncludingEventArgs : EventArgs
 	{
-		public IAppSettingSource Source { get; private set; }
+		public IIdentifiedSource Source { get; private set; }
 		public string Name { get; private set; }
 		public ICfgNode Config { get; private set; }
 
-		private List<IAppSettingSource> _settings = new List<IAppSettingSource>();
+		private List<IIdentifiedSource> _settings = new List<IIdentifiedSource>();
 		private bool _handled = false;
 
-		public IncludingEventArgs(IAppSettingSource source, string name, ICfgNode cfg)
+		public IncludingEventArgs(IIdentifiedSource source, string name, ICfgNode cfg)
 		{
 			Source = source;
 			Name = name;
@@ -36,7 +36,7 @@ namespace Configuration.Joining
 			_handled = true;
 		}
 
-		public List<IAppSettingSource> Settings
+		public List<IIdentifiedSource> Settings
 		{
 			get
 			{
@@ -44,7 +44,7 @@ namespace Configuration.Joining
 			}
 		}
 
-		public void Add(IAppSettingSource settings)
+		public void Add(IIdentifiedSource settings)
 		{
 			_settings.Add(settings);
 		}

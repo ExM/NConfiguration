@@ -13,7 +13,7 @@ using System.Text;
 
 namespace Configuration.Ini
 {
-	public class IniFileSettings : IniSettings, IFilePathOwner, IAppSettingSource, IChangeable
+	public class IniFileSettings : IniSettings, IFilePathOwner, IIdentifiedSource, IChangeable
 	{
 		private readonly List<Section> _sections;
 		private readonly FileMonitor _fm;

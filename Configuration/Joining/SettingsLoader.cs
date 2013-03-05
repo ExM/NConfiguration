@@ -31,14 +31,14 @@ namespace Configuration.Joining
 
 		public event EventHandler<LoadedEventArgs> Loaded;
 
-		private void OnLoaded(IAppSettingSource settings)
+		private void OnLoaded(IIdentifiedSource settings)
 		{
 			var copy = Loaded;
 			if (copy != null)
 				copy(this, new LoadedEventArgs(settings));
 		}
 
-		public SettingsLoader LoadSettings(IAppSettingSource setting)
+		public SettingsLoader LoadSettings(IIdentifiedSource setting)
 		{
 			if (CheckLoaded(setting))
 				return this;
@@ -51,7 +51,7 @@ namespace Configuration.Joining
 
 		public event EventHandler<IncludingEventArgs> Including;
 
-		private List<IAppSettingSource> OnIncluding(IAppSettingSource source, string name, ICfgNode cfg)
+		private List<IIdentifiedSource> OnIncluding(IIdentifiedSource source, string name, ICfgNode cfg)
 		{
 			var copy = Including;
 			if (copy != null)
@@ -65,7 +65,7 @@ namespace Configuration.Joining
 			throw new InvalidOperationException(string.Format("unknown include type '{0}'", name));
 		}
 
-		private void IncludeSettings(IAppSettingSource setting)
+		private void IncludeSettings(IIdentifiedSource setting)
 		{
 			var includeRoot = setting.TryFirst<ICfgNode>("Include", false);
 			if(includeRoot == null)
@@ -83,7 +83,7 @@ namespace Configuration.Joining
 			}
 		}
 
-		private bool CheckLoaded(IAppSettingSource settings)
+		private bool CheckLoaded(IIdentifiedSource settings)
 		{
 			var key = new IdentityKey(settings.GetType(), settings.Identity);
 			return !_loaded.Add(key);

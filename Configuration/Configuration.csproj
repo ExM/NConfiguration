@@ -69,7 +69,7 @@
     <Compile Include="Monitoring\WatchFileConfig.cs" />
     <Compile Include="Monitoring\WatchMode.cs" />
     <Compile Include="Xml\InterfaceExtensions.cs" />
-    <Compile Include="IAppSettingSource.cs" />
+    <Compile Include="IIdentifiedSource.cs" />
     <Compile Include="GenericView\Deserialization\AttributeState.cs" />
     <Compile Include="GenericView\Deserialization\BuildToolkit.cs" />
     <Compile Include="GenericView\Deserialization\FieldFunctionBuildingEventArgs.cs" />

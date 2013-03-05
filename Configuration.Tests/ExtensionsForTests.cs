@@ -17,7 +17,7 @@ namespace Configuration
 			return Global.PlainConverter.CreateView(doc);
 		}
 
-		public static IAppSettingSource ToXmlSettings(this string text)
+		public static IIdentifiedSource ToXmlSettings(this string text)
 		{
 			return new XmlStringSettings(text);
 		}
@@ -34,7 +34,7 @@ namespace Configuration
 			return new List<Section>(context.Sections);
 		}
 
-		public static IAppSettingSource ToXmlSettings(this string text, IProviderCollection providers)
+		public static IIdentifiedSource ToXmlSettings(this string text, IProviderCollection providers)
 		{
 			var settings = new XmlStringSettings(text);
 			settings.SetProviderCollection(providers);

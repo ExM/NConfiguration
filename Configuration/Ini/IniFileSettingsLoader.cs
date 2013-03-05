@@ -20,7 +20,7 @@ namespace Configuration.Ini
 			_converter = converter;
 		}
 
-		public IAppSettingSource LoadFile(string path)
+		public IIdentifiedSource LoadFile(string path)
 		{
 			return new IniFileSettings(path, _converter, Deserializer);
 		}
@@ -33,7 +33,7 @@ namespace Configuration.Ini
 			}
 		}
 
-		public override IAppSettingSource CreateAppSetting(string path)
+		public override IIdentifiedSource CreateAppSetting(string path)
 		{
 			return new IniFileSettings(path, _converter, Deserializer);
 		}

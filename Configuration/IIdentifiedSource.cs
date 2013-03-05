@@ -4,7 +4,7 @@ namespace Configuration
 	/// <summary>
 	/// store application settings
 	/// </summary>
-	public interface IAppSettingSource: IAppSettings
+	public interface IIdentifiedSource: IAppSettings
 	{
 		/// <summary>
 		/// source identifier the application settings

@@ -20,7 +20,7 @@ namespace Configuration.Xml
 			_converter = converter;
 		}
 
-		public IAppSettingSource LoadFile(string fileName)
+		public IIdentifiedSource LoadFile(string fileName)
 		{
 			return new XmlFileSettings(fileName, _converter, Deserializer);
 		}
@@ -33,7 +33,7 @@ namespace Configuration.Xml
 			}
 		}
 
-		public override IAppSettingSource CreateAppSetting(string path)
+		public override IIdentifiedSource CreateAppSetting(string path)
 		{
 			return new XmlFileSettings(path, _converter, Deserializer);
 		}

@@ -20,7 +20,7 @@ namespace Configuration.Json
 			_converter = converter;
 		}
 
-		public IAppSettingSource LoadFile(string path)
+		public IIdentifiedSource LoadFile(string path)
 		{
 			return new JsonFileSettings(path, _converter, Deserializer);
 		}
@@ -33,7 +33,7 @@ namespace Configuration.Json
 			}
 		}
 
-		public override IAppSettingSource CreateAppSetting(string path)
+		public override IIdentifiedSource CreateAppSetting(string path)
 		{
 			return new JsonFileSettings(path, _converter, Deserializer);
 		}

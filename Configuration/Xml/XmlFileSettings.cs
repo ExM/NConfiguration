@@ -13,7 +13,7 @@ namespace Configuration.Xml
 	/// <summary>
 	/// settings loaded from a file
 	/// </summary>
-	public class XmlFileSettings : XmlSettings, IFilePathOwner, IAppSettingSource, IChangeable
+	public class XmlFileSettings : XmlSettings, IFilePathOwner, IIdentifiedSource, IChangeable
 	{
 		private readonly XElement _root;
 		private readonly FileMonitor _fm;

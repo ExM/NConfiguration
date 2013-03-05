@@ -21,7 +21,7 @@ namespace Configuration.Joining
 
 		public abstract string Tag { get; }
 
-		public abstract IAppSettingSource CreateAppSetting(string path);
+		public abstract IIdentifiedSource CreateAppSetting(string path);
 
 		public void ResolveFile(object sender, IncludingEventArgs args)
 		{
@@ -68,9 +68,9 @@ namespace Configuration.Joining
 					args.Add(item);
 		}
 
-		private List<IAppSettingSource> SearchSettings(string basePath, string fileName, SearchMode mode)
+		private List<IIdentifiedSource> SearchSettings(string basePath, string fileName, SearchMode mode)
 		{
-			var result = new List<IAppSettingSource>();
+			var result = new List<IIdentifiedSource>();
 
 			if(basePath == null)
 				return result;

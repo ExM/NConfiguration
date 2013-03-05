@@ -9,7 +9,7 @@ using Configuration.Tests;
 
 namespace Configuration
 {
-	public class XmlStringSettings : XmlSettings, IAppSettingSource
+	public class XmlStringSettings : XmlSettings, IIdentifiedSource
 	{
 		private readonly XElement _root;
 		private readonly string _hash;

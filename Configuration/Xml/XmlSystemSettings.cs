@@ -11,7 +11,7 @@ using Configuration.GenericView;
 
 namespace Configuration.Xml
 {
-	public class XmlSystemSettings : XmlSettings, IFilePathOwner, IAppSettingSource
+	public class XmlSystemSettings : XmlSettings, IFilePathOwner, IIdentifiedSource
 	{
 		private readonly XElement _root;
 		private readonly string _sectionName;
