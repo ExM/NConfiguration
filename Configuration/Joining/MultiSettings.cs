@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Configuration
+namespace Configuration.Joining
 {
 	public class MultiSettings : IAppSettings, IChangeable
 	{

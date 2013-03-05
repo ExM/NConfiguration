@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+using Configuration.Joining;
 namespace Configuration
 {
 	[TestFixture]

@@ -81,7 +81,6 @@ namespace Configuration.Monitoring
 
 			IAppSettings settings = loader.Settings;
 
-
 			var wait = new ManualResetEvent(false);
 			((IChangeable)settings).Changed += (s, e) => { wait.Set(); };
 
