@@ -59,6 +59,7 @@
     <Compile Include="Json\ParsingTests.cs" />
     <Compile Include="KeyManager.cs" />
     <Compile Include="Monitoring\AsyncComparerTests.cs" />
+    <Compile Include="Monitoring\AppSettingChangeTests.cs" />
     <Compile Include="Monitoring\FileMonitorTests.cs" />
     <Compile Include="MultiSettings\CombineConfig.cs" />
     <Compile Include="MultiSettings\MultiSettingsCombineTests.cs" />

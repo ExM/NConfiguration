@@ -6,15 +6,17 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using Configuration.Xml.Protected;
 using Configuration.GenericView;
+using Configuration.Monitoring;
 
 namespace Configuration.Xml
 {
 	/// <summary>
 	/// settings loaded from a file
 	/// </summary>
-	public class XmlFileSettings : XmlSettings, IFilePathOwner, IAppSettingSource
+	public class XmlFileSettings : XmlSettings, IFilePathOwner, IAppSettingSource, IChangeable
 	{
 		private readonly XElement _root;
+		private readonly FileMonitor _fm;
 
 		/// <summary>
 		/// settings loaded from a file
@@ -28,12 +30,12 @@ namespace Configuration.Xml
 			try
 			{
 				fileName = System.IO.Path.GetFullPath(fileName);
+				var content = File.ReadAllBytes(fileName);
 
-				using(var s = System.IO.File.OpenRead(fileName))
-					_root = XDocument.Load(s).Root;
-
+				_root = XDocument.Load(new MemoryStream(content)).Root;
 				Identity = this.GetIdentitySource(fileName);
 				Path = System.IO.Path.GetDirectoryName(fileName);
+				_fm = this.GetMonitoring(fileName, content);
 			}
 			catch(SystemException ex)
 			{
@@ -52,6 +54,20 @@ namespace Configuration.Xml
 		public string Identity { get; private set; }
 
 		public string Path { get; private set; }
+
+		public event EventHandler Changed
+		{
+			add
+			{
+				if (_fm != null)
+					_fm.Changed += value;
+			}
+			remove
+			{
+				if (_fm != null)
+					_fm.Changed -= value;
+			}
+		}
 	}
 }
 

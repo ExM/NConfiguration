@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
+using Configuration.Monitoring;
 
 namespace Configuration
 {
@@ -15,6 +16,17 @@ namespace Configuration
 		{
 			var result = settings.TryFirst<string>("Identity");
 			return string.IsNullOrWhiteSpace(result) ? defaultIdentity : result;
+		}
+
+		internal static FileMonitor GetMonitoring(this IAppSettings settings, string fileName, byte[] expectedContent)
+		{
+			var cfg = settings.TryFirst<WatchFileConfig>();
+			if (cfg == null)
+				return null;
+			if (cfg.Mode == WatchMode.None)
+				return null;
+
+			return new FileMonitor(fileName, expectedContent, cfg.Mode, cfg.Delay);
 		}
 
 		/// <summary>
