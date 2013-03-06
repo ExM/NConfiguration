@@ -40,9 +40,13 @@ namespace Configuration.GenericView
 			
 			return DefaultConverter(type);
 		}
-
 <#foreach(var type in types){#>
 		
+		/// <summary>
+		/// Convert text to Nullable[<#= type#>]
+		/// </summary>
+		/// <param name="text">A string that represents the <#= type#> to convert.</param>
+		/// <returns>A <#= type#> equivalent to the specified in text or null-value if argument not contain a text</returns>
 		public <#= type#>? ToN<#= type#>(string text)
 		{
 			if (string.IsNullOrWhiteSpace(text))
@@ -51,7 +55,6 @@ namespace Configuration.GenericView
 			return To<#= type#>(text);
 		}
 <#}#>
-		
 	}
 }
 

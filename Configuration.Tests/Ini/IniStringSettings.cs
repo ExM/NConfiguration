@@ -7,7 +7,6 @@ using Configuration.Xml;
 using Configuration.GenericView;
 using Configuration.Tests;
 using System.Collections.Generic;
-using Configuration.Ini.Parsing;
 
 namespace Configuration.Ini
 {
@@ -18,9 +17,7 @@ namespace Configuration.Ini
 		public IniStringSettings(string text)
 			:base(Global.PlainConverter, Global.GenericDeserializer)
 		{
-			var context = new ParseContext();
-			context.ParseSource(text);
-			_sections = new List<Section>(context.Sections);
+			_sections = Section.Parse(text);
 		}
 
 		protected override IEnumerable<Section> Sections

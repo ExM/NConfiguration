@@ -39,6 +39,9 @@ namespace Configuration.Xml
 			}
 		}
 
+		/// <summary>
+		/// XML root element that contains all the configuration section
+		/// </summary>
 		protected override XElement Root
 		{
 			get
@@ -47,6 +50,9 @@ namespace Configuration.Xml
 			}
 		}
 
+		/// <summary>
+		/// source identifier the application settings
+		/// </summary>
 		public string Identity
 		{
 			get
@@ -55,6 +61,9 @@ namespace Configuration.Xml
 			}
 		}
 
+		/// <summary>
+		/// Directory containing the configuration file
+		/// </summary>
 		public string Path
 		{
 			get

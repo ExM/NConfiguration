@@ -20,6 +20,11 @@ namespace Configuration.Json
 
 		protected abstract IEnumerable<JValue> GetValue(string name);
 
+		/// <summary>
+		/// Returns a collection of instances of configurations
+		/// </summary>
+		/// <typeparam name="T">type of instance of configuration</typeparam>
+		/// <param name="name">section name</param>
 		public IEnumerable<T> LoadCollection<T>(string name)
 		{
 			foreach(var val in GetValue(name))

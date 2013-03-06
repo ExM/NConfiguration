@@ -47,9 +47,15 @@ namespace Configuration.Ini
 				return _sections;
 			}
 		}
-		
+
+		/// <summary>
+		/// source identifier the application settings
+		/// </summary>
 		public string Identity {get; private set;}
 
+		/// <summary>
+		/// Directory containing the configuration file
+		/// </summary>
 		public string Path {get; private set;}
 
 		public event EventHandler Changed

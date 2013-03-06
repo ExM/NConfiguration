@@ -10,14 +10,14 @@ namespace Configuration.GenericView.Deserialization
 {
 	public static class BuildToolkit
 	{
-		public static object CreatePrimitiveFunction(Type type)
+		internal static object CreatePrimitiveFunction(Type type)
 		{
 			var mi = typeof(BuildToolkit).GetMethod("PrimitiveTarget").MakeGenericMethod(type);
 			var funcType = typeof(Func<,>).MakeGenericType(typeof(ICfgNode), type);
 			return Delegate.CreateDelegate(funcType, mi);
 		}
 
-		public static bool IsNullable(Type type)
+		internal static bool IsNullable(Type type)
 		{
 			return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
 		}
@@ -30,7 +30,7 @@ namespace Configuration.GenericView.Deserialization
 			{typeof(CollectionDataContractAttribute), AttributeState.NotImplemented} // not implemented
 		};
 
-		public static AttributeState DataContractAvailable(Type targetType)
+		internal static AttributeState DataContractAvailable(Type targetType)
 		{
 			return CustomAttributesAvailable(targetType, DataContractAttributeStates);
 		}
@@ -82,12 +82,12 @@ namespace Configuration.GenericView.Deserialization
 			}
 		}
 
-		public static T PrimitiveTarget<T>(ICfgNode node)
+		internal static T PrimitiveTarget<T>(ICfgNode node)
 		{
 			return node.As<T>();
 		}
 
-		public static T OptionalPrimitiveField<T>(string name, ICfgNode node)
+		internal static T OptionalPrimitiveField<T>(string name, ICfgNode node)
 		{
 			var field = node.GetChild(name);
 			if (field == null)
@@ -96,7 +96,7 @@ namespace Configuration.GenericView.Deserialization
 			return field.As<T>();
 		}
 
-		public static T RequiredPrimitiveField<T>(string name, ICfgNode node)
+		internal static T RequiredPrimitiveField<T>(string name, ICfgNode node)
 		{
 			var field = node.GetChild(name);
 			if (field == null)
@@ -105,7 +105,7 @@ namespace Configuration.GenericView.Deserialization
 			return field.As<T>();
 		}
 
-		public static T RequiredComplexField<T>(string name, ICfgNode node, IGenericDeserializer deserializer)
+		internal static T RequiredComplexField<T>(string name, ICfgNode node, IGenericDeserializer deserializer)
 		{
 			var field = node.GetChild(name);
 			if (field == null)
@@ -114,7 +114,7 @@ namespace Configuration.GenericView.Deserialization
 			return deserializer.Deserialize<T>(field);
 		}
 
-		public static T OptionalComplexField<T>(string name, ICfgNode node, IGenericDeserializer deserializer)
+		internal static T OptionalComplexField<T>(string name, ICfgNode node, IGenericDeserializer deserializer)
 		{
 			var field = node.GetChild(name);
 			if (field == null)
@@ -123,28 +123,28 @@ namespace Configuration.GenericView.Deserialization
 			return deserializer.Deserialize<T>(field);
 		}
 
-		public static List<T> List<T>(string name, ICfgNode node, IGenericDeserializer deserializer)
+		internal static List<T> List<T>(string name, ICfgNode node, IGenericDeserializer deserializer)
 		{
 			return node.GetCollection(name)
 				.Select(deserializer.Deserialize<T>)
 				.ToList();
 		}
 
-		public static T[] Array<T>(string name, ICfgNode node, IGenericDeserializer deserializer)
+		internal static T[] Array<T>(string name, ICfgNode node, IGenericDeserializer deserializer)
 		{
 			return node.GetCollection(name)
 				.Select(deserializer.Deserialize<T>)
 				.ToArray();
 		}
 
-		public static object CreateNativeFunction()
+		internal static object CreateNativeFunction()
 		{
 			var mi = typeof(BuildToolkit).GetMethod("GetCfgNode");
 			var funcType = typeof(Func<,>).MakeGenericType(typeof(ICfgNode), typeof(ICfgNode));
 			return Delegate.CreateDelegate(funcType, mi);
 		}
 
-		public static ICfgNode GetCfgNode(ICfgNode node)
+		internal static ICfgNode GetCfgNode(ICfgNode node)
 		{
 			return node;
 		}

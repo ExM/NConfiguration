@@ -12,7 +12,7 @@ using Configuration.GenericView;
 namespace Configuration.Xml
 {
 	/// <summary>
-	/// settings loaded from a XML document
+	/// This settings loaded from a XML document
 	/// </summary>
 	public abstract class XmlSettings : IXmlEncryptable, IAppSettings
 	{
@@ -22,8 +22,14 @@ namespace Configuration.Xml
 		private readonly IGenericDeserializer _deserializer;
 		private IProviderCollection _providers = null;
 
+		/// <summary>
+		/// XML root element that contains all the configuration section
+		/// </summary>
 		protected abstract XElement Root { get; }
 
+		/// <summary>
+		/// This settings loaded from a XML document
+		/// </summary>
 		public XmlSettings(IStringConverter converter, IGenericDeserializer deserializer)
 		{
 			_converter = converter;
@@ -64,12 +70,20 @@ namespace Configuration.Xml
 
 			return xmlData.ToXElement();
 		}
-		
+
+		/// <summary>
+		/// Sets the collection providers to decrypt XML sections
+		/// </summary>
 		public void SetProviderCollection(IProviderCollection collection)
 		{
 			_providers = collection;
 		}
 
+		/// <summary>
+		/// Returns a collection of instances of configurations
+		/// </summary>
+		/// <typeparam name="T">type of instance of configuration</typeparam>
+		/// <param name="name">section name</param>
 		public IEnumerable<T> LoadCollection<T>(string name)
 		{
 			if (name == null)

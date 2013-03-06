@@ -6,7 +6,7 @@ using System.Collections.Specialized;
 
 namespace Configuration.Ini.Parsing
 {
-	public class ParseContext
+	internal class ParseContext
 	{
 		private char BeginComment = ';';
 		private char BeginSection = '[';

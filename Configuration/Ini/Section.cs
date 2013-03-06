@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Configuration.Ini.Parsing;
 
 namespace Configuration.Ini
 {
@@ -16,6 +17,13 @@ namespace Configuration.Ini
 		{
 			Name = name;
 			Pairs = new List<KeyValuePair<string, string>>();
+		}
+
+		public static List<Section> Parse(string text)
+		{
+			var context = new ParseContext();
+			context.ParseSource(text);
+			return new List<Section>(context.Sections);
 		}
 	}
 }

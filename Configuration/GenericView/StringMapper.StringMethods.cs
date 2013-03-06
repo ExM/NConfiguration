@@ -75,8 +75,12 @@ namespace Configuration.GenericView
 			
 			return DefaultConverter(type);
 		}
-
 		
+		/// <summary>
+		/// Convert text to Nullable[Boolean]
+		/// </summary>
+		/// <param name="text">A string that represents the Boolean to convert.</param>
+		/// <returns>A Boolean equivalent to the specified in text or null-value if argument not contain a text</returns>
 		public Boolean? ToNBoolean(string text)
 		{
 			if (string.IsNullOrWhiteSpace(text))
@@ -85,6 +89,11 @@ namespace Configuration.GenericView
 			return ToBoolean(text);
 		}
 		
+		/// <summary>
+		/// Convert text to Nullable[Byte]
+		/// </summary>
+		/// <param name="text">A string that represents the Byte to convert.</param>
+		/// <returns>A Byte equivalent to the specified in text or null-value if argument not contain a text</returns>
 		public Byte? ToNByte(string text)
 		{
 			if (string.IsNullOrWhiteSpace(text))
@@ -93,6 +102,11 @@ namespace Configuration.GenericView
 			return ToByte(text);
 		}
 		
+		/// <summary>
+		/// Convert text to Nullable[SByte]
+		/// </summary>
+		/// <param name="text">A string that represents the SByte to convert.</param>
+		/// <returns>A SByte equivalent to the specified in text or null-value if argument not contain a text</returns>
 		public SByte? ToNSByte(string text)
 		{
 			if (string.IsNullOrWhiteSpace(text))
@@ -101,6 +115,11 @@ namespace Configuration.GenericView
 			return ToSByte(text);
 		}
 		
+		/// <summary>
+		/// Convert text to Nullable[Char]
+		/// </summary>
+		/// <param name="text">A string that represents the Char to convert.</param>
+		/// <returns>A Char equivalent to the specified in text or null-value if argument not contain a text</returns>
 		public Char? ToNChar(string text)
 		{
 			if (string.IsNullOrWhiteSpace(text))
@@ -109,6 +128,11 @@ namespace Configuration.GenericView
 			return ToChar(text);
 		}
 		
+		/// <summary>
+		/// Convert text to Nullable[Int16]
+		/// </summary>
+		/// <param name="text">A string that represents the Int16 to convert.</param>
+		/// <returns>A Int16 equivalent to the specified in text or null-value if argument not contain a text</returns>
 		public Int16? ToNInt16(string text)
 		{
 			if (string.IsNullOrWhiteSpace(text))
@@ -117,6 +141,11 @@ namespace Configuration.GenericView
 			return ToInt16(text);
 		}
 		
+		/// <summary>
+		/// Convert text to Nullable[Int32]
+		/// </summary>
+		/// <param name="text">A string that represents the Int32 to convert.</param>
+		/// <returns>A Int32 equivalent to the specified in text or null-value if argument not contain a text</returns>
 		public Int32? ToNInt32(string text)
 		{
 			if (string.IsNullOrWhiteSpace(text))
@@ -125,6 +154,11 @@ namespace Configuration.GenericView
 			return ToInt32(text);
 		}
 		
+		/// <summary>
+		/// Convert text to Nullable[Int64]
+		/// </summary>
+		/// <param name="text">A string that represents the Int64 to convert.</param>
+		/// <returns>A Int64 equivalent to the specified in text or null-value if argument not contain a text</returns>
 		public Int64? ToNInt64(string text)
 		{
 			if (string.IsNullOrWhiteSpace(text))
@@ -133,6 +167,11 @@ namespace Configuration.GenericView
 			return ToInt64(text);
 		}
 		
+		/// <summary>
+		/// Convert text to Nullable[UInt16]
+		/// </summary>
+		/// <param name="text">A string that represents the UInt16 to convert.</param>
+		/// <returns>A UInt16 equivalent to the specified in text or null-value if argument not contain a text</returns>
 		public UInt16? ToNUInt16(string text)
 		{
 			if (string.IsNullOrWhiteSpace(text))
@@ -141,6 +180,11 @@ namespace Configuration.GenericView
 			return ToUInt16(text);
 		}
 		
+		/// <summary>
+		/// Convert text to Nullable[UInt32]
+		/// </summary>
+		/// <param name="text">A string that represents the UInt32 to convert.</param>
+		/// <returns>A UInt32 equivalent to the specified in text or null-value if argument not contain a text</returns>
 		public UInt32? ToNUInt32(string text)
 		{
 			if (string.IsNullOrWhiteSpace(text))
@@ -149,6 +193,11 @@ namespace Configuration.GenericView
 			return ToUInt32(text);
 		}
 		
+		/// <summary>
+		/// Convert text to Nullable[UInt64]
+		/// </summary>
+		/// <param name="text">A string that represents the UInt64 to convert.</param>
+		/// <returns>A UInt64 equivalent to the specified in text or null-value if argument not contain a text</returns>
 		public UInt64? ToNUInt64(string text)
 		{
 			if (string.IsNullOrWhiteSpace(text))
@@ -157,6 +206,11 @@ namespace Configuration.GenericView
 			return ToUInt64(text);
 		}
 		
+		/// <summary>
+		/// Convert text to Nullable[Single]
+		/// </summary>
+		/// <param name="text">A string that represents the Single to convert.</param>
+		/// <returns>A Single equivalent to the specified in text or null-value if argument not contain a text</returns>
 		public Single? ToNSingle(string text)
 		{
 			if (string.IsNullOrWhiteSpace(text))
@@ -165,6 +219,11 @@ namespace Configuration.GenericView
 			return ToSingle(text);
 		}
 		
+		/// <summary>
+		/// Convert text to Nullable[Double]
+		/// </summary>
+		/// <param name="text">A string that represents the Double to convert.</param>
+		/// <returns>A Double equivalent to the specified in text or null-value if argument not contain a text</returns>
 		public Double? ToNDouble(string text)
 		{
 			if (string.IsNullOrWhiteSpace(text))
@@ -173,6 +232,11 @@ namespace Configuration.GenericView
 			return ToDouble(text);
 		}
 		
+		/// <summary>
+		/// Convert text to Nullable[TimeSpan]
+		/// </summary>
+		/// <param name="text">A string that represents the TimeSpan to convert.</param>
+		/// <returns>A TimeSpan equivalent to the specified in text or null-value if argument not contain a text</returns>
 		public TimeSpan? ToNTimeSpan(string text)
 		{
 			if (string.IsNullOrWhiteSpace(text))
@@ -181,6 +245,11 @@ namespace Configuration.GenericView
 			return ToTimeSpan(text);
 		}
 		
+		/// <summary>
+		/// Convert text to Nullable[DateTime]
+		/// </summary>
+		/// <param name="text">A string that represents the DateTime to convert.</param>
+		/// <returns>A DateTime equivalent to the specified in text or null-value if argument not contain a text</returns>
 		public DateTime? ToNDateTime(string text)
 		{
 			if (string.IsNullOrWhiteSpace(text))
@@ -189,6 +258,11 @@ namespace Configuration.GenericView
 			return ToDateTime(text);
 		}
 		
+		/// <summary>
+		/// Convert text to Nullable[Guid]
+		/// </summary>
+		/// <param name="text">A string that represents the Guid to convert.</param>
+		/// <returns>A Guid equivalent to the specified in text or null-value if argument not contain a text</returns>
 		public Guid? ToNGuid(string text)
 		{
 			if (string.IsNullOrWhiteSpace(text))
@@ -196,7 +270,6 @@ namespace Configuration.GenericView
 
 			return ToGuid(text);
 		}
-		
 	}
 }
 

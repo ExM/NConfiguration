@@ -11,11 +11,7 @@ namespace Configuration.GenericView.Deserialization
 {
 	public class GenericMapper : IGenericMapper
 	{
-		protected HashSet<Type> PrimitiveTypes { get; private set; }
-
-		public GenericMapper()
-		{
-			PrimitiveTypes = new HashSet<Type>
+		private readonly HashSet<Type> _primitiveTypes = new HashSet<Type>
 			{
 				typeof(String), typeof(Boolean), typeof(Char),
 				typeof(Byte), typeof(SByte),
@@ -24,9 +20,12 @@ namespace Configuration.GenericView.Deserialization
 				typeof(TimeSpan), typeof(DateTime), typeof(Guid),
 				typeof(byte[])
 			};
+
+		public GenericMapper()
+		{
 		}
 
-		public bool IsPrimitive(Type type)
+		public virtual bool IsPrimitive(Type type)
 		{
 			var ntype = Nullable.GetUnderlyingType(type);
 			if(ntype != null) // is Nullable<>
@@ -35,7 +34,7 @@ namespace Configuration.GenericView.Deserialization
 			if (type.IsEnum)
 				return true;
 
-			return PrimitiveTypes.Contains(type);
+			return _primitiveTypes.Contains(type);
 		}
 
 		public bool IsCollection(Type type)

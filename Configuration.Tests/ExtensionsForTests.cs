@@ -6,7 +6,6 @@ using Configuration.GenericView;
 using Configuration.Tests;
 using Configuration.Ini;
 using System.Collections.Generic;
-using Configuration.Ini.Parsing;
 
 namespace Configuration
 {
@@ -29,9 +28,7 @@ namespace Configuration
 
 		public static List<Section> ToIniSections(this string text)
 		{
-			var context = new ParseContext();
-			context.ParseSource(text);
-			return new List<Section>(context.Sections);
+			return Section.Parse(text);
 		}
 
 		public static IIdentifiedSource ToXmlSettings(this string text, IProviderCollection providers)

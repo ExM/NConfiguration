@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Configuration.Ini.Parsing
 {
-	public enum TokenType
+	internal enum TokenType
 	{
 		Section,
 		Key,

@@ -19,6 +19,11 @@ namespace Configuration.Ini
 
 		protected abstract IEnumerable<Section> Sections { get; }
 
+		/// <summary>
+		/// Returns a collection of instances of configurations
+		/// </summary>
+		/// <typeparam name="T">type of instance of configuration</typeparam>
+		/// <param name="sectionName">section name</param>
 		public IEnumerable<T> LoadCollection<T>(string sectionName)
 		{
 			foreach (var section in Sections)
