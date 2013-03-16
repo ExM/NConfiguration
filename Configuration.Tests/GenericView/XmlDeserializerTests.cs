@@ -19,10 +19,7 @@ namespace Configuration.GenericView
 			{
 				if (BuildToolkit.XmlAvailable(targetType) == AttributeState.NotImplemented)
 					throw new NotImplementedException();
-				var builder = new ComplexFunctionBuilder(targetType, deserializer);
-				builder.FieldFunctionBuilding += XmlFieldReader;
-
-				return builder;
+				return new ComplexFunctionBuilder(targetType, deserializer, XmlFieldReader);
 			}
 		}
 

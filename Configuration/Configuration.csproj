@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GenericView\Deserialization\FieldFunctionInfo.cs" />
     <Compile Include="IChangeable.cs" />
     <Compile Include="Monitoring\AsyncComparer.cs" />
     <Compile Include="Monitoring\FileMonitor.cs" />
@@ -72,7 +73,6 @@
     <Compile Include="IIdentifiedSource.cs" />
     <Compile Include="GenericView\Deserialization\AttributeState.cs" />
     <Compile Include="GenericView\Deserialization\BuildToolkit.cs" />
-    <Compile Include="GenericView\Deserialization\FieldFunctionBuildingEventArgs.cs" />
     <Compile Include="GenericView\Deserialization\FieldFunctionType.cs" />
     <Compile Include="GenericView\Deserialization\IGenericMapper.cs" />
     <Compile Include="GenericView\EnumParsing\IEnumParser_1.cs" />

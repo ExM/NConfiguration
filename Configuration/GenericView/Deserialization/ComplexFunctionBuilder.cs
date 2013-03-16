@@ -14,24 +14,14 @@ namespace Configuration.GenericView.Deserialization
 		private ParameterExpression _pCfgNode = Expression.Parameter(typeof(ICfgNode));
 		private List<Expression> _bodyList = new List<Expression>();
 		private ParameterExpression _pResult;
+		private Action<FieldFunctionInfo, object[]> _configureFieldInfo;
 
-		public ComplexFunctionBuilder(Type targetType, IGenericDeserializer deserializer)
+		public ComplexFunctionBuilder(Type targetType, IGenericDeserializer deserializer, Action<FieldFunctionInfo, object[]> configureFieldInfo)
 		{
 			_targetType = targetType;
 			_pResult = Expression.Parameter(_targetType);
 			_deserializer = deserializer;
-		}
-
-		public event EventHandler<FieldFunctionBuildingEventArgs> FieldFunctionBuilding;
-
-		private FieldFunctionBuildingEventArgs OnFieldFunctionBuilding(Type type, string name, object[] customAttributes)
-		{
-			var args = new FieldFunctionBuildingEventArgs(type, name, customAttributes);
-			var copy = FieldFunctionBuilding;
-			if (copy != null)
-				copy(this, args);
-
-			return args;
+			_configureFieldInfo = configureFieldInfo;
 		}
 
 		private void SetConstructor()
@@ -86,41 +76,39 @@ namespace Configuration.GenericView.Deserialization
 
 		private Expression CreateFunction(Type fieldType, string fieldName, object[] customAttributes)
 		{
-			var args = OnFieldFunctionBuilding(fieldType, fieldName, customAttributes);
-			if (args.Ignore)
-				return null;
-
-			return MakeFieldReader(args);
+			var ffi = new FieldFunctionInfo(fieldType, fieldName);
+			_configureFieldInfo(ffi, customAttributes);
+			return ffi.Ignore ? null : MakeFieldReader(ffi);
 		}
 
-		private Expression MakeFieldReader(FieldFunctionBuildingEventArgs args)
+		private Expression MakeFieldReader(FieldFunctionInfo ffi)
 		{
-			if (args.Type.IsArray)
+			if (ffi.ResultType.IsArray)
 			{
-				var itemType = args.Type.GetElementType();
-				var mi = typeof(BuildToolkit).GetMethod("Array").MakeGenericMethod(itemType);
-				return Expression.Call(null, mi, Expression.Constant(args.Name), _pCfgNode, Expression.Constant(_deserializer));
+				var itemType = ffi.ResultType.GetElementType();
+				var mi = BuildToolkit.ArrayMI.MakeGenericMethod(itemType);
+				return Expression.Call(null, mi, Expression.Constant(ffi.Name), _pCfgNode, Expression.Constant(_deserializer));
 			}
 
-			if (args.Function == FieldFunctionType.Primitive)
+			if (ffi.Function == FieldFunctionType.Primitive)
 			{
-				var methodName = args.Required ? "RequiredPrimitiveField" : "OptionalPrimitiveField";
-				var mi = typeof(BuildToolkit).GetMethod(methodName).MakeGenericMethod(args.Type);
-				return Expression.Call(null, mi, Expression.Constant(args.Name), _pCfgNode);
+				var mi = ffi.Required ? BuildToolkit.RequiredPrimitiveFieldMI : BuildToolkit.OptionalPrimitiveFieldMI;
+				mi = mi.MakeGenericMethod(ffi.ResultType);
+				return Expression.Call(null, mi, Expression.Constant(ffi.Name), _pCfgNode);
 			}
 
-			if (args.Function == FieldFunctionType.Collection)
+			if (ffi.Function == FieldFunctionType.Collection)
 			{
-				var itemType = args.Type.GetGenericArguments()[0];
-				var mi = typeof(BuildToolkit).GetMethod("List").MakeGenericMethod(itemType);
-				return Expression.Call(null, mi, Expression.Constant(args.Name), _pCfgNode, Expression.Constant(_deserializer));
+				var itemType = ffi.ResultType.GetGenericArguments()[0];
+				var mi = BuildToolkit.ListMI.MakeGenericMethod(itemType);
+				return Expression.Call(null, mi, Expression.Constant(ffi.Name), _pCfgNode, Expression.Constant(_deserializer));
 			}
 
-			if (args.Function == FieldFunctionType.Complex)
+			if (ffi.Function == FieldFunctionType.Complex)
 			{
-				var methodName = args.Required ? "RequiredComplexField" : "OptionalComplexField";
-				var mi = typeof(BuildToolkit).GetMethod(methodName).MakeGenericMethod(args.Type);
-				return Expression.Call(null, mi, Expression.Constant(args.Name), _pCfgNode, Expression.Constant(_deserializer));
+				var mi = ffi.Required ? BuildToolkit.RequiredComplexFieldMI : BuildToolkit.OptionalComplexFieldMI;
+				mi = mi.MakeGenericMethod(ffi.ResultType);
+				return Expression.Call(null, mi, Expression.Constant(ffi.Name), _pCfgNode, Expression.Constant(_deserializer));
 			}
 
 			throw new InvalidOperationException("unexpected FieldFunctionType");

@@ -67,79 +67,73 @@ namespace Configuration.GenericView.Deserialization
 
 		public virtual ComplexFunctionBuilder CreateComplexFunctionBuilder(Type targetType, IGenericDeserializer deserializer)
 		{
-			var builder = new ComplexFunctionBuilder(targetType, deserializer);
+			Action<FieldFunctionInfo, object[]> cffi;
 
 			if (BuildToolkit.DataContractAvailable(targetType) == AttributeState.Found)
-			{ // DataContract deserialize
-				builder.FieldFunctionBuilding += DataContractFieldReader;
-			}
+				cffi = DataContractFieldReader; // DataContract deserialize
 			else if (BuildToolkit.XmlAvailable(targetType) == AttributeState.Found)
-			{ // Xml deserialize
-				builder.FieldFunctionBuilding += XmlFieldReader;
-			}
+				cffi = XmlFieldReader; // Xml deserialize
 			else
-			{ // Native name deserialize
-				builder.FieldFunctionBuilding += NativeNameFieldReader;
-			}
+				cffi = NativeNameFieldReader; // Native name deserialize
 
-			return builder;
+			return new ComplexFunctionBuilder(targetType, deserializer, cffi);
 		}
 
-		public void NativeNameFieldReader(object sender, FieldFunctionBuildingEventArgs e)
+		public void NativeNameFieldReader(FieldFunctionInfo ffi, object[] customAttributes)
 		{
-			DefaultFunctionType(e);
+			ffi.Function = DefaultFunctionType(ffi.ResultType);
 		}
 
-		private void DefaultFunctionType(FieldFunctionBuildingEventArgs e)
+		private FieldFunctionType DefaultFunctionType(Type type)
 		{
-			if (IsPrimitive(e.Type))
-				e.Function = FieldFunctionType.Primitive;
-			else if (IsCollection(e.Type))
-				e.Function = FieldFunctionType.Collection;
+			if (IsPrimitive(type))
+				return FieldFunctionType.Primitive;
+			else if (IsCollection(type))
+				return FieldFunctionType.Collection;
 			else
-				e.Function = FieldFunctionType.Complex;
+				return FieldFunctionType.Complex;
 		}
-		
-		public void DataContractFieldReader(object sender, FieldFunctionBuildingEventArgs e)
+
+		public void DataContractFieldReader(FieldFunctionInfo ffi, object[] customAttributes)
 		{
-			if (e.CustomAttributes.Any(o => o is IgnoreDataMemberAttribute))
+			if (customAttributes.Any(o => o is IgnoreDataMemberAttribute))
 			{
-				e.Ignore = true;
+				ffi.Ignore = true;
 				return;
 			}
 
-			DefaultFunctionType(e);
+			ffi.Function = DefaultFunctionType(ffi.ResultType);
 
-			var dmAttr = e.CustomAttributes.Select(o => o as DataMemberAttribute).FirstOrDefault(a => a != null);
+			var dmAttr = customAttributes.Select(o => o as DataMemberAttribute).FirstOrDefault(a => a != null);
 
 			if (dmAttr != null && !string.IsNullOrWhiteSpace(dmAttr.Name))
-				e.Name = dmAttr.Name;
+				ffi.Name = dmAttr.Name;
 
 			if(dmAttr != null)
-				e.Required = dmAttr.IsRequired;
+				ffi.Required = dmAttr.IsRequired;
 		}
 
-		public void XmlFieldReader(object sender, FieldFunctionBuildingEventArgs e)
+		public void XmlFieldReader(FieldFunctionInfo ffi, object[] customAttributes)
 		{
-			if (e.CustomAttributes.Any(o => o is XmlIgnoreAttribute))
+			if (customAttributes.Any(o => o is XmlIgnoreAttribute))
 			{
-				e.Ignore = true;
+				ffi.Ignore = true;
 				return;
 			}
 
-			DefaultFunctionType(e);
+			ffi.Function = DefaultFunctionType(ffi.ResultType);
 
-			var attrAttr = e.CustomAttributes.Select(o => o as XmlAttributeAttribute).FirstOrDefault(a => a != null);
-			var elAttr = e.CustomAttributes.Select(o => o as XmlElementAttribute).FirstOrDefault(a => a != null);
+			var attrAttr = customAttributes.Select(o => o as XmlAttributeAttribute).FirstOrDefault(a => a != null);
+			var elAttr = customAttributes.Select(o => o as XmlElementAttribute).FirstOrDefault(a => a != null);
 
 			if (attrAttr != null && elAttr != null)
-				throw new ArgumentOutOfRangeException(string.Format("found XmlAttributeAttribute and XmlElementAttribute for member '{0}'", e.Name));
+				throw new ArgumentOutOfRangeException(string.Format("found XmlAttributeAttribute and XmlElementAttribute for member '{0}'", ffi.Name));
 
 			if (attrAttr != null && !string.IsNullOrWhiteSpace(attrAttr.AttributeName))
-				e.Name = attrAttr.AttributeName;
+				ffi.Name = attrAttr.AttributeName;
 
 			if (elAttr != null && !string.IsNullOrWhiteSpace(elAttr.ElementName))
-				e.Name = elAttr.ElementName;
+				ffi.Name = elAttr.ElementName;
 		}
 	}
 }
