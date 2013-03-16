@@ -75,8 +75,7 @@ namespace Configuration.Monitoring
 			File.WriteAllText(cfgAdditionalFile, _xmlCfgAutoOrigin);
 			File.WriteAllText(cfgMainFile, string.Format(_xmlCfgMain, cfgAdditionalFile));
 
-			var loader = new SettingsLoader();
-			loader.Including += xmlFileLoader.ResolveFile;
+			var loader = new SettingsLoader(xmlFileLoader);
 			loader.LoadSettings(xmlFileLoader.LoadFile(cfgMainFile));
 
 			IAppSettings settings = loader.Settings;

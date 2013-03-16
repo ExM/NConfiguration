@@ -40,14 +40,11 @@ namespace Configuration.Including
 
 		private static IAppSettings LoadSettings(string file)
 		{
-			var loader = new SettingsLoader();
 			var xmlFileLoader = new XmlFileSettingsLoader(Global.GenericDeserializer, Global.PlainConverter);
 			var jsonFileLoader = new JsonFileSettingsLoader(Global.GenericDeserializer, Global.PlainConverter);
 			var iniFileLoader = new IniFileSettingsLoader(Global.GenericDeserializer, Global.PlainConverter);
 
-			loader.Including += xmlFileLoader.ResolveFile;
-			loader.Including += jsonFileLoader.ResolveFile;
-			loader.Including += iniFileLoader.ResolveFile;
+			var loader = new SettingsLoader(xmlFileLoader, jsonFileLoader, iniFileLoader);
 			loader.Loaded += (s, e) =>
 			{
 				Console.WriteLine("Loaded: {0} ({1})", e.Settings.GetType(), e.Settings.Identity);

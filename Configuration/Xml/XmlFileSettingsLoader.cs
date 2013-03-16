@@ -33,7 +33,7 @@ namespace Configuration.Xml
 			}
 		}
 
-		public override IIdentifiedSource CreateAppSetting(string path)
+		public override IIdentifiedSource CreateFileSetting(string path)
 		{
 			return new XmlFileSettings(path, _converter, Deserializer);
 		}

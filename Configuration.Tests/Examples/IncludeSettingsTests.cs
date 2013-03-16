@@ -18,10 +18,10 @@ namespace Configuration.Examples
 		[Test]
 		public void Load()
 		{
-			var loader = new SettingsLoader();
+			
 			var xmlFileLoader = new XmlFileSettingsLoader(Global.GenericDeserializer, Global.PlainConverter);
 
-			loader.Including += xmlFileLoader.ResolveFile;
+			var loader = new SettingsLoader(xmlFileLoader);
 			loader.Loaded += (s,e) => 
 			{
 				Console.WriteLine("Loaded: {0} ({1})", e.Settings.GetType(), e.Settings.Identity);
@@ -40,12 +40,10 @@ namespace Configuration.Examples
 		[Test]
 		public void LoadJson()
 		{
-			var loader = new SettingsLoader();
 			var xmlFileLoader = new XmlFileSettingsLoader(Global.GenericDeserializer, Global.PlainConverter);
 			var jsonFileLoader = new JsonFileSettingsLoader(Global.GenericDeserializer, Global.PlainConverter);
 
-			loader.Including += xmlFileLoader.ResolveFile;
-			loader.Including += jsonFileLoader.ResolveFile;
+			var loader = new SettingsLoader(xmlFileLoader, jsonFileLoader);
 			loader.Loaded += (s, e) =>
 			{
 				Console.WriteLine("Loaded: {0} ({1})", e.Settings.GetType(), e.Settings.Identity);
@@ -67,10 +65,9 @@ namespace Configuration.Examples
 			KeyManager.Create();
 
 			var providerLoader = new ProviderLoader();
-			var loader = new SettingsLoader();
 			var xmlFileLoader = new XmlFileSettingsLoader(Global.GenericDeserializer, Global.PlainConverter);
 
-			loader.Including += xmlFileLoader.ResolveFile;
+			var loader = new SettingsLoader(xmlFileLoader);
 			loader.Loaded += providerLoader.TryExtractConfigProtectedData;
 			
 			loader.Loaded += (s, e) =>

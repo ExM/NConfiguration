@@ -33,7 +33,7 @@ namespace Configuration.Json
 			}
 		}
 
-		public override IIdentifiedSource CreateAppSetting(string path)
+		public override IIdentifiedSource CreateFileSetting(string path)
 		{
 			return new JsonFileSettings(path, _converter, Deserializer);
 		}

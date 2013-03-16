@@ -10,7 +10,7 @@ using Configuration.GenericView;
 
 namespace Configuration.Joining
 {
-	public abstract class FileSearcher
+	public abstract class FileSearcher : ISettingsFactory
 	{
 		protected FileSearcher(IGenericDeserializer deserializer)
 		{
@@ -21,28 +21,20 @@ namespace Configuration.Joining
 
 		public abstract string Tag { get; }
 
-		public abstract IIdentifiedSource CreateAppSetting(string path);
+		public abstract IIdentifiedSource CreateFileSetting(string path);
 
-		public void ResolveFile(object sender, IncludingEventArgs args)
+		public IEnumerable<IIdentifiedSource> CreateSettings(IIdentifiedSource source, ICfgNode config)
 		{
-			if (args.IsHandled)
-				return;
+			var rpo = source as IFilePathOwner;
+			var cfg = Deserializer.Deserialize<IncludeFileConfig>(config);
 
-			if(!NameComparer.Equals(args.Name, Tag))
-				return;
-
-			args.Handle();
-
-			var rpo = args.Source as IFilePathOwner;
-			var cfg = Deserializer.Deserialize<IncludeFileConfig>(args.Config);
-
-			if(Path.IsPathRooted(cfg.Path))
+			if (Path.IsPathRooted(cfg.Path))
 			{
 				if (!File.Exists(cfg.Path) && !cfg.Required)
-					return;
+					yield break;
 
-				args.Add(CreateAppSetting(cfg.Path));
-				return;
+				yield return CreateFileSetting(cfg.Path);
+				yield break;
 			}
 
 			// relative path
@@ -56,16 +48,16 @@ namespace Configuration.Joining
 				if (cfg.Required)
 					throw new ApplicationException(string.Format("configuration file '{0}' not found in '{1}'", cfg.Path, rpo.Path));
 
-				return;
+				yield break;
 			}
 
 			if (cfg.Include == IncludeMode.First)
-				args.Add(found.First());
+				yield return found.First();
 			else if (cfg.Include == IncludeMode.Last)
-				args.Add(found.Last());
+				yield return found.Last();
 			else
 				foreach (var item in found)
-					args.Add(item);
+					yield return item;
 		}
 
 		private List<IIdentifiedSource> SearchSettings(string basePath, string fileName, SearchMode mode)
@@ -91,7 +83,7 @@ namespace Configuration.Joining
 
 					if (File.Exists(fullPath))
 					{
-						var item = CreateAppSetting(fullPath);
+						var item = CreateFileSetting(fullPath);
 						result.Add(item);
 
 						if (item.TryFirst<IncludeConfig>(true).FinalSearch)

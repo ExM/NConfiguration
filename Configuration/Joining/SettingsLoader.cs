@@ -12,21 +12,39 @@ namespace Configuration.Joining
 	public class SettingsLoader
 	{
 		private MultiSettings _settings;
+		private Dictionary<string, ISettingsFactory> _tagMap = new Dictionary<string, ISettingsFactory>(NameComparer.Instance);
 		private HashSet<IdentityKey> _loaded = new HashSet<IdentityKey>();
 
-		public SettingsLoader()
-			: this(new MultiSettings())
+		public SettingsLoader(params ISettingsFactory[] factories)
+			: this(new MultiSettings(), factories)
 		{
 		}
 
-		public SettingsLoader(MultiSettings settings)
+		public SettingsLoader(MultiSettings settings, params ISettingsFactory[] factories)
 		{
 			_settings = settings;
+			AddFactory(factories);
 		}
 
 		public MultiSettings Settings
 		{
 			get { return _settings; }
+		}
+
+		public void AddFactory(ISettingsFactory factory)
+		{
+			_tagMap[factory.Tag] = factory;
+		}
+
+		public void AddFactory(string name, ISettingsFactory factory)
+		{
+			_tagMap[name] = factory;
+		}
+	
+		public void AddFactory(params ISettingsFactory[] factories)
+		{
+			foreach(var f in factories)
+				_tagMap[f.Tag] = f;
 		}
 
 		public event EventHandler<LoadedEventArgs> Loaded;
@@ -49,25 +67,9 @@ namespace Configuration.Joining
 			return this;
 		}
 
-		public event EventHandler<IncludingEventArgs> Including;
-
-		private List<IIdentifiedSource> OnIncluding(IIdentifiedSource source, string name, ICfgNode cfg)
+		private void IncludeSettings(IIdentifiedSource source)
 		{
-			var copy = Including;
-			if (copy != null)
-			{
-				var args = new IncludingEventArgs(source, name, cfg);
-				copy(this, args);
-				if (args.IsHandled)
-					return args.Settings;
-			}
-
-			throw new InvalidOperationException(string.Format("unknown include type '{0}'", name));
-		}
-
-		private void IncludeSettings(IIdentifiedSource setting)
-		{
-			var includeRoot = setting.TryFirst<ICfgNode>("Include", false);
+			var includeRoot = source.TryFirst<ICfgNode>("Include", false);
 			if(includeRoot == null)
 				return;
 
@@ -76,10 +78,12 @@ namespace Configuration.Joining
 				if (NameComparer.Equals(incNode.Key, "FinalSearch"))
 					continue;
 
-				var incSettings = OnIncluding(setting, incNode.Key, incNode.Value);
-				if (incSettings != null)
-					foreach(var incSetting in incSettings)
-						LoadSettings(incSetting);
+				ISettingsFactory factory;
+				if(!_tagMap.TryGetValue(incNode.Key, out factory))
+					throw new InvalidOperationException(string.Format("unknown include type '{0}'", incNode.Key));
+
+				foreach (var incSetting in factory.CreateSettings(source, incNode.Value))
+					LoadSettings(incSetting);
 			}
 		}
 

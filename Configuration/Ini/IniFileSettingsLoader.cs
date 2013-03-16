@@ -33,7 +33,7 @@ namespace Configuration.Ini
 			}
 		}
 
-		public override IIdentifiedSource CreateAppSetting(string path)
+		public override IIdentifiedSource CreateFileSetting(string path)
 		{
 			return new IniFileSettings(path, _converter, Deserializer);
 		}

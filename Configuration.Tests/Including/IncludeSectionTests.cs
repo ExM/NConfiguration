@@ -5,6 +5,7 @@ using System.Linq;
 using Configuration.Xml;
 using System.Collections.Generic;
 using Configuration.Joining;
+using Configuration.GenericView;
 
 namespace Configuration.Including
 {
@@ -28,6 +29,24 @@ namespace Configuration.Including
 			
 			Assert.AreEqual(expected, cfg.FinalSearch);
 		}
+
+		private class MockFactory : ISettingsFactory
+		{
+			public List<IncludeFileConfig> Configs = new List<IncludeFileConfig>();
+
+			public string Tag
+			{
+				get { return "XmlFile"; }
+			}
+
+			public IEnumerable<IIdentifiedSource> CreateSettings(IIdentifiedSource source, ICfgNode config)
+			{
+				Configs.Add(Global.GenericDeserializer.Deserialize<IncludeFileConfig>(config));
+				yield break;
+			}
+
+
+		}
 		
 		[Test]
 		public void GetFiles()
@@ -41,18 +60,12 @@ namespace Configuration.Including
 	</Include>
 </Config>".ToXmlSettings();
 
-			var files = new List<IncludeFileConfig>();
+			var mock = new MockFactory();
 
-			SettingsLoader loader = new SettingsLoader();
-			loader.Including += (s, e) =>
-			{
-				Assert.AreEqual("XmlFile", e.Name);
-				var fileCfg = Global.GenericDeserializer.Deserialize<IncludeFileConfig>(e.Config);
-				files.Add(fileCfg);
-				e.Handle();
-			};
-
+			SettingsLoader loader = new SettingsLoader(mock);
 			loader.LoadSettings(settings);
+
+			var files = mock.Configs;
 
 			CollectionAssert.IsNotEmpty(files);
 			
