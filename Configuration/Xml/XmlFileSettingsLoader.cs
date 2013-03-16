@@ -25,6 +25,9 @@ namespace Configuration.Xml
 			return new XmlFileSettings(fileName, _converter, Deserializer);
 		}
 
+		/// <summary>
+		/// name of including configuration
+		/// </summary>
 		public override string Tag
 		{
 			get

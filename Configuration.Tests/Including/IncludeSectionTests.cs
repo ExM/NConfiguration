@@ -39,7 +39,7 @@ namespace Configuration.Including
 				get { return "XmlFile"; }
 			}
 
-			public IEnumerable<IIdentifiedSource> CreateSettings(IIdentifiedSource source, ICfgNode config)
+			public IEnumerable<IIdentifiedSource> CreateSettings(IAppSettings source, ICfgNode config)
 			{
 				Configs.Add(Global.GenericDeserializer.Deserialize<IncludeFileConfig>(config));
 				yield break;

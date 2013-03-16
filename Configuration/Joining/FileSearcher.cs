@@ -19,11 +19,20 @@ namespace Configuration.Joining
 
 		public IGenericDeserializer Deserializer { get; private set; }
 
+		/// <summary>
+		/// name of including configuration
+		/// </summary>
 		public abstract string Tag { get; }
 
 		public abstract IIdentifiedSource CreateFileSetting(string path);
 
-		public IEnumerable<IIdentifiedSource> CreateSettings(IIdentifiedSource source, ICfgNode config)
+		/// <summary>
+		/// creates a collection of includes configuration
+		/// </summary>
+		/// <param name="source">parent settings</param>
+		/// <param name="config">include configuration node</param>
+		/// <returns>collection of includes configuration</returns>
+		public IEnumerable<IIdentifiedSource> CreateSettings(IAppSettings source, ICfgNode config)
 		{
 			var rpo = source as IFilePathOwner;
 			var cfg = Deserializer.Deserialize<IncludeFileConfig>(config);

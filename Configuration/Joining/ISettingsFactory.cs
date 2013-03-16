@@ -10,10 +10,22 @@ using Configuration.GenericView;
 
 namespace Configuration.Joining
 {
+	/// <summary>
+	/// The interface for creating instances IIdentifiedSource
+	/// </summary>
 	public interface ISettingsFactory
 	{
+		/// <summary>
+		/// name of including configuration
+		/// </summary>
 		string Tag { get; }
-		IEnumerable<IIdentifiedSource> CreateSettings(IIdentifiedSource source, ICfgNode config);
+		/// <summary>
+		/// creates a collection of includes configuration
+		/// </summary>
+		/// <param name="source">parent settings</param>
+		/// <param name="config">include configuration node</param>
+		/// <returns>collection of includes configuration</returns>
+		IEnumerable<IIdentifiedSource> CreateSettings(IAppSettings source, ICfgNode config);
 	}
 }
 

@@ -64,6 +64,9 @@ namespace Configuration.Xml
 		/// </summary>
 		public string Path { get; private set; }
 
+		/// <summary>
+		/// Instance changed.
+		/// </summary>
 		public event EventHandler Changed
 		{
 			add

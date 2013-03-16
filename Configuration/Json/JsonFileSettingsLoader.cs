@@ -25,6 +25,9 @@ namespace Configuration.Json
 			return new JsonFileSettings(path, _converter, Deserializer);
 		}
 
+		/// <summary>
+		/// name of including configuration
+		/// </summary>
 		public override string Tag
 		{
 			get

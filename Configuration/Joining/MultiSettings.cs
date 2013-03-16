@@ -53,6 +53,9 @@ namespace Configuration.Joining
 
 		private EventHandler _changedHandler = null;
 
+		/// <summary>
+		/// Instance changed.
+		/// </summary>
 		public event EventHandler Changed
 		{
 			add
