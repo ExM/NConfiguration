@@ -30,7 +30,7 @@ namespace Configuration
 		}
 
 		/// <summary>
-		/// Gets the name of the section in XmlRootAttribute or DataContractAttribute
+		/// Gets the name of the section in DataContractAttribute or XmlRootAttribute or class name
 		/// </summary>
 		/// <returns>The section name.</returns>
 		/// <typeparam name='T'>type of configuration</typeparam>
@@ -51,7 +51,7 @@ namespace Configuration
 			if (xmlAttr != null)
 				return xmlAttr.ElementName;
 
-			throw new ArgumentException("XmlRoot or DataContract attributes not set for " + typeof(T).Name);
+			return typeof(T).Name;
 		}
 		
 		/// <summary>
@@ -153,11 +153,24 @@ namespace Configuration
 				.FirstOrDefault();
 		}
 
+		/// <summary>
+		/// Trying to combines a collection of settings in one instance.
+		/// </summary>
+		/// <typeparam name="T">type of instance of configuration</typeparam>
+		/// <param name="settings">instance of application settings</param>
+		/// <returns>Instance of configuration or null.</returns>
 		public static T TryCombine<T>(this IAppSettings settings) where T : class, ICombinable
 		{
 			return TryCombine<T>(settings, GetSectionName<T>());
 		}
 
+		/// <summary>
+		/// Trying to combines a collection of settings in one instance by specified name
+		/// </summary>
+		/// <typeparam name="T">type of instance of configuration</typeparam>
+		/// <param name="settings">instance of application settings</param>
+		/// <param name="sectionName">section name</param>
+		/// <returns>Instance of configuration or null.</returns>
 		public static T TryCombine<T>(this IAppSettings settings, string sectionName) where T : class, ICombinable
 		{
 			T sum = null;
@@ -172,11 +185,22 @@ namespace Configuration
 			return sum;
 		}
 
+		/// <summary>
+		/// Combines a collection of settings in one instance.
+		/// </summary>
+		/// <typeparam name="T">type of instance of configuration</typeparam>
+		/// <param name="settings">instance of application settings</param>
 		public static T Combine<T>(this IAppSettings settings) where T : class, ICombinable
 		{
 			return Combine<T>(settings, GetSectionName<T>());
 		}
 
+		/// <summary>
+		/// Combines a collection of settings in one instance by specified name
+		/// </summary>
+		/// <typeparam name="T">type of instance of configuration</typeparam>
+		/// <param name="settings">instance of application settings</param>
+		/// <param name="sectionName">section name</param>
 		public static T Combine<T>(this IAppSettings settings, string sectionName) where T : class, ICombinable
 		{
 			T sum = null;
@@ -194,6 +218,13 @@ namespace Configuration
 			return sum;
 		}
 
+		/// <summary>
+		/// Combines a collection of settings in one instance by specified name and function
+		/// </summary>
+		/// <typeparam name="T">type of instance of configuration</typeparam>
+		/// <param name="settings">instance of application settings</param>
+		/// <param name="sectionName">section name</param>
+		/// <param name="combine">combine function</param>
 		public static T Combine<T>(this IAppSettings settings, string sectionName, Func<T, T, T> combine) where T : class
 		{
 			T sum = settings.LoadCollection<T>(sectionName).Aggregate(null, combine);
@@ -202,16 +233,37 @@ namespace Configuration
 			return sum;
 		}
 
+		/// <summary>
+		/// Combines a collection of settings in one instance by specified function
+		/// </summary>
+		/// <typeparam name="T">type of instance of configuration</typeparam>
+		/// <param name="settings">instance of application settings</param>
+		/// <param name="combine">combine function</param>
 		public static T Combine<T>(this IAppSettings settings, Func<T, T, T> combine) where T : class
 		{
 			return Combine<T>(settings, GetSectionName<T>(), combine);
 		}
 
+		/// <summary>
+		/// Trying to combines a collection of settings in one instance by specified name and function
+		/// </summary>
+		/// <typeparam name="T">type of instance of configuration</typeparam>
+		/// <param name="settings">instance of application settings</param>
+		/// <param name="sectionName">section name</param>
+		/// <param name="combine">combine function</param>
+		/// <returns>Instance of configuration or null.</returns>
 		public static T TryCombine<T>(this IAppSettings settings, string sectionName, Func<T, T, T> combine) where T : class
 		{
 			return settings.LoadCollection<T>(sectionName).Aggregate(null, combine);
 		}
 
+		/// <summary>
+		/// Trying to combines a collection of settings in one instance by specified function
+		/// </summary>
+		/// <typeparam name="T">type of instance of configuration</typeparam>
+		/// <param name="settings">instance of application settings</param>
+		/// <param name="combine">combine function</param>
+		/// <returns>Instance of configuration or null.</returns>
 		public static T TryCombine<T>(this IAppSettings settings, Func<T, T, T> combine) where T : class
 		{
 			return TryCombine<T>(settings, GetSectionName<T>(), combine);

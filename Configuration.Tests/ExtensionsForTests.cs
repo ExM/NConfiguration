@@ -13,7 +13,7 @@ namespace Configuration
 	{
 		public static ICfgNode ToXmlView(this XDocument doc)
 		{
-			return Global.PlainConverter.CreateView(doc);
+			return new XmlViewNode(Global.PlainConverter, doc.Root);
 		}
 
 		public static IIdentifiedSource ToXmlSettings(this string text)

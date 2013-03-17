@@ -70,7 +70,6 @@
     <Compile Include="Json\ViewObject.cs" />
     <Compile Include="Monitoring\WatchFileConfig.cs" />
     <Compile Include="Monitoring\WatchMode.cs" />
-    <Compile Include="Xml\InterfaceExtensions.cs" />
     <Compile Include="IIdentifiedSource.cs" />
     <Compile Include="GenericView\Deserialization\AttributeState.cs" />
     <Compile Include="GenericView\Deserialization\BuildToolkit.cs" />
