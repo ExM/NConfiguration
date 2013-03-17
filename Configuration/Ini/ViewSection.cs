@@ -18,6 +18,11 @@ namespace Configuration.Ini
 			_pairs = section.Pairs;
 		}
 
+		/// <summary>
+		/// Returns the first child node with the specified name or null if no match is found.
+		/// </summary>
+		/// <param name="name">node name is not case-sensitive</param>
+		/// <returns>Returns the first child node with the specified name or null if no match is found.</returns>
 		public ICfgNode GetChild(string name)
 		{
 			var value = _pairs

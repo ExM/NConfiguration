@@ -7,7 +7,7 @@ using Configuration.Json.Parsing;
 
 namespace Configuration.Json
 {
-	public class ViewObject: ICfgNode
+	internal class ViewObject: ICfgNode
 	{
 		private IStringConverter _converter;
 		private JObject _obj;
