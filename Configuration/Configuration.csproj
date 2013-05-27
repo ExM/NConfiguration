@@ -42,6 +42,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="GenericView\Deserialization\FieldFunctionInfo.cs" />
     <Compile Include="IChangeable.cs" />
+    <Compile Include="Joining\FindingSettingsArgs.cs" />
     <Compile Include="Joining\ISettingsFactory.cs" />
     <Compile Include="Monitoring\AsyncComparer.cs" />
     <Compile Include="Monitoring\FileMonitor.cs" />

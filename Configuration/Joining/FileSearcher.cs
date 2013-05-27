@@ -26,6 +26,15 @@ namespace Configuration.Joining
 
 		public abstract IIdentifiedSource CreateFileSetting(string path);
 
+		public event EventHandler<FindingSettingsArgs> FindingSettings;
+
+		private void OnFindingSettings(IAppSettings source, IncludeFileConfig cfg)
+		{
+			var copy = FindingSettings;
+			if (copy != null)
+				copy(this, new FindingSettingsArgs(source, cfg));
+		}
+
 		/// <summary>
 		/// creates a collection of includes configuration
 		/// </summary>
@@ -36,6 +45,8 @@ namespace Configuration.Joining
 		{
 			var rpo = source as IFilePathOwner;
 			var cfg = Deserializer.Deserialize<IncludeFileConfig>(config);
+
+			OnFindingSettings(source, cfg);
 
 			if (Path.IsPathRooted(cfg.Path))
 			{
