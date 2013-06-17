@@ -65,6 +65,8 @@ namespace Configuration.GenericView
 			public GoodType Inner { get; set; }
 			[XmlElement("xmlInnerList")]
 			public List<GoodType> InnerList { get; set; }
+			[XmlAttribute("xmlBlob")]
+			public byte[] Blob;
 		}
 
 		[Test]
@@ -94,6 +96,18 @@ namespace Configuration.GenericView
 			Assert.IsFalse(t.Ignored);
 			Assert.IsNotNull(t.Inner);
 			Assert.AreEqual(321, t.Inner.NInt);
+		}
+
+		[Test]
+		public void ParseGoodType_Blob()
+		{
+			var root =
+@"<Root xmlBlob='MTIz'></Root>".ToXmlView();
+			var d = new GenericDeserializer(new XmlMapper());
+
+			var t = d.Deserialize<GoodType>(root);
+
+			Assert.That(t.Blob, Is.EquivalentTo(new byte[] {49, 50, 51}));
 		}
 	}
 }

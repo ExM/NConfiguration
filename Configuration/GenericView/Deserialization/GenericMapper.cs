@@ -88,6 +88,8 @@ namespace Configuration.GenericView.Deserialization
 		{
 			if (IsPrimitive(type))
 				return FieldFunctionType.Primitive;
+			else if(type.IsArray)
+				return FieldFunctionType.Array;
 			else if (IsCollection(type))
 				return FieldFunctionType.Collection;
 			else

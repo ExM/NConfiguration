@@ -10,6 +10,7 @@ namespace Configuration.GenericView.Deserialization
 		Unknown,
 		Primitive,
 		Collection,
+		Array,
 		Complex
 	}
 }

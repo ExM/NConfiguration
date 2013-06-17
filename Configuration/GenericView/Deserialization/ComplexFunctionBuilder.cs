@@ -83,35 +83,39 @@ namespace Configuration.GenericView.Deserialization
 
 		private Expression MakeFieldReader(FieldFunctionInfo ffi)
 		{
-			if (ffi.ResultType.IsArray)
+			switch (ffi.Function)
 			{
-				var itemType = ffi.ResultType.GetElementType();
-				var mi = BuildToolkit.ArrayMI.MakeGenericMethod(itemType);
-				return Expression.Call(null, mi, Expression.Constant(ffi.Name), _pCfgNode, Expression.Constant(_deserializer));
-			}
+				case FieldFunctionType.Primitive:
+				{
+					var mi = ffi.Required ? BuildToolkit.RequiredPrimitiveFieldMI : BuildToolkit.OptionalPrimitiveFieldMI;
+					mi = mi.MakeGenericMethod(ffi.ResultType);
+					return Expression.Call(null, mi, Expression.Constant(ffi.Name), _pCfgNode);
+				}
 
-			if (ffi.Function == FieldFunctionType.Primitive)
-			{
-				var mi = ffi.Required ? BuildToolkit.RequiredPrimitiveFieldMI : BuildToolkit.OptionalPrimitiveFieldMI;
-				mi = mi.MakeGenericMethod(ffi.ResultType);
-				return Expression.Call(null, mi, Expression.Constant(ffi.Name), _pCfgNode);
-			}
+				case FieldFunctionType.Array:
+				{
+					var itemType = ffi.ResultType.GetElementType();
+					var mi = BuildToolkit.ArrayMI.MakeGenericMethod(itemType);
+					return Expression.Call(null, mi, Expression.Constant(ffi.Name), _pCfgNode, Expression.Constant(_deserializer));
+				};
 
-			if (ffi.Function == FieldFunctionType.Collection)
-			{
-				var itemType = ffi.ResultType.GetGenericArguments()[0];
-				var mi = BuildToolkit.ListMI.MakeGenericMethod(itemType);
-				return Expression.Call(null, mi, Expression.Constant(ffi.Name), _pCfgNode, Expression.Constant(_deserializer));
-			}
+				case FieldFunctionType.Collection:
+				{
+					var itemType = ffi.ResultType.GetGenericArguments()[0];
+					var mi = BuildToolkit.ListMI.MakeGenericMethod(itemType);
+					return Expression.Call(null, mi, Expression.Constant(ffi.Name), _pCfgNode, Expression.Constant(_deserializer));
+				};
 
-			if (ffi.Function == FieldFunctionType.Complex)
-			{
-				var mi = ffi.Required ? BuildToolkit.RequiredComplexFieldMI : BuildToolkit.OptionalComplexFieldMI;
-				mi = mi.MakeGenericMethod(ffi.ResultType);
-				return Expression.Call(null, mi, Expression.Constant(ffi.Name), _pCfgNode, Expression.Constant(_deserializer));
-			}
+				case FieldFunctionType.Complex:
+				{
+					var mi = ffi.Required ? BuildToolkit.RequiredComplexFieldMI : BuildToolkit.OptionalComplexFieldMI;
+					mi = mi.MakeGenericMethod(ffi.ResultType);
+					return Expression.Call(null, mi, Expression.Constant(ffi.Name), _pCfgNode, Expression.Constant(_deserializer));
+				};
 
-			throw new InvalidOperationException("unexpected FieldFunctionType");
+				default:
+					throw new InvalidOperationException("unexpected FieldFunctionType");
+			}
 		}
 	}
 }
