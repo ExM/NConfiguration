@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>NConfiguration</RootNamespace>
+    <AssemblyName>NConfiguration</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Release\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <DocumentationFile>..\Release\NConfiguration.xml</DocumentationFile>
+    <GenerateDocumentation>true</GenerateDocumentation>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Configuration" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="GenericView\Deserialization\FieldFunctionInfo.cs" />
+    <Compile Include="IChangeable.cs" />
+    <Compile Include="Joining\FindingSettingsArgs.cs" />
+    <Compile Include="Joining\ISettingsFactory.cs" />
+    <Compile Include="Monitoring\AsyncComparer.cs" />
+    <Compile Include="Monitoring\FileMonitor.cs" />
+    <Compile Include="GenericView\ViewPlainField.cs" />
+    <Compile Include="GenericView\Deserialization\StringMapper.StringMethods.cs">
+      <DependentUpon>StringMapper.StringMethods.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="GenericView\Deserialization\IStringMapper.cs" />
+    <Compile Include="GenericView\Deserialization\StringMapper.cs" />
+    <Compile Include="GenericView\StringConverter.cs" />
+    <Compile Include="GenericView\IStringConverter.cs" />
+    <Compile Include="Json\JsonFileSettings.cs" />
+    <Compile Include="Json\JsonFileSettingsLoader.cs" />
+    <Compile Include="Json\JsonSettings.cs" />
+    <Compile Include="Json\Parsing\CharEnumerator.cs" />
+    <Compile Include="Json\Parsing\JArray.cs" />
+    <Compile Include="Json\Parsing\JNumber.cs" />
+    <Compile Include="Json\Parsing\JNull.cs" />
+    <Compile Include="Json\Parsing\JBoolean.cs" />
+    <Compile Include="Json\Parsing\JValue.cs" />
+    <Compile Include="Json\Parsing\JString.cs" />
+    <Compile Include="Json\Parsing\JObject.cs" />
+    <Compile Include="Json\Parsing\TokenType.cs" />
+    <Compile Include="Json\ViewObject.cs" />
+    <Compile Include="Monitoring\WatchFileConfig.cs" />
+    <Compile Include="Monitoring\WatchMode.cs" />
+    <Compile Include="IIdentifiedSource.cs" />
+    <Compile Include="GenericView\Deserialization\AttributeState.cs" />
+    <Compile Include="GenericView\Deserialization\BuildToolkit.cs" />
+    <Compile Include="GenericView\Deserialization\FieldFunctionType.cs" />
+    <Compile Include="GenericView\Deserialization\IGenericMapper.cs" />
+    <Compile Include="GenericView\EnumParsing\IEnumParser_1.cs" />
+    <Compile Include="GenericView\EnumParsing\EnumHelper_1.cs" />
+    <Compile Include="GenericView\EnumParsing\EnumParsers.cs">
+      <DependentUpon>EnumParsers.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="GenericView\NameComparer.cs" />
+    <Compile Include="Xml\XmlViewNode.cs" />
+    <Compile Include="GenericView\IGenericDeserializer.cs" />
+    <Compile Include="GenericView\Deserialization\GenericMapper.cs" />
+    <Compile Include="GenericView\Deserialization\ComplexFunctionBuilder.cs" />
+    <Compile Include="GenericView\GenericDeserializer.cs" />
+    <Compile Include="GenericView\ICfgNode.cs" />
+    <Compile Include="IFilePathOwner.cs" />
+    <Compile Include="IAppSettings.cs" />
+    <Compile Include="AppSettingExtensions.cs" />
+    <Compile Include="Ini\Section.cs" />
+    <Compile Include="Ini\Parsing\TokenType.cs" />
+    <Compile Include="Ini\Parsing\ParseState.cs" />
+    <Compile Include="Ini\Parsing\ParseContext.cs" />
+    <Compile Include="Ini\IniSettings.cs" />
+    <Compile Include="Ini\ViewSection.cs" />
+    <Compile Include="Ini\IniFileSettings.cs" />
+    <Compile Include="Ini\IniFileSettingsLoader.cs" />
+    <Compile Include="Joining\SettingsLoader.cs" />
+    <Compile Include="Joining\FileSearcher.cs" />
+    <Compile Include="Xml\XmlFileSettings.cs" />
+    <Compile Include="Xml\Protected\IXmlEncryptable.cs" />
+    <Compile Include="ICombinable.cs" />
+    <Compile Include="Xml\Protected\ConfigProtectedData.cs" />
+    <Compile Include="Joining\LoadedEventArgs.cs" />
+    <Compile Include="Xml\XmlFileSettingsLoader.cs" />
+    <Compile Include="CancelableEventArgs.cs" />
+    <Compile Include="Xml\Protected\ProviderLoadingEventArgs.cs" />
+    <Compile Include="Xml\Protected\ProviderLoader.cs" />
+    <Compile Include="Xml\Protected\ProviderCollection.cs" />
+    <Compile Include="SectionNotFoundException.cs" />
+    <Compile Include="Joining\MultiSettings.cs" />
+    <Compile Include="Xml\PlainXmlSection.cs" />
+    <Compile Include="Xml\XmlSystemSettings.cs" />
+    <Compile Include="Xml\XmlLinqConversionExtensions.cs" />
+    <Compile Include="Joining\IncludeConfig.cs" />
+    <Compile Include="Joining\IncludeFileConfig.cs" />
+    <Compile Include="Joining\SearchMode.cs" />
+    <Compile Include="Joining\IncludeMode.cs" />
+    <Compile Include="Xml\XmlSettings.cs" />
+    <Compile Include="Xml\Protected\IProviderCollection.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="GenericView\Deserialization\StringMapper.StringMethods.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>StringMapper.StringMethods.cs</LastGenOutput>
+    </None>
+    <None Include="GenericView\EnumParsing\EnumParsers.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EnumParsers.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+</Project>
