@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ExM")]
 [assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright(@"LGPLv3 Copyright © 2011 (git://github.com/ExM/Configuration.git)")]
+[assembly: AssemblyCopyright(@"LGPLv3 Copyright © 2013 (git://github.com/ExM/NConfiguration.git)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -17,4 +17,4 @@ using System.Runtime.CompilerServices;
 // The form "{Major}.{Minor}.*" will automatically update the build and revision,
 // and "{Major}.{Minor}.{Build}.*" will update just the revision.
 
-[assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyVersion("1.2.*")]

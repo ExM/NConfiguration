@@ -8,19 +8,11 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("RsaToolkit.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Hewlett-Packard Company")]
+[assembly: AssemblyCompany("ExM")]
 [assembly: AssemblyProduct("RsaToolkit.Tests")]
-[assembly: AssemblyCopyright("Copyright © Hewlett-Packard Company 2012")]
+[assembly: AssemblyCopyright("LGPLv3 Copyright © 2013 (git://github.com/ExM/NConfiguration.git)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-
-// Setting ComVisible to false makes the types in this assembly not visible 
-// to COM components.  If you need to access a type in this assembly from 
-// COM, set the ComVisible attribute to true on that type.
-[assembly: ComVisible(false)]
-
-// The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("6264caa6-75b5-4768-b611-d9078f59dcd9")]
 
 // Version information for an assembly consists of the following four values:
 //
