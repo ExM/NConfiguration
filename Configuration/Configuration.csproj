@@ -48,13 +48,13 @@
     <Compile Include="Monitoring\AsyncComparer.cs" />
     <Compile Include="Monitoring\FileMonitor.cs" />
     <Compile Include="GenericView\ViewPlainField.cs" />
-    <Compile Include="GenericView\StringMapper.StringMethods.cs">
+    <Compile Include="GenericView\Deserialization\StringMapper.StringMethods.cs">
       <DependentUpon>StringMapper.StringMethods.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="GenericView\IStringMapper.cs" />
-    <Compile Include="GenericView\StringMapper.cs" />
+    <Compile Include="GenericView\Deserialization\IStringMapper.cs" />
+    <Compile Include="GenericView\Deserialization\StringMapper.cs" />
     <Compile Include="GenericView\StringConverter.cs" />
     <Compile Include="GenericView\IStringConverter.cs" />
     <Compile Include="Json\JsonFileSettings.cs" />
@@ -128,7 +128,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <None Include="GenericView\StringMapper.StringMethods.tt">
+    <None Include="GenericView\Deserialization\StringMapper.StringMethods.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>StringMapper.StringMethods.cs</LastGenOutput>
     </None>

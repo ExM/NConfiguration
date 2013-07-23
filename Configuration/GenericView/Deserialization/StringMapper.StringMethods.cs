@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace Configuration.GenericView
+namespace Configuration.GenericView.Deserialization
 {
 	public partial class StringMapper
 	{

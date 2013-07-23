@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Collections.Concurrent;
 using System.Xml.Linq;
+using Configuration.GenericView.Deserialization;
 
 namespace Configuration.GenericView
 {
@@ -15,6 +16,14 @@ namespace Configuration.GenericView
 		private readonly IStringMapper _mapper;
 		private readonly Func<Type, object> _creater;
 		private readonly ConcurrentDictionary<Type, object> _funcMap = new ConcurrentDictionary<Type, object>();
+
+		/// <summary>
+		/// Converter string into a simple values
+		/// </summary>
+		public StringConverter()
+			: this(new StringMapper())
+		{
+		}
 
 		/// <summary>
 		/// Converter string into a simple values

@@ -21,6 +21,16 @@ namespace Configuration.GenericView
 			_mapper = mapper;
 		}
 
+		/// <summary>
+		/// Set custom deserializer
+		/// </summary>
+		/// <typeparam name="T">required type</typeparam>
+		/// <param name="conv">deserialize function</param>
+		public void SetDeserializer<T>(Func<ICfgNode, T> conv)
+		{
+			_funcMap[typeof(T)] = conv;
+		}
+
 		public T Deserialize<T>(ICfgNode cfgNode)
 		{
 			return ((Func<ICfgNode, T>)GetFunction(typeof(T)))(cfgNode);

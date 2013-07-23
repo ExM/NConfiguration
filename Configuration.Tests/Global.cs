@@ -10,7 +10,7 @@ namespace Configuration.Tests
 	{
 		//public static readonly IXmlViewConverter XmlViewConverter = new XmlViewConverter();
 
-		public static readonly IStringConverter PlainConverter = new StringConverter(new StringMapper());
+		public static readonly IStringConverter PlainConverter = new StringConverter();
 
 		public static readonly IGenericDeserializer GenericDeserializer = new GenericDeserializer();
 	}

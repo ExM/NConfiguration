@@ -5,23 +5,13 @@ using System.Text;
 
 namespace Configuration.GenericView
 {
-	internal class NameComparer: IEqualityComparer<string>
+	internal class NameComparer
 	{
-		public static readonly NameComparer Instance = new NameComparer();
-
-		bool IEqualityComparer<string>.Equals(string x, string y)
-		{
-			return string.Equals(x, y, StringComparison.InvariantCultureIgnoreCase);
-		}
-
-		int IEqualityComparer<string>.GetHashCode(string obj)
-		{
-			return obj.ToLowerInvariant().GetHashCode();
-		}
+		public static readonly IEqualityComparer<string> Instance = StringComparer.InvariantCultureIgnoreCase;
 
 		public static bool Equals(string x, string y)
 		{
-			return string.Equals(x, y, StringComparison.InvariantCultureIgnoreCase);
+			return Instance.Equals(x, y);
 		}
 	}
 }
