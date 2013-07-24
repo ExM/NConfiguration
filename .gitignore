@@ -8,5 +8,6 @@ Release/*
 test-results
 *.user
 TestResults
+*.nupkg
 
 

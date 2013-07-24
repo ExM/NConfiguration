@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+	<metadata>
+		<id>NConfiguration</id>
+		<version>1.0.1</version>
+		<title>NConfiguration</title>
+		<authors>Anatoliy Koperin</authors>
+		<owners />
+		<licenseUrl>https://github.com/ExM/NConfiguration/blob/master/License.txt</licenseUrl>
+		<projectUrl>https://github.com/ExM/NConfiguration</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>C# library for convenient operation with configurations of one or groups of applications. The library supports work with standard XML configurations and  included files in format of XML, JSON, or the INI.</description>
+		<summary />
+		<tags>
+			configuration config admin reload
+		</tags>
+	</metadata>
+	<files>
+		<file src="..\Release\lib\*.*" target="lib\net40" />
+		<file src="..\Release\RsaToolkit\*.*" target="tools\RsaToolkit" />
+	</files>
+</package>
