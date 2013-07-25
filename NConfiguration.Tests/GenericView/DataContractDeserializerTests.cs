@@ -51,7 +51,26 @@ namespace NConfiguration.GenericView
 		}
 
 		[Test]
-		[ExpectedException(typeof(FormatException))]
+		public void BadParsePath()
+		{
+			try
+			{
+				var root =
+	@"<Root NInt2='1' Int2='1'><CfgNode2 /><Inner1 /></Root>".ToXmlView();
+				var d = new GenericDeserializer();
+
+				d.Deserialize<TestType1>(root);
+			}
+			catch (DeserializeChildException ex)
+			{
+				var fullPath = string.Join("/", ex.FullPath);
+				Assert.That(fullPath, Is.EqualTo("Inner1/NInt"));
+				Assert.That(ex.Reason, Is.InstanceOf<FormatException>());
+			}
+		}
+
+		[Test]
+		[ExpectedException(typeof(DeserializeChildException))]
 		public void BadParse1()
 		{
 			var root =
@@ -62,7 +81,7 @@ namespace NConfiguration.GenericView
 		}
 
 		[Test]
-		[ExpectedException(typeof(FormatException))]
+		[ExpectedException(typeof(DeserializeChildException))]
 		public void BadParse2()
 		{
 			var root =
@@ -73,7 +92,7 @@ namespace NConfiguration.GenericView
 		}
 
 		[Test]
-		[ExpectedException(typeof(FormatException))]
+		[ExpectedException(typeof(DeserializeChildException))]
 		public void BadParse3()
 		{
 			var root =

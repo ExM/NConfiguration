@@ -92,62 +92,101 @@ namespace NConfiguration.GenericView.Deserialization
 
 		internal static T OptionalPrimitiveField<T>(string name, ICfgNode node)
 		{
-			var field = node.GetChild(name);
-			if (field == null)
-				return default(T);
-
-			return field.As<T>();
+			try
+			{
+				var field = node.GetChild(name);
+				if (field == null)
+					return default(T);
+			
+				return field.As<T>();
+			}
+			catch (Exception ex)
+			{
+				throw new DeserializeChildException(name, ex);
+			}
 		}
 
 		internal static readonly MethodInfo RequiredPrimitiveFieldMI = typeof(BuildToolkit).GetMethod("RequiredPrimitiveField", BindingFlags.Static | BindingFlags.NonPublic);
 
 		internal static T RequiredPrimitiveField<T>(string name, ICfgNode node)
 		{
-			var field = node.GetChild(name);
-			if (field == null)
-				throw new FormatException(string.Format("field '{0}' not found", name));
+			try
+			{
+				var field = node.GetChild(name);
+				if (field == null)
+					throw new FormatException("field not found");
 
-			return field.As<T>();
+				return field.As<T>();
+			}
+			catch (Exception ex)
+			{
+				throw new DeserializeChildException(name, ex);
+			}
 		}
 
 		internal static readonly MethodInfo RequiredComplexFieldMI = typeof(BuildToolkit).GetMethod("RequiredComplexField", BindingFlags.Static | BindingFlags.NonPublic);
 
 		internal static T RequiredComplexField<T>(string name, ICfgNode node, IGenericDeserializer deserializer)
 		{
-			var field = node.GetChild(name);
-			if (field == null)
-				throw new FormatException(string.Format("field '{0}' not found", name));
+			try
+			{
+				var field = node.GetChild(name);
+				if (field == null)
+					throw new FormatException("field not found");
 
-			return deserializer.Deserialize<T>(field);
+				return deserializer.Deserialize<T>(field);
+			}
+			catch (Exception ex)
+			{
+				throw new DeserializeChildException(name, ex);
+			}
 		}
 
 		internal static readonly MethodInfo OptionalComplexFieldMI = typeof(BuildToolkit).GetMethod("OptionalComplexField", BindingFlags.Static | BindingFlags.NonPublic);
 
 		internal static T OptionalComplexField<T>(string name, ICfgNode node, IGenericDeserializer deserializer)
 		{
-			var field = node.GetChild(name);
-			if (field == null)
-				return default(T);
+			try
+			{
+				var field = node.GetChild(name);
+				if (field == null)
+					return default(T);
 
-			return deserializer.Deserialize<T>(field);
+				return deserializer.Deserialize<T>(field);
+			}
+			catch (Exception ex)
+			{
+				throw new DeserializeChildException(name, ex);
+			}
 		}
 
 		internal static readonly MethodInfo ListMI = typeof(BuildToolkit).GetMethod("List", BindingFlags.Static | BindingFlags.NonPublic);
 
 		internal static List<T> List<T>(string name, ICfgNode node, IGenericDeserializer deserializer)
 		{
-			return node.GetCollection(name)
-				.Select(deserializer.Deserialize<T>)
-				.ToList();
+			int i = 0;
+			try
+			{
+				List<T> result = new List<T>();
+				foreach (var chItem in node.GetCollection(name))
+				{
+					result.Add(deserializer.Deserialize<T>(chItem));
+					i++;
+				}
+
+				return result;
+			}
+			catch (Exception ex)
+			{
+				throw new DeserializeChildException(string.Format("{0}[{1}]", name, i), ex);
+			}
 		}
 
 		internal static readonly MethodInfo ArrayMI = typeof(BuildToolkit).GetMethod("Array", BindingFlags.Static | BindingFlags.NonPublic);
 
 		internal static T[] Array<T>(string name, ICfgNode node, IGenericDeserializer deserializer)
 		{
-			return node.GetCollection(name)
-				.Select(deserializer.Deserialize<T>)
-				.ToArray();
+			return List<T>(name, node, deserializer).ToArray();
 		}
 
 		internal static object CreateNativeFunction()
