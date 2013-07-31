@@ -31,6 +31,8 @@ namespace NConfiguration.GenericView
 		/// <param name="mapper">factory to create functions of converters</param>
 		public StringConverter(IStringMapper mapper)
 		{
+			if (mapper == null)
+				throw new ArgumentNullException("mapper");
 			_mapper = mapper;
 			_creater = CreateFunction;
 		}
