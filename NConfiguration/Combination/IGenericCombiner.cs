@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NConfiguration.GenericView
+namespace NConfiguration.Combination
 {
 	public interface IGenericCombiner
 	{

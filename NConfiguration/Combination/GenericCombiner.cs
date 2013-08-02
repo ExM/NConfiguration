@@ -5,7 +5,7 @@ using System.Text;
 using NConfiguration.GenericView.Deserialization;
 using System.Collections.Concurrent;
 
-namespace NConfiguration.GenericView
+namespace NConfiguration.Combination
 {
 	public class GenericCombiner: IGenericCombiner
 	{

@@ -16,11 +16,6 @@ namespace NConfiguration.GenericView.Deserialization
 			return Delegate.CreateDelegate(funcType, PrimitiveTargetMI.MakeGenericMethod(type));
 		}
 
-		internal static bool IsNullable(Type type)
-		{
-			return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
-		}
-
 		private static readonly Dictionary<Type, AttributeState> DataContractAttributeStates = new Dictionary<Type, AttributeState>
 		{
 			{typeof(DataContractAttribute), AttributeState.Found}, // not used

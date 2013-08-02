@@ -1,6 +1,6 @@
 using System;
 
-namespace NConfiguration.GenericView.Deserialization
+namespace NConfiguration.Combination
 {
 	public interface ICombineMapper
 	{
