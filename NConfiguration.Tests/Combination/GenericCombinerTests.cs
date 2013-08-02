@@ -42,5 +42,19 @@ namespace NConfiguration.Combination
 		{
 			Assert.That(_combiner.Combine(x, y), Is.EqualTo(res));
 		}
+
+		[TestCase("A,B", "B", "B")]
+		[TestCase("A,B", "", "A,B")]
+		[TestCase("", "A,B", "A,B")]
+		[TestCase("", "", "")]
+		public void CombineArray(string x, string y, string res)
+		{
+			var xColl = x.Split(',').Where(s => !string.IsNullOrEmpty(s)).ToArray();
+			var yColl = y.Split(',').Where(s => !string.IsNullOrEmpty(s)).ToArray();
+
+			var combine = string.Join(",", _combiner.Combine(xColl, yColl));
+
+			Assert.That(combine, Is.EqualTo(res));
+		}
 	}
 }

@@ -41,8 +41,15 @@ namespace NConfiguration.Combination
 			if (IsSimplyStruct(targetType))
 				return BuildToolkit.CreateForwardCombiner(targetType);
 
-			if (BuildToolkit.IsNullable(targetType))
-				return BuildToolkit.CreateRecursiveNullableCombiner(targetType, combiner);
+			object result = null;
+
+			result = BuildToolkit.TryCreateRecursiveNullableCombiner(targetType, combiner);
+			if (result != null)
+				return result;
+
+			result = BuildToolkit.TryCreateCollectionCombiner(targetType);
+			if (result != null)
+				return result;
 
 			//TODO: attempt to read internal fields
 

@@ -15,13 +15,29 @@ namespace NConfiguration.Combination
 			return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
 		}
 
-		internal static object CreateRecursiveNullableCombiner(Type type, IGenericCombiner combiner)
+		internal static bool IsCollection(Type type)
+		{
+			if (type.IsArray)
+				return true;
+
+			if (!type.IsGenericType)
+				return false;
+
+			var genType = type.GetGenericTypeDefinition();
+
+			return genType == typeof(List<>)
+				|| genType == typeof(IList<>)
+				|| genType == typeof(ICollection<>)
+				|| genType == typeof(IEnumerable<>);
+		}
+
+		internal static object TryCreateRecursiveNullableCombiner(Type type, IGenericCombiner combiner)
 		{
 			var funcType = typeof(Func<,,>).MakeGenericType(type, type, type);
 
 			var ntype = Nullable.GetUnderlyingType(type);
-			if (ntype == null) // is Nullable<>
-				throw new ArgumentOutOfRangeException("type", "must be a nullable");
+			if (ntype == null) // is not Nullable<>
+				return null;
 
 			// this is currying. Reduce first argument in RecursiveNullableCombine
 			return Delegate.CreateDelegate(funcType, combiner, RecursiveNullableCombineMI.MakeGenericMethod(ntype));
@@ -102,6 +118,145 @@ namespace NConfiguration.Combination
 		internal static T ForwardOthersStructCombine<T>(T x, T y) where T : struct
 		{
 			return y.Equals(default(T)) ? x : y;
+		}
+
+		internal static object TryCreateCollectionCombiner(Type type)
+		{
+			var funcType = typeof(Func<,,>).MakeGenericType(type, type, type);
+
+			if (type.IsArray)
+			{
+				var itemType = type.GetElementType();
+				return Delegate.CreateDelegate(funcType, ForwardArrayCombineMI.MakeGenericMethod(itemType));
+			}
+
+
+			if (!type.IsGenericType)
+				return null;
+
+			var genType = type.GetGenericTypeDefinition();
+
+			if(genType == typeof(List<>))
+			{
+				var itemType = type.GetGenericArguments()[0];
+				return Delegate.CreateDelegate(funcType, ForwardListCombineMI.MakeGenericMethod(itemType));
+			}
+
+			if(genType == typeof(IList<>))
+			{
+				var itemType = type.GetGenericArguments()[0];
+				return Delegate.CreateDelegate(funcType, ForwardIListCombineMI.MakeGenericMethod(itemType));
+			}
+
+			if(genType == typeof(ICollection<>))
+			{
+				var itemType = type.GetGenericArguments()[0];
+				return Delegate.CreateDelegate(funcType, ForwardICollectionCombineMI.MakeGenericMethod(itemType));
+			}
+
+			if(genType == typeof(IEnumerable<>))
+			{
+				var itemType = type.GetGenericArguments()[0];
+				return Delegate.CreateDelegate(funcType, ForwardIEnumerableCombineMI.MakeGenericMethod(itemType));
+			}
+			
+			return null;
+		}
+
+
+		internal static readonly MethodInfo ForwardArrayCombineMI = typeof(BuildToolkit).GetMethod("ForwardArrayCombine", BindingFlags.Static | BindingFlags.NonPublic);
+
+		internal static T[] ForwardArrayCombine<T>(T[] x, T[] y)
+		{
+			if (y == null)
+				return x;
+
+			if (x == null)
+				return y;
+
+			if (y.Length == 0)
+				return x;
+
+			if (x.Length == 0)
+				return y;
+
+			return y;
+		}
+
+		internal static readonly MethodInfo ForwardListCombineMI = typeof(BuildToolkit).GetMethod("ForwardListCombine", BindingFlags.Static | BindingFlags.NonPublic);
+
+		internal static List<T> ForwardListCombine<T>(List<T> x, List<T> y)
+		{
+			if (y == null)
+				return x;
+
+			if (x == null)
+				return y;
+
+			if(y.Count == 0)
+				return x;
+
+			if(x.Count == 0)
+				return y;
+
+			return y;
+		}
+
+		internal static readonly MethodInfo ForwardIListCombineMI = typeof(BuildToolkit).GetMethod("ForwardIListCombine", BindingFlags.Static | BindingFlags.NonPublic);
+
+		internal static IList<T> ForwardIListCombine<T>(IList<T> x, IList<T> y)
+		{
+			if (y == null)
+				return x;
+
+			if (x == null)
+				return y;
+
+			if (y.Count == 0)
+				return x;
+
+			if (x.Count == 0)
+				return y;
+
+			return y;
+		}
+
+		internal static readonly MethodInfo ForwardICollectionCombineMI = typeof(BuildToolkit).GetMethod("ForwardICollectionCombine", BindingFlags.Static | BindingFlags.NonPublic);
+
+		internal static ICollection<T> ForwardICollectionCombine<T>(ICollection<T> x, ICollection<T> y)
+		{
+			if (y == null)
+				return x;
+
+			if (x == null)
+				return y;
+
+			if (y.Count == 0)
+				return x;
+
+			if (x.Count == 0)
+				return y;
+
+			return y;
+		}
+
+		internal static readonly MethodInfo ForwardIEnumerableCombineMI = typeof(BuildToolkit).GetMethod("ForwardIEnumerableCombine", BindingFlags.Static | BindingFlags.NonPublic);
+
+		internal static IEnumerable<T> ForwardIEnumerableCombine<T>(IEnumerable<T> x, IEnumerable<T> y)
+		{
+			if (y == null)
+				return x;
+
+			if (x == null)
+				return y;
+
+			if (!y.Any())
+				return x;
+
+			if (!x.Any())
+				return y;
+
+			return y;
 		}
 	}
 }
