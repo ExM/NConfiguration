@@ -9,7 +9,7 @@ using NConfiguration.GenericView.Deserialization;
 namespace NConfiguration.Combination
 {
 	[TestFixture]
-	public class GenericCombinerTests
+	public class SimplyTests
 	{
 		private static IGenericCombiner _combiner = new GenericCombiner();
 

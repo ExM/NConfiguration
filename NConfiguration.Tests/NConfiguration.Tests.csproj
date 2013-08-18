@@ -33,15 +33,14 @@
     <Reference Include="nunit.framework">
       <HintPath>..\lib\NUnit-2.5.10.11092\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Combination\GenericCombinerTests.cs" />
     <Compile Include="Examples\ExampleCombineConfig.cs" />
     <Compile Include="Examples\ConnectionConfig.cs" />
     <Compile Include="Examples\IncludeSettingsTests.cs" />
@@ -76,6 +75,9 @@
     <Compile Include="XmlStringSettings.cs" />
     <Compile Include="ExtensionsForTests.cs" />
     <Compile Include="MultiSettings\MultiSettingsBase.cs" />
+    <Compile Include="Combination\ComplexTests.cs" />
+    <Compile Include="Combination\SimplyTests.cs" />
+    <Compile Include="Combination\TestStruct.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

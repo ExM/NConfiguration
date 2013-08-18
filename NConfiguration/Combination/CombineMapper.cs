@@ -13,6 +13,7 @@ namespace NConfiguration.Combination
 	{
 		private readonly HashSet<Type> _simplySystemStructs = new HashSet<Type>
 			{
+				typeof(string),
 				typeof(Enum), typeof(DateTime), typeof(DateTimeOffset),
 				typeof(bool), typeof(byte), typeof(char), typeof(decimal),
 				typeof(double), typeof(Guid), typeof(short), typeof(int),
@@ -38,21 +39,24 @@ namespace NConfiguration.Combination
 
 		public object CreateFunction(Type targetType, IGenericCombiner combiner)
 		{
-			if (IsSimplyStruct(targetType))
+			if(IsSimplyStruct(targetType))
 				return BuildToolkit.CreateForwardCombiner(targetType);
 
 			object result = null;
 
 			result = BuildToolkit.TryCreateRecursiveNullableCombiner(targetType, combiner);
-			if (result != null)
+			if(result != null)
 				return result;
 
 			result = BuildToolkit.TryCreateCollectionCombiner(targetType);
-			if (result != null)
+			if(result != null)
 				return result;
 
-			//TODO: attempt to read internal fields
-
+			var builder = new ComplexFunctionBuilder(targetType, combiner);
+			result = builder.Compile();
+			if(result != null)
+				return result;
+			
 			return BuildToolkit.CreateForwardCombiner(targetType);
 		}
 	}

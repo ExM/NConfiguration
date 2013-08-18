@@ -131,6 +131,7 @@
     <Compile Include="Joining\IncludeMode.cs" />
     <Compile Include="Xml\XmlSettings.cs" />
     <Compile Include="Xml\Protected\IProviderCollection.cs" />
+    <Compile Include="Combination\ComplexFunctionBuilder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

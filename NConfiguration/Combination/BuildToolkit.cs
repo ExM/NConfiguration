@@ -258,5 +258,12 @@ namespace NConfiguration.Combination
 
 			return y;
 		}
+		
+		internal static readonly MethodInfo FieldCombineMI = typeof(BuildToolkit).GetMethod("FieldCombine", BindingFlags.Static | BindingFlags.NonPublic);
+
+		internal static T FieldCombine<T>(IGenericCombiner combiner, T prev, T next)
+		{
+			return combiner.Combine<T>(prev, next);
+		}
 	}
 }
