@@ -156,6 +156,8 @@ iaWGZaw==
 		[Test]
 		public void DecryptFail()
 		{
+			KeyManager.Delete();
+			
 			var settings = CryptoProvidersSettings.ToXmlSettings();
 			var providers = ProviderLoader.FromAppSettings(settings).Providers;
 			var cryptedsettings = EncryptedCfg.ToXmlSettings(providers);
