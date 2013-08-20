@@ -31,7 +31,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="nunit.framework">
-      <HintPath>..\lib\NUnit-2.5.10.11092\nunit.framework.dll</HintPath>
+      <HintPath>..\lib\NUnit-2.6.2\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />

@@ -1,7 +1,0 @@
-﻿MongoDB C# Driver
-
-Site:
- https://github.com/mongodb/mongo-csharp-driver
-
-Download url:
- http://cloud.github.com/downloads/mongodb/mongo-csharp-driver/CSharpDriver-1.7.0.4714.zip
