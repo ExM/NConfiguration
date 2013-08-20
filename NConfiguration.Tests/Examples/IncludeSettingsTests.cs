@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NConfiguration.Tests;
 using NUnit.Framework;
 using System.Collections.Specialized;
@@ -57,6 +58,29 @@ namespace NConfiguration.Examples
 
 			Assert.IsNotNull(addCfg);
 			Assert.AreEqual("InAppDirectory_json", addCfg.F);
+		}
+
+		[Test]
+		public void AutoCombineLoad()
+		{
+			var xmlFileLoader = new XmlFileSettingsLoader(Global.GenericDeserializer, Global.PlainConverter);
+
+			var loader = new SettingsLoader(xmlFileLoader);
+			loader.Loaded += (s, e) =>
+			{
+				Console.WriteLine("Loaded: {0} ({1})", e.Settings.GetType(), e.Settings.Identity);
+			};
+
+			loader.LoadSettings(xmlFileLoader.LoadFile("Examples/AppDirectory/autoMain.config"));
+
+			var settings = new CombinableAppSettings(loader.Settings, Global.GenericCombiner);
+
+			var cfg = settings.TryGet<ChildAutoCombinableConnectionConfig>();
+
+			var cfgs = settings.Settings.LoadCollection<ChildAutoCombinableConnectionConfig>().ToArray();
+
+			Assert.IsNotNull(cfg);
+			Assert.AreEqual("Server=localhost;Database=workDb;User ID=admin;Password=pass;Trusted_Connection=True;Connection Timeout=60", cfg.ConnectionString);
 		}
 
 		[Test]

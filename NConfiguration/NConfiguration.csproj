@@ -42,6 +42,9 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Combination\BuildToolkit.cs" />
+    <Compile Include="CombinableAppSettings.cs" />
+    <Compile Include="CombinableAppSettingExtensions.cs" />
+    <Compile Include="ICombinableAppSettings.cs" />
     <Compile Include="DeserializeChildException.cs" />
     <Compile Include="Combination\CombineMapper.cs" />
     <Compile Include="Combination\ICombineMapper.cs" />

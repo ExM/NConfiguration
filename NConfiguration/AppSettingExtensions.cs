@@ -3,6 +3,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using System.Runtime.Serialization;
 using NConfiguration.Monitoring;
+using System.Collections.Generic;
 
 namespace NConfiguration
 {
@@ -35,7 +36,6 @@ namespace NConfiguration
 		/// <returns>The section name.</returns>
 		/// <typeparam name='T'>type of configuration</typeparam>
 		public static string GetSectionName<T>()
-			where T : class
 		{
 			var dataAttr = typeof(T).GetCustomAttributes(typeof(DataContractAttribute), false)
 				.Select(a => a as DataContractAttribute)
@@ -267,6 +267,15 @@ namespace NConfiguration
 		public static T TryCombine<T>(this IAppSettings settings, Func<T, T, T> combine) where T : class
 		{
 			return TryCombine<T>(settings, GetSectionName<T>(), combine);
+		}
+
+		/// <summary>
+		/// Returns a collection of instances of configurations by default name
+		/// </summary>
+		/// <typeparam name="T">type of instance of configuration</typeparam>
+		public static IEnumerable<T> LoadCollection<T>(this IAppSettings settings)
+		{
+			return settings.LoadCollection<T>(GetSectionName<T>());
 		}
 	}
 }

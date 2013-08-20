@@ -41,6 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Combination\TestAttrClass.cs" />
+    <Compile Include="Combination\TestClass.cs" />
+    <Compile Include="Examples\AutoCombinableConnectionConfig.cs" />
+    <Compile Include="Examples\ChildAutoCombinableConnectionConfig.cs" />
     <Compile Include="Examples\ExampleCombineConfig.cs" />
     <Compile Include="Examples\ConnectionConfig.cs" />
     <Compile Include="Examples\IncludeSettingsTests.cs" />
@@ -89,6 +93,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Examples\AppDirectory\Additional.json">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Examples\AppDirectory\autoMain.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
