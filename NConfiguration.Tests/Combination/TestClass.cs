@@ -13,6 +13,10 @@ namespace NConfiguration.Combination
 		public int FInt;
 		
 		public int? NInt;
+
+		public int[] Array1;
+
+		public int[] Array2 { get; set; }
 	}
 }
 

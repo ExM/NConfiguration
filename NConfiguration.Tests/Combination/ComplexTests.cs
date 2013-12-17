@@ -44,7 +44,9 @@ namespace NConfiguration.Combination
 				FString1 = "prev",
 				FString2 = "prev",
 				FInt = 1,
-				NInt = 0
+				NInt = 0,
+				Array1 = new int[]{1, 2, 3},
+				Array2 = new int[]{1, 2, 3}
 			};
 
 			var next = new TestClass()
@@ -53,7 +55,9 @@ namespace NConfiguration.Combination
 				FString1 = "next",
 				FString2 = null,
 				FInt = 0,
-				NInt = null
+				NInt = null,
+				Array1 = null,
+				Array2 = new int[]{3, 3, 3}
 			};
 
 			var result = _combiner.Combine(prev, next);
@@ -63,6 +67,8 @@ namespace NConfiguration.Combination
 			Assert.That(result.FString2, Is.EqualTo("prev"));
 			Assert.That(result.FInt, Is.EqualTo(1));
 			Assert.That(result.NInt, Is.EqualTo(0));
+			Assert.That(result.Array1, Is.EquivalentTo(new int[] { 1, 2, 3 }));
+			Assert.That(result.Array2, Is.EquivalentTo(new int[] { 3, 3, 3 }));
 		}
 
 		[Test]
