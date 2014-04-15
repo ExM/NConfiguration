@@ -63,8 +63,12 @@ namespace NConfiguration.GenericView.Deserialization
 
 			if (type.IsEnum)
 				return CreateStringToEnum(type);
-			else
-				return CreateConverterFromString(type);
+
+			var undtype = Nullable.GetUnderlyingType(type);
+			if (undtype != null && undtype.IsEnum) // is nullable enum
+				return CreateStringToNullableEnum(type, undtype);
+
+			return CreateConverterFromString(type);
 		}
 
 		private object DefaultConverter(Type type)
@@ -96,6 +100,21 @@ namespace NConfiguration.GenericView.Deserialization
 			var mi = typeof(EnumHelper<>).MakeGenericType(type).GetMethod("Parse", BindingFlags.Public | BindingFlags.Static);
 			var funcType = typeof(Func<,>).MakeGenericType(typeof(string), type);
 			return Delegate.CreateDelegate(funcType, mi);
+		}
+
+		private object CreateStringToNullableEnum(Type type, Type underlyingType)
+		{
+			var mi = GetType().GetMethod("ToNullableEnum", BindingFlags.Public | BindingFlags.Static).MakeGenericMethod(underlyingType);
+			var funcType = typeof(Func<,>).MakeGenericType(typeof(string), type);
+			return Delegate.CreateDelegate(funcType, mi);
+		}
+
+		public static T? ToNullableEnum<T>(string text) where T: struct
+		{
+			if (string.IsNullOrWhiteSpace(text))
+				return null;
+
+			return EnumHelper<T>.Parse(text);
 		}
 
 		/// <summary>

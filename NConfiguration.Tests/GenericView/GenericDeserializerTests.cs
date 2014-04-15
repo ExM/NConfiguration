@@ -16,6 +16,7 @@ namespace NConfiguration.GenericView
 			public string TextField;
 			public string TextProp {get; set;}
 			public TestEn EnProp { get; set; }
+			public TestEn? NEnProp { get; set; }
 			public bool BoolField;
 			public bool BoolProp { get; set; }
 			public bool? NBoolField;
@@ -42,6 +43,7 @@ namespace NConfiguration.GenericView
 	ByteField='123' ByteProp='12'
 	NByteProp=''
 	EnProp='One'
+	NEnProp='Two'
 ><NByteField>0</NByteField></Config>".ToXmlView();
 			var d = new GenericDeserializer();
 
@@ -59,6 +61,7 @@ namespace NConfiguration.GenericView
 			Assert.AreEqual(0, tc.NByteField);
 			Assert.AreEqual(null, tc.NByteProp);
 			Assert.AreEqual(TestEn.One, tc.EnProp);
+			Assert.AreEqual(TestEn.Two, tc.NEnProp);
 		}
 
 		public class ComplexTest
