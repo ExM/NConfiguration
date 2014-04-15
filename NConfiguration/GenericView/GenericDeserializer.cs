@@ -9,11 +9,22 @@ namespace NConfiguration.GenericView
 {
 	public class GenericDeserializer: IGenericDeserializer
 	{
+		private static readonly Lazy<IGenericMapper> _defaultMapper = new Lazy<IGenericMapper>(() => new GenericMapper(), true);
+
+		public static IGenericMapper DefaultMapper
+		{
+			get
+			{
+				return _defaultMapper.Value;
+			}
+		}
+
 		private IGenericMapper _mapper;
 		private readonly Func<Type, object> _creater;
 		private ConcurrentDictionary<Type, object> _funcMap = new ConcurrentDictionary<Type, object>();
 
-		public GenericDeserializer() : this(new GenericMapper())
+		public GenericDeserializer()
+			: this(DefaultMapper)
 		{
 		}
 
