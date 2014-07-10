@@ -48,6 +48,8 @@
     <Compile Include="Examples\ExampleCombineConfig.cs" />
     <Compile Include="Examples\ConnectionConfig.cs" />
     <Compile Include="Examples\IncludeSettingsTests.cs" />
+    <Compile Include="ExampleTypes\CombinableConfig.cs" />
+    <Compile Include="ExampleTypes\CustomCombinableConfig.cs" />
     <Compile Include="GenericView\DataContractDeserializerTests.cs" />
     <Compile Include="GenericView\XmlDeserializerTests.cs" />
     <Compile Include="GenericView\EnumParserTests.cs" />
@@ -68,6 +70,7 @@
     <Compile Include="MultiSettings\CombineConfig.cs" />
     <Compile Include="MultiSettings\MultiSettingsCombineTests.cs" />
     <Compile Include="Protected\XmlCryptoProvidersTests.cs" />
+    <Compile Include="CombinableAppSettingsTests.cs" />
     <Compile Include="StringConverterTests.cs" />
     <Compile Include="XmlSystemSettingsTests.cs" />
     <Compile Include="MultiSettings\FullCombineConfig.cs" />

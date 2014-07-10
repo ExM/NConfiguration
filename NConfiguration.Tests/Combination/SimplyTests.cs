@@ -11,7 +11,7 @@ namespace NConfiguration.Combination
 	[TestFixture]
 	public class SimplyTests
 	{
-		private static IGenericCombiner _combiner = new GenericCombiner();
+		private static IGenericCombiner _combiner = new GenericCombiner(new CombineMapper());
 
 		[TestCase(0, 0, 0)]
 		[TestCase(0, 5, 5)]

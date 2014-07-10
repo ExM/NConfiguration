@@ -9,25 +9,9 @@ namespace NConfiguration.Combination
 {
 	public class GenericCombiner: IGenericCombiner
 	{
-		private static readonly Lazy<ICombineMapper> _defaultMapper = new Lazy<ICombineMapper>(() => new CombineMapper(), true);
-
-		public static ICombineMapper DefaultMapper
-		{
-			get
-			{
-				return _defaultMapper.Value;
-			}
-		}
-
-
 		private ICombineMapper _mapper;
 		private readonly Func<Type, object> _creater;
 		private ConcurrentDictionary<Type, object> _funcMap = new ConcurrentDictionary<Type, object>();
-
-		public GenericCombiner()
-			: this(DefaultMapper)
-		{
-		}
 
 		public GenericCombiner(ICombineMapper mapper)
 		{

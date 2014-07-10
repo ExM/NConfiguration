@@ -40,6 +40,7 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdaptiveCombineMapper.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Combination\BuildToolkit.cs" />
     <Compile Include="CombinableAppSettings.cs" />

@@ -13,6 +13,6 @@ namespace NConfiguration.Tests
 
 		public static readonly IGenericDeserializer GenericDeserializer = new GenericDeserializer();
 
-		public static readonly GenericCombiner GenericCombiner = new GenericCombiner();
+		public static readonly GenericCombiner GenericCombiner = new GenericCombiner(new CombineMapper());
 	}
 }

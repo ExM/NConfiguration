@@ -1,5 +1,7 @@
 using NConfiguration.Combination;
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace NConfiguration
 {
@@ -12,7 +14,7 @@ namespace NConfiguration
 		public GenericCombiner Combiner { get; private set; }
 
 		public CombinableAppSettings(IAppSettings settings)
-			: this(settings, new GenericCombiner())
+			: this(settings, new GenericCombiner(new AdaptiveCombineMapper()))
 		{
 		}
 

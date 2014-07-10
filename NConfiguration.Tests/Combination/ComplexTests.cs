@@ -11,7 +11,7 @@ namespace NConfiguration.Combination
 	[TestFixture]
 	public class ComplexTests
 	{
-		private static IGenericCombiner _combiner = new GenericCombiner();
+		private static IGenericCombiner _combiner = new GenericCombiner(new CombineMapper());
 
 		[Test]
 		public void CombineStruct()

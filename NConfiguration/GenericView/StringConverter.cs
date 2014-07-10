@@ -13,16 +13,6 @@ namespace NConfiguration.GenericView
 	/// </summary>
 	public class StringConverter : IStringConverter
 	{
-		private static readonly Lazy<StringMapper> _defaultStringMapper = new Lazy<StringMapper>(() => new StringMapper(), true);
-
-		public static IStringMapper DefaultMapper
-		{
-			get
-			{
-				return _defaultStringMapper.Value;
-			}
-		}
-
 		private readonly IStringMapper _mapper;
 		private readonly Func<Type, object> _creater;
 		private readonly ConcurrentDictionary<Type, object> _funcMap = new ConcurrentDictionary<Type, object>();
@@ -31,7 +21,7 @@ namespace NConfiguration.GenericView
 		/// Converter string into a simple values
 		/// </summary>
 		public StringConverter()
-			: this(DefaultMapper)
+			: this(new StringMapper())
 		{
 		}
 
