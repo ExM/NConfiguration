@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.ComponentModel;
 
 namespace NConfiguration.GenericView.Deserialization
 {
 	public class ComplexFunctionBuilder
 	{
 		private Type _targetType;
+		private bool _supportInitialize;
 		private IGenericDeserializer _deserializer;
 		private ParameterExpression _pCfgNode = Expression.Parameter(typeof(ICfgNode));
 		private List<Expression> _bodyList = new List<Expression>();
@@ -19,6 +21,7 @@ namespace NConfiguration.GenericView.Deserialization
 		public ComplexFunctionBuilder(Type targetType, IGenericDeserializer deserializer, Action<FieldFunctionInfo, object[]> configureFieldInfo)
 		{
 			_targetType = targetType;
+			_supportInitialize = typeof(ISupportInitialize).IsAssignableFrom(_targetType);
 			_pResult = Expression.Parameter(_targetType);
 			_deserializer = deserializer;
 			_configureFieldInfo = configureFieldInfo;
@@ -41,6 +44,8 @@ namespace NConfiguration.GenericView.Deserialization
 			try
 			{
 				SetConstructor();
+				if (_supportInitialize)
+					CallBeginInit();
 
 				foreach (var fi in _targetType.GetFields(BindingFlags.Instance | BindingFlags.Public))
 				{
@@ -62,6 +67,9 @@ namespace NConfiguration.GenericView.Deserialization
 					_bodyList.Add(Expression.Assign(left, right));
 				}
 
+				if (_supportInitialize)
+					CallEndInit();
+
 				_bodyList.Add(Expression.Label(Expression.Label(_targetType), _pResult));
 
 				var delegateType = typeof(Func<,>).MakeGenericType(typeof(ICfgNode), _targetType);
@@ -72,6 +80,18 @@ namespace NConfiguration.GenericView.Deserialization
 			{
 				throw new InvalidOperationException(string.Format("can't create a deserialize function for '{0}'", _targetType.FullName), ex);
 			}
+		}
+
+		private void CallBeginInit()
+		{
+			var callBeginInit = Expression.Call(_pResult, typeof(ISupportInitialize).GetMethod("BeginInit"));
+			_bodyList.Add(callBeginInit);
+		}
+
+		private void CallEndInit()
+		{
+			var callEndInit = Expression.Call(_pResult, typeof(ISupportInitialize).GetMethod("EndInit"));
+			_bodyList.Add(callEndInit);
 		}
 
 		private Expression CreateFunction(Type fieldType, string fieldName, object[] customAttributes)
