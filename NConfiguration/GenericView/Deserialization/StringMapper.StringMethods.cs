@@ -1,4 +1,7 @@
-﻿using System;
+﻿
+
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 
@@ -12,69 +15,91 @@ namespace NConfiguration.GenericView.Deserialization
 				return (Func<string, string>)ToString;
 			else if(type == typeof(byte[]))
 				return (Func<string, byte[]>)ToByteArray;
+
 			else if(type == typeof(Boolean))
 				return (Func<string, Boolean>)ToBoolean;
 			else if(type == typeof(Boolean?))
 				return (Func<string, Boolean?>)ToNBoolean;
+
 			else if(type == typeof(Byte))
 				return (Func<string, Byte>)ToByte;
 			else if(type == typeof(Byte?))
 				return (Func<string, Byte?>)ToNByte;
+
 			else if(type == typeof(SByte))
 				return (Func<string, SByte>)ToSByte;
 			else if(type == typeof(SByte?))
 				return (Func<string, SByte?>)ToNSByte;
+
 			else if(type == typeof(Char))
 				return (Func<string, Char>)ToChar;
 			else if(type == typeof(Char?))
 				return (Func<string, Char?>)ToNChar;
+
 			else if(type == typeof(Int16))
 				return (Func<string, Int16>)ToInt16;
 			else if(type == typeof(Int16?))
 				return (Func<string, Int16?>)ToNInt16;
+
 			else if(type == typeof(Int32))
 				return (Func<string, Int32>)ToInt32;
 			else if(type == typeof(Int32?))
 				return (Func<string, Int32?>)ToNInt32;
+
 			else if(type == typeof(Int64))
 				return (Func<string, Int64>)ToInt64;
 			else if(type == typeof(Int64?))
 				return (Func<string, Int64?>)ToNInt64;
+
 			else if(type == typeof(UInt16))
 				return (Func<string, UInt16>)ToUInt16;
 			else if(type == typeof(UInt16?))
 				return (Func<string, UInt16?>)ToNUInt16;
+
 			else if(type == typeof(UInt32))
 				return (Func<string, UInt32>)ToUInt32;
 			else if(type == typeof(UInt32?))
 				return (Func<string, UInt32?>)ToNUInt32;
+
 			else if(type == typeof(UInt64))
 				return (Func<string, UInt64>)ToUInt64;
 			else if(type == typeof(UInt64?))
 				return (Func<string, UInt64?>)ToNUInt64;
+
 			else if(type == typeof(Single))
 				return (Func<string, Single>)ToSingle;
 			else if(type == typeof(Single?))
 				return (Func<string, Single?>)ToNSingle;
+
 			else if(type == typeof(Double))
 				return (Func<string, Double>)ToDouble;
 			else if(type == typeof(Double?))
 				return (Func<string, Double?>)ToNDouble;
+
+			else if(type == typeof(Decimal))
+				return (Func<string, Decimal>)ToDecimal;
+			else if(type == typeof(Decimal?))
+				return (Func<string, Decimal?>)ToNDecimal;
+
 			else if(type == typeof(TimeSpan))
 				return (Func<string, TimeSpan>)ToTimeSpan;
 			else if(type == typeof(TimeSpan?))
 				return (Func<string, TimeSpan?>)ToNTimeSpan;
+
 			else if(type == typeof(DateTime))
 				return (Func<string, DateTime>)ToDateTime;
 			else if(type == typeof(DateTime?))
 				return (Func<string, DateTime?>)ToNDateTime;
+
 			else if(type == typeof(Guid))
 				return (Func<string, Guid>)ToGuid;
 			else if(type == typeof(Guid?))
 				return (Func<string, Guid?>)ToNGuid;
+
 			
 			return DefaultConverter(type);
 		}
+
 		
 		/// <summary>
 		/// Convert text to Nullable[Boolean]
@@ -88,6 +113,7 @@ namespace NConfiguration.GenericView.Deserialization
 
 			return ToBoolean(text);
 		}
+
 		
 		/// <summary>
 		/// Convert text to Nullable[Byte]
@@ -101,6 +127,7 @@ namespace NConfiguration.GenericView.Deserialization
 
 			return ToByte(text);
 		}
+
 		
 		/// <summary>
 		/// Convert text to Nullable[SByte]
@@ -114,6 +141,7 @@ namespace NConfiguration.GenericView.Deserialization
 
 			return ToSByte(text);
 		}
+
 		
 		/// <summary>
 		/// Convert text to Nullable[Char]
@@ -127,6 +155,7 @@ namespace NConfiguration.GenericView.Deserialization
 
 			return ToChar(text);
 		}
+
 		
 		/// <summary>
 		/// Convert text to Nullable[Int16]
@@ -140,6 +169,7 @@ namespace NConfiguration.GenericView.Deserialization
 
 			return ToInt16(text);
 		}
+
 		
 		/// <summary>
 		/// Convert text to Nullable[Int32]
@@ -153,6 +183,7 @@ namespace NConfiguration.GenericView.Deserialization
 
 			return ToInt32(text);
 		}
+
 		
 		/// <summary>
 		/// Convert text to Nullable[Int64]
@@ -166,6 +197,7 @@ namespace NConfiguration.GenericView.Deserialization
 
 			return ToInt64(text);
 		}
+
 		
 		/// <summary>
 		/// Convert text to Nullable[UInt16]
@@ -179,6 +211,7 @@ namespace NConfiguration.GenericView.Deserialization
 
 			return ToUInt16(text);
 		}
+
 		
 		/// <summary>
 		/// Convert text to Nullable[UInt32]
@@ -192,6 +225,7 @@ namespace NConfiguration.GenericView.Deserialization
 
 			return ToUInt32(text);
 		}
+
 		
 		/// <summary>
 		/// Convert text to Nullable[UInt64]
@@ -205,6 +239,7 @@ namespace NConfiguration.GenericView.Deserialization
 
 			return ToUInt64(text);
 		}
+
 		
 		/// <summary>
 		/// Convert text to Nullable[Single]
@@ -218,6 +253,7 @@ namespace NConfiguration.GenericView.Deserialization
 
 			return ToSingle(text);
 		}
+
 		
 		/// <summary>
 		/// Convert text to Nullable[Double]
@@ -231,6 +267,21 @@ namespace NConfiguration.GenericView.Deserialization
 
 			return ToDouble(text);
 		}
+
+		
+		/// <summary>
+		/// Convert text to Nullable[Decimal]
+		/// </summary>
+		/// <param name="text">A string that represents the Decimal to convert.</param>
+		/// <returns>A Decimal equivalent to the specified in text or null-value if argument not contain a text</returns>
+		public Decimal? ToNDecimal(string text)
+		{
+			if (string.IsNullOrWhiteSpace(text))
+				return null;
+
+			return ToDecimal(text);
+		}
+
 		
 		/// <summary>
 		/// Convert text to Nullable[TimeSpan]
@@ -244,6 +295,7 @@ namespace NConfiguration.GenericView.Deserialization
 
 			return ToTimeSpan(text);
 		}
+
 		
 		/// <summary>
 		/// Convert text to Nullable[DateTime]
@@ -257,6 +309,7 @@ namespace NConfiguration.GenericView.Deserialization
 
 			return ToDateTime(text);
 		}
+
 		
 		/// <summary>
 		/// Convert text to Nullable[Guid]
@@ -270,6 +323,7 @@ namespace NConfiguration.GenericView.Deserialization
 
 			return ToGuid(text);
 		}
+
 	}
 }
 

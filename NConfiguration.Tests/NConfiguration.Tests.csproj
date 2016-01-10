@@ -51,6 +51,7 @@
     <Compile Include="ExampleTypes\CombinableConfig.cs" />
     <Compile Include="ExampleTypes\CustomCombinableConfig.cs" />
     <Compile Include="GenericView\DataContractDeserializerTests.cs" />
+    <Compile Include="GenericView\DeserializePrimitiveTypes.cs" />
     <Compile Include="GenericView\XmlDeserializerTests.cs" />
     <Compile Include="GenericView\EnumParserTests.cs" />
     <Compile Include="GenericView\GenericDeserializerTests.cs" />
@@ -185,5 +186,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="testKey.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
 </Project>

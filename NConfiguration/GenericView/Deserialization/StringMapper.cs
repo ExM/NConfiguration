@@ -9,7 +9,7 @@ namespace NConfiguration.GenericView.Deserialization
 {
 	/// <summary>
 	/// Allows you to create delegates to convert a string to an instance of a specified type.
-	/// Support types: Boolean, Byte, SByte, Char, Int16, Int32, Int64, UInt16, UInt32, UInt64, Single, Double, TimeSpan, DateTime, Guid
+	/// Support types: Boolean, Byte, SByte, Char, Int16, Int32, Int64, UInt16, UInt32, UInt64, Single, Double, Decimal, TimeSpan, DateTime, Guid
 	///  and their nullable variants.
 	/// </summary>
 	public partial class StringMapper : IStringMapper
@@ -217,6 +217,16 @@ namespace NConfiguration.GenericView.Deserialization
 		public Double ToDouble(string text)
 		{
 			return Double.Parse(text, _ci);
+		}
+
+		/// <summary>
+		/// Converts the string representation of a number to its System.Decimal number equivalent.
+		/// </summary>
+		/// <param name="text">A string that contains a number to convert.</param>
+		/// <returns>A System.Decimal number that is equivalent to the numeric value or symbol specified in text.</returns>
+		public Decimal ToDecimal(string text)
+		{
+			return Decimal.Parse(text, _ci);
 		}
 
 		/// <summary>

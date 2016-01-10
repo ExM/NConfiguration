@@ -16,7 +16,7 @@ namespace NConfiguration.GenericView.Deserialization
 				typeof(String), typeof(Boolean), typeof(Char),
 				typeof(Byte), typeof(SByte),
 				typeof(Int16), typeof(Int32), typeof(Int64), typeof(UInt16), typeof(UInt32), typeof(UInt64),
-				typeof(Single), typeof(Double),
+				typeof(Single), typeof(Double), typeof(Decimal),
 				typeof(TimeSpan), typeof(DateTime), typeof(Guid),
 				typeof(byte[])
 			};
