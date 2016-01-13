@@ -67,7 +67,7 @@ namespace NConfiguration.GenericView.Deserialization
 
 		public virtual ComplexFunctionBuilder CreateComplexFunctionBuilder(Type targetType, IGenericDeserializer deserializer)
 		{
-			Action<FieldFunctionInfo, object[]> cffi;
+			Action<FieldFunctionInfo> cffi;
 
 			if (BuildToolkit.DataContractAvailable(targetType) == AttributeState.Found)
 				cffi = DataContractFieldReader; // DataContract deserialize
@@ -79,8 +79,14 @@ namespace NConfiguration.GenericView.Deserialization
 			return new ComplexFunctionBuilder(targetType, deserializer, cffi);
 		}
 
-		public void NativeNameFieldReader(FieldFunctionInfo ffi, object[] customAttributes)
+		public void NativeNameFieldReader(FieldFunctionInfo ffi)
 		{
+			if (!ffi.IsPublic)
+			{
+				ffi.Ignore = true;
+				return;
+			}
+
 			ffi.Function = DefaultFunctionType(ffi.ResultType);
 		}
 
@@ -96,9 +102,9 @@ namespace NConfiguration.GenericView.Deserialization
 				return FieldFunctionType.Complex;
 		}
 
-		public void DataContractFieldReader(FieldFunctionInfo ffi, object[] customAttributes)
+		public void DataContractFieldReader(FieldFunctionInfo ffi)
 		{
-			if (customAttributes.Any(o => o is IgnoreDataMemberAttribute))
+			if (ffi.CustomAttributes.Any(o => o is IgnoreDataMemberAttribute))
 			{
 				ffi.Ignore = true;
 				return;
@@ -106,7 +112,13 @@ namespace NConfiguration.GenericView.Deserialization
 
 			ffi.Function = DefaultFunctionType(ffi.ResultType);
 
-			var dmAttr = customAttributes.Select(o => o as DataMemberAttribute).FirstOrDefault(a => a != null);
+			var dmAttr = ffi.CustomAttributes.Select(o => o as DataMemberAttribute).FirstOrDefault(a => a != null);
+
+			if (dmAttr == null && !ffi.IsPublic)
+			{
+				ffi.Ignore = true;
+				return;
+			}
 
 			if (dmAttr != null && !string.IsNullOrWhiteSpace(dmAttr.Name))
 				ffi.Name = dmAttr.Name;
@@ -115,9 +127,9 @@ namespace NConfiguration.GenericView.Deserialization
 				ffi.Required = dmAttr.IsRequired;
 		}
 
-		public void XmlFieldReader(FieldFunctionInfo ffi, object[] customAttributes)
+		public void XmlFieldReader(FieldFunctionInfo ffi)
 		{
-			if (customAttributes.Any(o => o is XmlIgnoreAttribute))
+			if (ffi.CustomAttributes.Any(o => o is XmlIgnoreAttribute))
 			{
 				ffi.Ignore = true;
 				return;
@@ -125,8 +137,14 @@ namespace NConfiguration.GenericView.Deserialization
 
 			ffi.Function = DefaultFunctionType(ffi.ResultType);
 
-			var attrAttr = customAttributes.Select(o => o as XmlAttributeAttribute).FirstOrDefault(a => a != null);
-			var elAttr = customAttributes.Select(o => o as XmlElementAttribute).FirstOrDefault(a => a != null);
+			var attrAttr = ffi.CustomAttributes.Select(o => o as XmlAttributeAttribute).FirstOrDefault(a => a != null);
+			var elAttr = ffi.CustomAttributes.Select(o => o as XmlElementAttribute).FirstOrDefault(a => a != null);
+
+			if (attrAttr == null && elAttr == null && !ffi.IsPublic)
+			{
+				ffi.Ignore = true;
+				return;
+			}
 
 			if (attrAttr != null && elAttr != null)
 				throw new ArgumentOutOfRangeException(string.Format("found XmlAttributeAttribute and XmlElementAttribute for member '{0}'", ffi.Name));

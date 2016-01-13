@@ -50,7 +50,7 @@ namespace NConfiguration.GenericView.Deserialization
 		{
 			AttributeState result = AttributeState.NotFound;
 			CheckAttributes(targetType.GetCustomAttributes(true), ref result, attrStates);
-			foreach (var mi in targetType.FindMembers(MemberTypes.Field | MemberTypes.Property, BindingFlags.Public | BindingFlags.Instance, (m, o) => true, null))
+			foreach (var mi in targetType.FindMembers(MemberTypes.Field | MemberTypes.Property, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, (m, o) => true, null))
 				CheckAttributes(mi.GetCustomAttributes(true), ref result, attrStates);
 			return result;
 		}

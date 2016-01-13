@@ -16,9 +16,9 @@ namespace NConfiguration.GenericView.Deserialization
 		private ParameterExpression _pCfgNode = Expression.Parameter(typeof(ICfgNode));
 		private List<Expression> _bodyList = new List<Expression>();
 		private ParameterExpression _pResult;
-		private Action<FieldFunctionInfo, object[]> _configureFieldInfo;
+		private Action<FieldFunctionInfo> _configureFieldInfo;
 
-		public ComplexFunctionBuilder(Type targetType, IGenericDeserializer deserializer, Action<FieldFunctionInfo, object[]> configureFieldInfo)
+		public ComplexFunctionBuilder(Type targetType, IGenericDeserializer deserializer, Action<FieldFunctionInfo> configureFieldInfo)
 		{
 			_targetType = targetType;
 			_supportInitialize = typeof(ISupportInitialize).IsAssignableFrom(_targetType);
@@ -47,20 +47,20 @@ namespace NConfiguration.GenericView.Deserialization
 				if (_supportInitialize)
 					CallBeginInit();
 
-				foreach (var fi in _targetType.GetFields(BindingFlags.Instance | BindingFlags.Public))
+				foreach (var fi in _targetType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
 				{
-					var right = CreateFunction(fi.FieldType, fi.Name, fi.GetCustomAttributes(true));
+					var right = CreateFunction(new FieldFunctionInfo(fi));
 					if (right == null)
 						continue;
 					var left = Expression.Field(_pResult, fi);
 					_bodyList.Add(Expression.Assign(left, right));
 				}
 
-				foreach (var pi in _targetType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
+				foreach (var pi in _targetType.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
 				{
 					if (!pi.CanWrite)
 						continue;
-					var right = CreateFunction(pi.PropertyType, pi.Name, pi.GetCustomAttributes(true));
+					var right = CreateFunction(new FieldFunctionInfo(pi));
 					if (right == null)
 						continue;
 					var left = Expression.Property(_pResult, pi);
@@ -94,10 +94,9 @@ namespace NConfiguration.GenericView.Deserialization
 			_bodyList.Add(callEndInit);
 		}
 
-		private Expression CreateFunction(Type fieldType, string fieldName, object[] customAttributes)
+		private Expression CreateFunction(FieldFunctionInfo ffi)
 		{
-			var ffi = new FieldFunctionInfo(fieldType, fieldName);
-			_configureFieldInfo(ffi, customAttributes);
+			_configureFieldInfo(ffi);
 			return ffi.Ignore ? null : MakeFieldReader(ffi);
 		}
 

@@ -51,6 +51,7 @@
     <Compile Include="ExampleTypes\CombinableConfig.cs" />
     <Compile Include="ExampleTypes\CustomCombinableConfig.cs" />
     <Compile Include="GenericView\DataContractDeserializerTests.cs" />
+    <Compile Include="GenericView\PrivateDeserializerTests.cs" />
     <Compile Include="GenericView\SupportInitializeTest.cs" />
     <Compile Include="GenericView\DeserializePrimitiveTypes.cs" />
     <Compile Include="GenericView\XmlDeserializerTests.cs" />
