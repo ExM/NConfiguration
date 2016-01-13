@@ -32,7 +32,10 @@ namespace NConfiguration.GenericView.Deserialization
 			if (_targetType.IsValueType)
 				return;
 			
-			var ci = _targetType.GetConstructor(new Type[] { });
+			var ci = _targetType.GetConstructor(
+				BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+				null, new Type[] { }, null);
+				
 			if (ci == null)
 				throw new InvalidOperationException("default constructor not found");
 

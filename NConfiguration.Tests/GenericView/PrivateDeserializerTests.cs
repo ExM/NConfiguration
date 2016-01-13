@@ -23,6 +23,15 @@ namespace NConfiguration.GenericView
 			public string getPrivField { get { return PrivField; } }
 		}
 
+		public class PrivateCtorType
+		{
+			private PrivateCtorType()
+			{
+			}
+
+			public string PubText;
+		}
+
 		public class InjectPropertyType
 		{
 			public string PubText;
@@ -108,5 +117,13 @@ namespace NConfiguration.GenericView
 			Assert.AreEqual(null, tc.getPrivProp);
 		}
 
+		[Test]
+		public void PrivateCtor()
+		{
+			var d = new GenericDeserializer();
+			var tc = d.Deserialize<PrivateCtorType>(_root);
+
+			Assert.AreEqual("PubText", tc.PubText);
+		}
 	}
 }
