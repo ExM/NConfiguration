@@ -126,5 +126,56 @@ namespace NConfiguration.Combination
 			else
 				Assert.That(result, Is.Null);
 		}
+
+		[TestCase("A", "B", "BA")]
+		[TestCase(null, "B", "B")]
+		[TestCase("A", null, "A")]
+		[TestCase(null, null, null)]
+		public void ContainCombinableClass(string x, string y, string res)
+		{
+			var prev = new CombinableContainer()
+			{
+				ClassField = x == null ? null : (new CombinableTestClass() { Text = x })
+			};
+
+			var next = new CombinableContainer()
+			{
+				ClassField = y == null ? null : (new CombinableTestClass() { Text = y })
+			};
+
+			var field = _combiner.Combine(prev, next).ClassField;
+			var test = field == null ? null : field.Text;
+
+			Assert.That(test, Is.EqualTo(res));
+		}
+
+		[TestCase("A", "B", "BA")]
+		[TestCase(null, "B", "B")]
+		[TestCase("A", null, "A")]
+		[TestCase(null, null, null)]
+		public void ContainCombinableStruct(string x, string y, string res)
+		{
+			var prev = new CombinableContainer()
+			{
+				StructField = new CombinableTestStruct() { Text = x }
+			};
+
+			var next = new CombinableContainer()
+			{
+				StructField = new CombinableTestStruct() { Text = y }
+			};
+
+			var test = _combiner.Combine(prev, next).StructField.Text;
+
+			Assert.That(test, Is.EqualTo(res));
+		}
+
+
+		public class CombinableContainer
+		{
+			public CombinableTestClass ClassField;
+
+			public CombinableTestStruct StructField;
+		}
 	}
 }

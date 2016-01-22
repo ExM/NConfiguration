@@ -39,6 +39,16 @@ namespace NConfiguration.Combination
 
 		public object CreateFunction(Type targetType, IGenericCombiner combiner)
 		{
+			if (typeof(ICombinable).IsAssignableFrom(targetType))
+			{
+				var funcType = typeof(Func<,,>).MakeGenericType(targetType, targetType, targetType);
+
+				if (targetType.IsValueType)
+					return Delegate.CreateDelegate(funcType, CustomStructCombineMI.MakeGenericMethod(targetType));
+				else
+					return Delegate.CreateDelegate(funcType, CustomClassCombineMI.MakeGenericMethod(targetType));
+			}
+
 			if(IsSimplyStruct(targetType))
 				return BuildToolkit.CreateForwardCombiner(targetType);
 
@@ -59,5 +69,25 @@ namespace NConfiguration.Combination
 			
 			return BuildToolkit.CreateForwardCombiner(targetType);
 		}
+
+		internal static readonly MethodInfo CustomClassCombineMI = typeof(CombineMapper).GetMethod("CustomClassCombine", BindingFlags.Static | BindingFlags.NonPublic);
+
+		internal static T CustomClassCombine<T>(T x, T y) where T : class, ICombinable
+		{
+			if (x == null)
+				return y;
+
+			x.Combine(y);
+			return x;
+		}
+
+		internal static readonly MethodInfo CustomStructCombineMI = typeof(CombineMapper).GetMethod("CustomStructCombine", BindingFlags.Static | BindingFlags.NonPublic);
+
+		internal static T CustomStructCombine<T>(T x, T y) where T : struct, ICombinable
+		{
+			x.Combine(y);
+			return x;
+		}
+
 	}
 }

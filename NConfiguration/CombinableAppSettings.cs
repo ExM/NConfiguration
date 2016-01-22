@@ -14,7 +14,7 @@ namespace NConfiguration
 		public GenericCombiner Combiner { get; private set; }
 
 		public CombinableAppSettings(IAppSettings settings)
-			: this(settings, new GenericCombiner(new AdaptiveCombineMapper()))
+			: this(settings, new GenericCombiner(new CombineMapper()))
 		{
 		}
 
