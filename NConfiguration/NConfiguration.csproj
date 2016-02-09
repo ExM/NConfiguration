@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -9,6 +9,8 @@
     <OutputType>Library</OutputType>
     <RootNamespace>NConfiguration</RootNamespace>
     <AssemblyName>NConfiguration</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -19,6 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,6 +33,7 @@
     <DocumentationFile>..\Release\lib\NConfiguration.xml</DocumentationFile>
     <GenerateDocumentation>true</GenerateDocumentation>
     <DebugSymbols>true</DebugSymbols>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -41,15 +45,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Combination\BuildToolkit.cs" />
     <Compile Include="CombinableAppSettings.cs" />
     <Compile Include="CombinableAppSettingExtensions.cs" />
+    <Compile Include="Combination\BuildUtils.cs" />
+    <Compile Include="Combination\CombinerAttribute.cs" />
+    <Compile Include="Combination\BuildUtils.Combiners.cs" />
+    <Compile Include="Combination\ComplexFunctionBuilder.cs" />
+    <Compile Include="Combination\DefaultCombiner.cs" />
+    <Compile Include="Combination\ChildCombiner.cs" />
+    <Compile Include="Combination\ICombinable%271.cs" />
+    <Compile Include="Combination\ICombinable.cs" />
+    <Compile Include="Combination\CombinerExtensions.cs" />
+    <Compile Include="Combination\ICombiner.cs" />
+    <Compile Include="Combination\ICombiner%271.cs" />
+    <Compile Include="Combination\ICombinerFactory.cs" />
     <Compile Include="ICombinableAppSettings.cs" />
     <Compile Include="DeserializeChildException.cs" />
-    <Compile Include="Combination\CombineMapper.cs" />
-    <Compile Include="Combination\ICombineMapper.cs" />
-    <Compile Include="Combination\IGenericCombiner.cs" />
-    <Compile Include="Combination\GenericCombiner.cs" />
     <Compile Include="GenericView\Deserialization\FieldFunctionInfo.cs" />
     <Compile Include="IChangeable.cs" />
     <Compile Include="Joining\FindingSettingsArgs.cs" />
@@ -115,7 +126,6 @@
     <Compile Include="Joining\FileSearcher.cs" />
     <Compile Include="Xml\XmlFileSettings.cs" />
     <Compile Include="Xml\Protected\IXmlEncryptable.cs" />
-    <Compile Include="ICombinable.cs" />
     <Compile Include="Xml\Protected\ConfigProtectedData.cs" />
     <Compile Include="Joining\LoadedEventArgs.cs" />
     <Compile Include="Xml\XmlFileSettingsLoader.cs" />
@@ -134,7 +144,6 @@
     <Compile Include="Joining\IncludeMode.cs" />
     <Compile Include="Xml\XmlSettings.cs" />
     <Compile Include="Xml\Protected\IProviderCollection.cs" />
-    <Compile Include="Combination\ComplexFunctionBuilder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

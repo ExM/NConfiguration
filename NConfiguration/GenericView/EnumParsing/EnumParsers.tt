@@ -1,6 +1,6 @@
-﻿<#@ template debug="false" hostspecific="false" language="C#" #>
-<#@ output extension=".cs" #>
-<# string[] types = new []{
+﻿<#@ template debug="false" hostspecific="false" language="C#"
+#><#@ output extension=".cs"
+ #><#string[] types = new []{
 	"Byte",
 	"SByte",
 	"Int16",
@@ -9,8 +9,7 @@
 	"UInt16",
 	"UInt32",
 	"UInt64"
-};#>
-using System;
+};#>using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;

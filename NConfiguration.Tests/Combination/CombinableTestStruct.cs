@@ -6,7 +6,7 @@ namespace NConfiguration.Combination
 	{
 		public string Text;
 
-		public void Combine(object other)
+		public void Combine(ICombiner combiner, object other)
 		{
 			if (other == null)
 				return;
@@ -15,8 +15,6 @@ namespace NConfiguration.Combination
 
 			if (otherText != null)
 				Text = otherText + Text;
-
-			
 		}
 	}
 }
