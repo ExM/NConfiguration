@@ -7,7 +7,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using NConfiguration.GenericView;
+using NConfiguration.Serialization;
 
 namespace NConfiguration.Xml
 {
@@ -17,8 +17,8 @@ namespace NConfiguration.Xml
 		private readonly string _sectionName;
 		private readonly string _directory;
 
-		public XmlSystemSettings(string sectionName, IStringConverter converter, IGenericDeserializer deserializer)
-			: base(converter, deserializer)
+		public XmlSystemSettings(string sectionName, IDeserializer deserializer)
+			: base(deserializer)
 		{
 			_sectionName = sectionName;
 			var confFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;

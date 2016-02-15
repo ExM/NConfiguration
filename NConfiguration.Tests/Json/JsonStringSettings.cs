@@ -5,7 +5,7 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using NConfiguration.Xml.Protected;
-using NConfiguration.GenericView;
+using NConfiguration.Serialization;
 using System.Collections.Generic;
 using NConfiguration.Json.Parsing;
 using NConfiguration.Tests;
@@ -17,7 +17,7 @@ namespace NConfiguration.Json
 		private readonly JObject _obj;
 
 		public JsonStringSettings(string text)
-			: base(Global.PlainConverter, Global.GenericDeserializer)
+			: base(DefaultDeserializer.Instance)
 		{
 			var val = JValue.Parse(text);
 			if (val.Type != TokenType.Object)

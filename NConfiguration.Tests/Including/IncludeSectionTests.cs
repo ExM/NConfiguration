@@ -5,7 +5,7 @@ using System.Linq;
 using NConfiguration.Xml;
 using System.Collections.Generic;
 using NConfiguration.Joining;
-using NConfiguration.GenericView;
+using NConfiguration.Serialization;
 
 namespace NConfiguration.Including
 {
@@ -41,7 +41,7 @@ namespace NConfiguration.Including
 
 			public IEnumerable<IIdentifiedSource> CreateSettings(IAppSettings source, ICfgNode config)
 			{
-				Configs.Add(Global.GenericDeserializer.Deserialize<IncludeFileConfig>(config));
+				Configs.Add(DefaultDeserializer.Instance.Deserialize<IncludeFileConfig>(config));
 				yield break;
 			}
 

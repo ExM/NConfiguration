@@ -4,7 +4,7 @@ using System.IO;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using NConfiguration.Xml;
-using NConfiguration.GenericView;
+using NConfiguration.Serialization;
 using NConfiguration.Tests;
 using System.Collections.Generic;
 
@@ -15,7 +15,7 @@ namespace NConfiguration.Ini
 		private readonly List<Section> _sections;
 
 		public IniStringSettings(string text)
-			:base(Global.PlainConverter, Global.GenericDeserializer)
+			: base(DefaultDeserializer.Instance)
 		{
 			_sections = Section.Parse(text);
 		}

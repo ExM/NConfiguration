@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NConfiguration.GenericView
+namespace NConfiguration.Serialization
 {
 	internal class NameComparer
 	{
-		public static readonly IEqualityComparer<string> Instance = StringComparer.InvariantCultureIgnoreCase;
+		public static readonly IEqualityComparer<string> Instance = StringComparer.OrdinalIgnoreCase;
 
 		public static bool Equals(string x, string y)
 		{

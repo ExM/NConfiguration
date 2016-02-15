@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.Configuration;
 using NConfiguration.Xml;
 using System.IO;
-using NConfiguration.GenericView;
+using NConfiguration.Serialization;
 using NConfiguration.Tests;
 
 namespace NConfiguration
@@ -26,7 +26,7 @@ namespace NConfiguration
 		[TestCase("", null)]
 		public void NEnumByte(string text, ByteEn? expected)
 		{
-			Assert.AreEqual(expected, Global.PlainConverter.Convert<ByteEn?>(text));
+			Assert.AreEqual(expected, DefaultDeserializer.Instance.Deserialize<ByteEn?>(new ViewPlainField(text)));
 		}
 	}
 }

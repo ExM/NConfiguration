@@ -6,66 +6,24 @@ using System.Linq.Expressions;
 using System.Xml;
 using System.Xml.Serialization;
 using NUnit.Framework;
-using NConfiguration.GenericView.Deserialization;
+using System.Runtime.Serialization;
 
-namespace NConfiguration.GenericView
+namespace NConfiguration.Serialization
 {
 	[TestFixture]
 	public class XmlDeserializerTests
 	{
-		public class XmlMapper: GenericMapper
-		{
-			public override ComplexFunctionBuilder CreateComplexFunctionBuilder(Type targetType, IGenericDeserializer deserializer)
-			{
-				if (BuildToolkit.XmlAvailable(targetType) == AttributeState.NotImplemented)
-					throw new NotImplementedException();
-				return new ComplexFunctionBuilder(targetType, deserializer, XmlFieldReader);
-			}
-		}
-
-		public class BadType1
-		{
-			[XmlArray]
-			public int[] Array { get; set; }
-		}
-
-		public class BadType2
-		{
-			[XmlAnyElement]
-			public XmlElement AnyElement { get; set; }
-		}
-
-		[Test]
-		[ExpectedException(typeof(NotImplementedException))]
-		public void ParseBadType1()
-		{
-			var root = @"<Root></Root>".ToXmlView();
-			var d = new GenericDeserializer(new XmlMapper());
-
-			d.Deserialize<BadType1>(root);
-		}
-
-		[Test]
-		[ExpectedException(typeof(NotImplementedException))]
-		public void ParseBadType2()
-		{
-			var root = @"<Root></Root>".ToXmlView();
-			var d = new GenericDeserializer(new XmlMapper());
-
-			d.Deserialize<BadType2>(root);
-		}
-
 		public class GoodType
 		{
-			[XmlIgnore]
+			[IgnoreDataMember]
 			public bool Ignored;
-			[XmlAttribute("xmlNInt")]
+			[DataMember(Name = "xmlNInt")]
 			public int? NInt;
-			[XmlElement("xmlInner")]
+			[DataMember(Name = "xmlInner")]
 			public GoodType Inner { get; set; }
-			[XmlElement("xmlInnerList")]
+			[DataMember(Name = "xmlInnerList")]
 			public List<GoodType> InnerList { get; set; }
-			[XmlAttribute("xmlBlob")]
+			[DataMember(Name = "xmlBlob")]
 			public byte[] Blob;
 		}
 
@@ -74,9 +32,8 @@ namespace NConfiguration.GenericView
 		{
 			var root = 
 @"<Root Ignored='true'><xmlNInt>123</xmlNInt></Root>".ToXmlView();
-			var d = new GenericDeserializer(new XmlMapper());
 
-			var t = d.Deserialize<GoodType>(root);
+			var t = DefaultDeserializer.Instance.Deserialize<GoodType>(root);
 
 			Assert.IsFalse(t.Ignored);
 			Assert.AreEqual(123, t.NInt);
@@ -89,9 +46,8 @@ namespace NConfiguration.GenericView
 		{
 			var root = 
 @"<Root Ignored='1'><xmlInner xmlNInt='321'></xmlInner></Root>".ToXmlView();
-			var d = new GenericDeserializer(new XmlMapper());
 
-			var t = d.Deserialize<GoodType>(root);
+			var t = DefaultDeserializer.Instance.Deserialize<GoodType>(root);
 
 			Assert.IsFalse(t.Ignored);
 			Assert.IsNotNull(t.Inner);
@@ -103,9 +59,8 @@ namespace NConfiguration.GenericView
 		{
 			var root =
 @"<Root xmlBlob='MTIz'></Root>".ToXmlView();
-			var d = new GenericDeserializer(new XmlMapper());
 
-			var t = d.Deserialize<GoodType>(root);
+			var t = DefaultDeserializer.Instance.Deserialize<GoodType>(root);
 
 			Assert.That(t.Blob, Is.EquivalentTo(new byte[] {49, 50, 51}));
 		}

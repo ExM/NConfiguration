@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NConfiguration.GenericView;
+using NConfiguration.Serialization;
 using NConfiguration.Json.Parsing;
 
 namespace NConfiguration.Json
@@ -12,7 +12,6 @@ namespace NConfiguration.Json
 	/// </summary>
 	public class ViewObject: ICfgNode
 	{
-		private IStringConverter _converter;
 		private JObject _obj;
 
 		/// <summary>
@@ -20,60 +19,33 @@ namespace NConfiguration.Json
 		/// </summary>
 		/// <param name="converter">string converter into a simple values</param>
 		/// <param name="obj">JSON object</param>
-		public ViewObject(IStringConverter converter, JObject obj)
+		public ViewObject(JObject obj)
 		{
-			_converter = converter;
 			_obj = obj;
 		}
 
-		/// <summary>
-		/// Returns the first child node with the specified name or null if no match is found.
-		/// </summary>
-		/// <param name="name">node name is not case-sensitive.</param>
-		/// <returns>Returns the first child node with the specified name or null if no match is found.</returns>
-		public ICfgNode GetChild(string name)
+		public IEnumerable<KeyValuePair<string, ICfgNode>> Nested
 		{
-			var val = _obj.Properties
-				.Where(p => NameComparer.Equals(p.Key, name))
-				.Select(p => p.Value)
-				.FirstOrDefault();
-			if (val == null)
-				return null;
-
-			return CreateByJsonValue(_converter, FlatArray(val).FirstOrDefault());
-		}
-
-		/// <summary>
-		/// Returns the collection of child nodes with the specified name or empty if no match is found.
-		/// </summary>
-		/// <param name="name">node name is not case-sensitive.</param>
-		/// <returns>Returns the collection of child nodes with the specified name or empty if no match is found.</returns>
-		public IEnumerable<ICfgNode> GetCollection(string name)
-		{
-			return _obj.Properties.Where(p => NameComparer.Equals(p.Key, name))
-				.SelectMany(p => FlatArray(p.Value))
-				.Select(p => CreateByJsonValue(_converter, p));
-		}
-
-		/// <summary>
-		/// Gets all the child nodes with their names.
-		/// </summary>
-		public IEnumerable<KeyValuePair<string, ICfgNode>> GetNodes()
-		{
-			foreach (var el in _obj.Properties)
-				foreach (var val in FlatArray(el.Value))
-					yield return new KeyValuePair<string, ICfgNode>(el.Key, CreateByJsonValue(_converter, val));
+			get
+			{
+				foreach (var el in _obj.Properties)
+					foreach (var val in FlatArray(el.Value))
+						yield return new KeyValuePair<string, ICfgNode>(el.Key, CreateByJsonValue(val));
+			}
 		}
 
 		/// <summary>
 		/// Throw NotSupportedException.
 		/// </summary>
-		public T As<T>()
+		public string Text
 		{
-			throw new NotSupportedException("JSON document can't contain value");
+			get
+			{
+				throw new NotSupportedException("JSON document can't contain value");
+			}
 		}
 
-		internal static ICfgNode CreateByJsonValue(IStringConverter converter, JValue val)
+		internal static ICfgNode CreateByJsonValue(JValue val)
 		{
 			if (val == null)
 				return null;
@@ -81,15 +53,15 @@ namespace NConfiguration.Json
 			switch (val.Type)
 			{
 				case TokenType.Null:
-					return new ViewPlainField(converter, null);
+					return new ViewPlainField(null);
 
 				case TokenType.Object:
-					return new ViewObject(converter, (JObject)val);
+					return new ViewObject((JObject)val);
 
 				case TokenType.String:
 				case TokenType.Boolean:
 				case TokenType.Number:
-					return new ViewPlainField(converter, val.ToString());
+					return new ViewPlainField(val.ToString());
 				
 				default:
 					throw new NotSupportedException(string.Format("JSON type {0} not supported", val.Type));

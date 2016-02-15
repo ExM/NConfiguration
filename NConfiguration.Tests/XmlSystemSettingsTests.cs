@@ -1,6 +1,6 @@
 using NConfiguration.Xml;
 using NUnit.Framework;
-using NConfiguration.GenericView;
+using NConfiguration.Serialization;
 using NConfiguration.Tests;
 
 namespace NConfiguration
@@ -11,7 +11,7 @@ namespace NConfiguration
 		[Test]
 		public void ReadForDefaultName()
 		{
-			var cfg = new XmlSystemSettings("ExtConfigure", Global.PlainConverter, Global.GenericDeserializer).First<MyXmlConfig>();
+			var cfg = new XmlSystemSettings("ExtConfigure", DefaultDeserializer.Instance).First<MyXmlConfig>();
 			
 			Assert.AreEqual("attr field text", cfg.AttrField);
 			Assert.AreEqual("elem field text", cfg.ElemField);

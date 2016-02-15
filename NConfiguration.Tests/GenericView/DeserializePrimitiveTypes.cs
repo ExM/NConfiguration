@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Linq.Expressions;
 using NUnit.Framework;
-using NConfiguration.GenericView.Deserialization;
 using System.Globalization;
 
-namespace NConfiguration.GenericView
+namespace NConfiguration.Serialization
 {
 	[TestFixture]
 	public class DeserializePrimitiveTypes
@@ -119,9 +118,8 @@ namespace NConfiguration.GenericView
 			UIntEn='One'
 			LongEn='One'
 			ULongEn='One' />".ToXmlView();
-			var d = new GenericDeserializer();
 
-			var tc = d.Deserialize<PrimitiveTypeContainer>(root);
+			var tc = DefaultDeserializer.Instance.Deserialize<PrimitiveTypeContainer>(root);
 
 			Assert.AreEqual("text", tc.Text);
 			Assert.AreEqual(true, tc.Bool);
@@ -178,9 +176,8 @@ namespace NConfiguration.GenericView
 			UIntEn=''
 			LongEn=''
 			ULongEn=''/>".ToXmlView();
-			var d = new GenericDeserializer();
 
-			var tc = d.Deserialize<PrimitiveTypeContainer>(root);
+			var tc = DefaultDeserializer.Instance.Deserialize<PrimitiveTypeContainer>(root);
 
 			Assert.IsNull(tc.Text);
 			Assert.IsNull(tc.Bool);

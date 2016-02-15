@@ -5,7 +5,7 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using NConfiguration.Xml.Protected;
-using NConfiguration.GenericView;
+using NConfiguration.Serialization;
 using System.Collections.Generic;
 using NConfiguration.Json.Parsing;
 using NConfiguration.Monitoring;
@@ -18,8 +18,8 @@ namespace NConfiguration.Json
 		private readonly JObject _obj;
 		private readonly FileMonitor _fm;
 
-		public JsonFileSettings(string fileName, IStringConverter converter, IGenericDeserializer deserializer)
-			: base(converter, deserializer)
+		public JsonFileSettings(string fileName, IDeserializer deserializer)
+			: base(deserializer)
 		{
 			try
 			{

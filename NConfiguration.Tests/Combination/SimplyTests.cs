@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Linq.Expressions;
 using NUnit.Framework;
-using NConfiguration.GenericView.Deserialization;
 
 namespace NConfiguration.Combination
 {

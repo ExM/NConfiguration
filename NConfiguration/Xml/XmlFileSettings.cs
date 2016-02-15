@@ -5,7 +5,7 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using NConfiguration.Xml.Protected;
-using NConfiguration.GenericView;
+using NConfiguration.Serialization;
 using NConfiguration.Monitoring;
 
 namespace NConfiguration.Xml
@@ -24,8 +24,8 @@ namespace NConfiguration.Xml
 		/// <param name="fileName">file name</param>
 		/// <param name="converter"></param>
 		/// <param name="deserializer">deserializer</param>
-		public XmlFileSettings(string fileName, IStringConverter converter, IGenericDeserializer deserializer)
-			: base(converter, deserializer)
+		public XmlFileSettings(string fileName, IDeserializer deserializer)
+			: base(deserializer)
 		{
 			try
 			{

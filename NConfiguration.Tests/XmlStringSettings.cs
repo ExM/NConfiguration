@@ -4,7 +4,7 @@ using System.IO;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using NConfiguration.Xml;
-using NConfiguration.GenericView;
+using NConfiguration.Serialization;
 using NConfiguration.Tests;
 
 namespace NConfiguration
@@ -15,7 +15,7 @@ namespace NConfiguration
 		private readonly string _hash;
 
 		public XmlStringSettings(string text)
-			:base(Global.PlainConverter, Global.GenericDeserializer)
+			: base(DefaultDeserializer.Instance)
 		{
 			_hash = text.GetHashCode().ToString();
 			_root = XDocument.Parse(text).Root;

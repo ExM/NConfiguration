@@ -6,18 +6,18 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using NConfiguration.Joining;
-using NConfiguration.GenericView;
+using NConfiguration.Serialization;
 
 namespace NConfiguration.Joining
 {
 	public abstract class FileSearcher : ISettingsFactory
 	{
-		protected FileSearcher(IGenericDeserializer deserializer)
+		protected FileSearcher(IDeserializer deserializer)
 		{
 			Deserializer = deserializer;
 		}
 
-		public IGenericDeserializer Deserializer { get; private set; }
+		public IDeserializer Deserializer { get; private set; }
 
 		/// <summary>
 		/// name of including configuration

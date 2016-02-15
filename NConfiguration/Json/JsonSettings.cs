@@ -2,19 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NConfiguration.GenericView;
+using NConfiguration.Serialization;
 using NConfiguration.Json.Parsing;
 
 namespace NConfiguration.Json
 {
 	public abstract class JsonSettings : IAppSettings
 	{
-		private readonly IStringConverter _converter;
-		private readonly IGenericDeserializer _deserializer;
+		private readonly IDeserializer _deserializer;
 
-		public JsonSettings(IStringConverter converter, IGenericDeserializer deserializer)
+		public JsonSettings(IDeserializer deserializer)
 		{
-			_converter = converter;
 			_deserializer = deserializer;
 		}
 
@@ -29,7 +27,7 @@ namespace NConfiguration.Json
 		{
 			foreach(var val in GetValue(name))
 				foreach(var item in ViewObject.FlatArray(val))
-					yield return _deserializer.Deserialize<T>(ViewObject.CreateByJsonValue(_converter, item));
+					yield return _deserializer.Deserialize<T>(ViewObject.CreateByJsonValue(item));
 		}
 	}
 }

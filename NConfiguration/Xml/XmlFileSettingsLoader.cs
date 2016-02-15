@@ -6,23 +6,20 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using NConfiguration.Joining;
-using NConfiguration.GenericView;
+using NConfiguration.Serialization;
 
 namespace NConfiguration.Xml
 {
 	public class XmlFileSettingsLoader : FileSearcher
 	{
-		private readonly IStringConverter _converter;
-
-		public XmlFileSettingsLoader(IGenericDeserializer deserializer, IStringConverter converter)
+		public XmlFileSettingsLoader(IDeserializer deserializer)
 			: base(deserializer)
 		{
-			_converter = converter;
 		}
 
 		public IIdentifiedSource LoadFile(string fileName)
 		{
-			return new XmlFileSettings(fileName, _converter, Deserializer);
+			return new XmlFileSettings(fileName, Deserializer);
 		}
 
 		/// <summary>
@@ -38,7 +35,7 @@ namespace NConfiguration.Xml
 
 		public override IIdentifiedSource CreateFileSetting(string path)
 		{
-			return new XmlFileSettings(path, _converter, Deserializer);
+			return new XmlFileSettings(path, Deserializer);
 		}
 	}
 }

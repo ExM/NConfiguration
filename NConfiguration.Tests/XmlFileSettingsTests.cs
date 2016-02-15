@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.Configuration;
 using NConfiguration.Xml;
 using System.IO;
-using NConfiguration.GenericView;
+using NConfiguration.Serialization;
 using NConfiguration.Tests;
 
 namespace NConfiguration
@@ -17,7 +17,7 @@ namespace NConfiguration
 		[TestFixtureSetUp]
 		public void SetUp()
 		{
-			_settings = new XmlFileSettings("testConfig1.xml", Global.PlainConverter, Global.GenericDeserializer);
+			_settings = new XmlFileSettings("testConfig1.xml", DefaultDeserializer.Instance);
 		}
 		
 		[Test]

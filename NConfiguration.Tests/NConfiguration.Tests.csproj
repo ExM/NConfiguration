@@ -78,8 +78,6 @@
     <Compile Include="GenericView\EnumParserTests.cs" />
     <Compile Include="GenericView\GenericDeserializerTests.cs" />
     <Compile Include="GenericView\XmlViewTests.cs" />
-    <Compile Include="GenericView\GenericMapperTests.cs" />
-    <Compile Include="Global.cs" />
     <Compile Include="Including\CycleIncludingTests.cs" />
     <Compile Include="Ini\IniStringSettings.cs" />
     <Compile Include="Ini\ParsingTests.cs" />
@@ -94,6 +92,11 @@
     <Compile Include="MultiSettings\MultiSettingsCombineTests.cs" />
     <Compile Include="Protected\XmlCryptoProvidersTests.cs" />
     <Compile Include="CombinableAppSettingsTests.cs" />
+    <Compile Include="Serialization\PlaceHolderDeserializer.cs" />
+    <Compile Include="Serialization\TestAttrClass.cs" />
+    <Compile Include="Serialization\TestGenericAttrClass.cs" />
+    <Compile Include="Serialization\TestMemberAttrClass.cs" />
+    <Compile Include="Serialization\AttributeTests.cs" />
     <Compile Include="StringConverterTests.cs" />
     <Compile Include="XmlSystemSettingsTests.cs" />
     <Compile Include="MultiSettings\FullCombineConfig.cs" />

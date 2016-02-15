@@ -5,7 +5,7 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using System.Collections.Generic;
-using NConfiguration.GenericView;
+using NConfiguration.Serialization;
 
 namespace NConfiguration.Joining
 {
@@ -73,7 +73,7 @@ namespace NConfiguration.Joining
 			if(includeRoot == null)
 				return;
 
-			foreach (var incNode in includeRoot.GetNodes())
+			foreach (var incNode in includeRoot.Nested)
 			{
 				if (NameComparer.Equals(incNode.Key, "FinalSearch"))
 					continue;
