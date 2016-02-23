@@ -17,7 +17,6 @@ namespace NConfiguration.Json
 		private readonly JObject _obj;
 
 		public JsonStringSettings(string text)
-			: base(DefaultDeserializer.Instance)
 		{
 			var val = JValue.Parse(text);
 			if (val.Type != TokenType.Object)
@@ -26,11 +25,9 @@ namespace NConfiguration.Json
 			_obj = (JObject)val;
 		}
 
-		protected override IEnumerable<JValue> GetValue(string name)
+		protected override JObject Root
 		{
-			return _obj.Properties
-				.Where(p => p.Key == name)
-				.Select(p => p.Value);
+			get { return _obj; }
 		}
 	}
 }

@@ -15,11 +15,15 @@ namespace NConfiguration.Json
 {
 	public class JsonFileSettings : JsonSettings, IFilePathOwner, IIdentifiedSource, IChangeable
 	{
+		public static JsonFileSettings Create(string fileName)
+		{
+			return new JsonFileSettings(fileName);
+		}
+
 		private readonly JObject _obj;
 		private readonly FileMonitor _fm;
 
-		public JsonFileSettings(string fileName, IDeserializer deserializer)
-			: base(deserializer)
+		public JsonFileSettings(string fileName)
 		{
 			try
 			{
@@ -34,7 +38,7 @@ namespace NConfiguration.Json
 
 				Identity = this.GetIdentitySource(fileName);
 				Path = System.IO.Path.GetDirectoryName(fileName);
-				_fm = this.GetMonitoring(fileName, content);
+				_fm = FileMonitor.TryCreate(this, fileName, content);
 			}
 			catch(SystemException ex)
 			{
@@ -42,11 +46,9 @@ namespace NConfiguration.Json
 			}
 		}
 
-		protected override IEnumerable<JValue> GetValue(string name)
+		protected override JObject Root
 		{
-			return _obj.Properties
-				.Where(p => NameComparer.Equals(p.Key, name))
-				.Select(p => p.Value);
+			get { return _obj; }
 		}
 
 		/// <summary>

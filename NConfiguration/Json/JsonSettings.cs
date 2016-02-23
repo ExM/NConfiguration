@@ -7,27 +7,15 @@ using NConfiguration.Json.Parsing;
 
 namespace NConfiguration.Json
 {
-	public abstract class JsonSettings : IAppSettings
+	public abstract class JsonSettings : CachedConfigNodeProvider
 	{
-		private readonly IDeserializer _deserializer;
+		protected abstract JObject Root { get; }
 
-		public JsonSettings(IDeserializer deserializer)
+		protected override IEnumerable<KeyValuePair<string, ICfgNode>> GetAllNodes()
 		{
-			_deserializer = deserializer;
-		}
-
-		protected abstract IEnumerable<JValue> GetValue(string name);
-
-		/// <summary>
-		/// Returns a collection of instances of configurations
-		/// </summary>
-		/// <typeparam name="T">type of instance of configuration</typeparam>
-		/// <param name="name">section name</param>
-		public IEnumerable<T> LoadCollection<T>(string name)
-		{
-			foreach(var val in GetValue(name))
-				foreach(var item in ViewObject.FlatArray(val))
-					yield return _deserializer.Deserialize<T>(ViewObject.CreateByJsonValue(item));
+			foreach (var pair in Root.Properties)
+				foreach (var item in ViewObject.FlatArray(pair.Value))
+					yield return new KeyValuePair<string, ICfgNode>(pair.Key, ViewObject.CreateByJsonValue(item));
 		}
 	}
 }

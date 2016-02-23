@@ -8,11 +8,11 @@ namespace NConfiguration.Xml.Protected
 	/// <summary>
 	/// This configuration can decrypt XML section
 	/// </summary>
-	public interface IXmlEncryptable
+	public interface IXmlEncryptable : IConfigNodeProvider
 	{
 		/// <summary>
-		/// Sets the collection providers to decrypt XML sections
+		/// the collection providers to decrypt XML sections
 		/// </summary>
-		void SetProviderCollection(IProviderCollection collection);
+		IProviderCollection Providers { get; set; }
 	}
 }

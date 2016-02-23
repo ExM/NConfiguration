@@ -15,11 +15,15 @@ namespace NConfiguration.Ini
 {
 	public class IniFileSettings : IniSettings, IFilePathOwner, IIdentifiedSource, IChangeable
 	{
+		public static IniFileSettings Create(string fileName)
+		{
+			return new IniFileSettings(fileName);
+		}
+
 		private readonly List<Section> _sections;
 		private readonly FileMonitor _fm;
 
-		public IniFileSettings(string fileName, IDeserializer deserializer)
-			: base(deserializer)
+		public IniFileSettings(string fileName)
 		{
 			try
 			{
@@ -32,7 +36,7 @@ namespace NConfiguration.Ini
 
 				Identity = this.GetIdentitySource(fileName);
 				Path = System.IO.Path.GetDirectoryName(fileName);
-				_fm = this.GetMonitoring(fileName, content);
+				_fm = FileMonitor.TryCreate(this, fileName, content);
 			}
 			catch(SystemException ex)
 			{

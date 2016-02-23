@@ -10,50 +10,41 @@ using NConfiguration.Serialization;
 
 namespace NConfiguration.Joining
 {
-	public abstract class FileSearcher : ISettingsFactory
+	public class FileSearcher: IIncludeHandler<IncludeFileConfig>
 	{
-		protected FileSearcher(IDeserializer deserializer)
+		private readonly Func<string, IIdentifiedSource> _creater;
+		private readonly HashSet<string> _validExtensions;
+
+		public FileSearcher(Func<string, IIdentifiedSource> creater, params string[] validExtensions)
 		{
-			Deserializer = deserializer;
+			_creater = creater;
+			_validExtensions = new HashSet<string>(validExtensions.Select(_ => "." + _), NameComparer.Instance);
 		}
-
-		public IDeserializer Deserializer { get; private set; }
-
-		/// <summary>
-		/// name of including configuration
-		/// </summary>
-		public abstract string Tag { get; }
-
-		public abstract IIdentifiedSource CreateFileSetting(string path);
 
 		public event EventHandler<FindingSettingsArgs> FindingSettings;
 
-		private void OnFindingSettings(IAppSettings source, IncludeFileConfig cfg)
+		private void OnFindingSettings(IConfigNodeProvider source, IncludeFileConfig cfg)
 		{
 			var copy = FindingSettings;
 			if (copy != null)
 				copy(this, new FindingSettingsArgs(source, cfg));
 		}
 
-		/// <summary>
-		/// creates a collection of includes configuration
-		/// </summary>
-		/// <param name="source">parent settings</param>
-		/// <param name="config">include configuration node</param>
-		/// <returns>collection of includes configuration</returns>
-		public IEnumerable<IIdentifiedSource> CreateSettings(IAppSettings source, ICfgNode config)
+		public IEnumerable<IIdentifiedSource> TryLoad(IConfigNodeProvider owner, IncludeFileConfig cfg)
 		{
-			var rpo = source as IFilePathOwner;
-			var cfg = Deserializer.Deserialize<IncludeFileConfig>(config);
+			if (_validExtensions.Count != 0 && !_validExtensions.Contains(Path.GetExtension(cfg.Path)))
+				yield break;
 
-			OnFindingSettings(source, cfg);
+			var rpo = owner as IFilePathOwner;
+
+			OnFindingSettings(owner, cfg);
 
 			if (Path.IsPathRooted(cfg.Path))
 			{
 				if (!File.Exists(cfg.Path) && !cfg.Required)
 					yield break;
 
-				yield return CreateFileSetting(cfg.Path);
+				yield return _creater(cfg.Path);
 				yield break;
 			}
 
@@ -103,11 +94,8 @@ namespace NConfiguration.Joining
 
 					if (File.Exists(fullPath))
 					{
-						var item = CreateFileSetting(fullPath);
+						var item = _creater(fullPath);
 						result.Add(item);
-
-						if (item.TryFirst<IncludeConfig>(true).FinalSearch)
-							break;
 					}
 
 					if (mode == SearchMode.Exact)
