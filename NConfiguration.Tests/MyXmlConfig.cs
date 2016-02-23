@@ -1,16 +1,17 @@
 using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace NConfiguration
 {
-	[XmlRoot("MyXmlCfg")]
+	[DataContract(Name = "MyXmlCfg")]
 	public class MyXmlConfig
 	{
-		[XmlAttribute]
+		[DataMember]
 		public string AttrField = "default";
 
-		[XmlElement]
+		[DataMember]
 		public string ElemField = null;
 	}
 }

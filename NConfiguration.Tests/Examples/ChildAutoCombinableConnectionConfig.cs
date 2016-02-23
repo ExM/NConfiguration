@@ -2,16 +2,17 @@ using System;
 using System.Text;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace NConfiguration.Examples
 {
-	[XmlRoot("CustomConnection")]
+	[DataContract(Name = "CustomConnection")]
 	public class ChildAutoCombinableConnectionConfig : AutoCombinableConnectionConfig
 	{
-		[XmlAttribute("Timeout")]
+		[DataMember(Name = "Timeout")]
 		public TimeSpan? Timeout { get; set; }
 
-		[XmlIgnore]
+		[IgnoreDataMember]
 		public override string ConnectionString
 		{
 			get
