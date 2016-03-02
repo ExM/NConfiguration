@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ExM")]
 [assembly: AssemblyProduct("RsaToolkit")]
-[assembly: AssemblyCopyright("LGPLv3 Copyright © 2013 (git://github.com/ExM/NConfiguration.git)")]
+[assembly: AssemblyCopyright("LGPLv3 Copyright © 2016 (git://github.com/ExM/NConfiguration.git)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -24,4 +24,4 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyVersion("1.1.0")]
