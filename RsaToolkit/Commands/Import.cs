@@ -5,6 +5,8 @@ using System.Text;
 using NDesk.Options;
 using System.Security.Cryptography;
 using System.IO;
+using System.Security.Principal;
+using System.Security.AccessControl;
 
 namespace RsaToolkit.Commands
 {
@@ -12,6 +14,8 @@ namespace RsaToolkit.Commands
 	{
 		private string _keyFile = null;
 		private string _containerName = null;
+		private string _writeAccess = null;
+		private string _readAccess = null;
 
 		public override void Validate()
 		{
@@ -25,12 +29,14 @@ namespace RsaToolkit.Commands
 			{
 				{ "f=|keyFile=", "file name for key in XML format", v => _keyFile = v },
 				{ "n=|containerName=", "key container name", v => _containerName = v },
+				{ "w=|writeAccess=", "list of users for full access (separator ;)", v => _writeAccess = v },
+				{ "r=|readAccess=", "list of users for read access (separator ;)", v => _readAccess = v }
 			};
 		}
 
 		public override string Description
 		{
-			get { return "Import a RSA-key from the specified XML-file to the key container"; ; }
+			get { return "Import a RSA-key from the specified XML-file to the key container"; }
 		}
 
 		public override void Run()
@@ -41,6 +47,7 @@ namespace RsaToolkit.Commands
 				var cp = new CspParameters();
 				cp.KeyContainerName = _containerName;
 				cp.Flags = CspProviderFlags.UseMachineKeyStore;
+				cp.CryptoKeySecurity = CreateAccessRules();
 
 				rsa = new RSACryptoServiceProvider(cp);
 				rsa.FromXmlString(File.ReadAllText(_keyFile));
@@ -57,6 +64,36 @@ namespace RsaToolkit.Commands
 
 				throw;
 			}
+		}
+
+		private CryptoKeySecurity CreateAccessRules()
+		{
+			var defaultRules = true;
+			var result = new CryptoKeySecurity();
+
+			foreach(var identity in GetIdentityList(_writeAccess))
+			{
+				result.AddAccessRule(new CryptoKeyAccessRule(new NTAccount(identity), CryptoKeyRights.FullControl, AccessControlType.Allow));
+				defaultRules = false;
+			}
+
+			foreach (var identity in GetIdentityList(_readAccess))
+			{
+				result.AddAccessRule(new CryptoKeyAccessRule(new NTAccount(identity), CryptoKeyRights.GenericRead, AccessControlType.Allow));
+				defaultRules = false;
+			}
+
+			return defaultRules ? null : result;
+		}
+
+		private IEnumerable<string> GetIdentityList(string identityList)
+		{
+			if (identityList == null)
+				return Enumerable.Empty<string>();
+
+			return identityList.Split(';')
+				.Select(_ => _.Trim())
+				.Where(_ => !string.IsNullOrEmpty(_));
 		}
 	}
 }
