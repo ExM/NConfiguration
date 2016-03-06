@@ -21,7 +21,7 @@ namespace NConfiguration
 <Combinable Field1='val1' />
 <Combinable Field1='val2' />
 <Combinable Field1='val3' />
-</Config>".ToXmlSettings().AsSingleSettings();
+</Config>".ToXmlSettings().ToAppSettings();
 
 			var connCfg = settings.Get<CustomCombinableConfig>("Combinable");
 
@@ -35,7 +35,7 @@ namespace NConfiguration
 <Combinable Field1='val1' />
 <Combinable Field1='val2' />
 <Combinable Field1='val3' />
-</Config>".ToXmlSettings().AsSingleSettings();
+</Config>".ToXmlSettings().ToAppSettings();
 
 
 			var connCfg = settings.Get<CombinableConfig>("Combinable");

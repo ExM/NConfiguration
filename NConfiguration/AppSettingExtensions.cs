@@ -25,9 +25,14 @@ namespace NConfiguration
 			return defaultIdentity;
 		}
 
-		public static ChangeableAppSettings AsSingleSettings(this IConfigNodeProvider nodeProvider)
+		public static IAppSettings ToAppSettings<T>(this T nodeProvider) where T : IConfigNodeProvider
 		{
-			return new ChangeableAppSettings(nodeProvider);
+			return new AppSettings(nodeProvider);
+		}
+
+		public static ChangeableAppSettings ToChangeableAppSettings<T>(this T nodeProvider) where T : IConfigNodeProvider, IChangeable
+		{
+			return new ChangeableAppSettings(new AppSettings(nodeProvider), nodeProvider);
 		}
 
 		/// <summary>
@@ -55,14 +60,14 @@ namespace NConfiguration
 			T sum = cfgs.Current;
 
 			while (cfgs.MoveNext())
-				sum = settings.Combiner.Combine<T>(sum, cfgs.Current);
+				sum = settings.Combine<T>(sum, cfgs.Current);
 
 			return sum;
 		}
 
 		public static IEnumerable<T> LoadSections<T>(this IAppSettings settings, string sectionName)
 		{
-			return settings.Nodes.ByName(sectionName).Select(_ => settings.Deserializer.Deserialize<T>(_));
+			return settings.ByName(sectionName).Select(_ => settings.Deserialize<T>(_));
 		}
 
 		public static IEnumerable<T> LoadSections<T>(this IAppSettings settings)
@@ -128,7 +133,7 @@ namespace NConfiguration
 			T sum = cfgs.Current;
 
 			while (cfgs.MoveNext())
-				sum = settings.Combiner.Combine<T>(sum, cfgs.Current);
+				sum = settings.Combine<T>(sum, cfgs.Current);
 
 			return sum;
 		}

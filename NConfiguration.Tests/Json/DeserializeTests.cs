@@ -32,7 +32,7 @@ namespace NConfiguration.Json
 		""Item1"": [ 1, 2 ],
 		""Item1"": null,
 		""Item1"": [ null, [ 1, 2 ]]
-	}}").AsSingleSettings();
+	}}").ToAppSettings();
 
 		public class Section1
 		{

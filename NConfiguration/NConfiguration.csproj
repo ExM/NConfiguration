@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="AppSettings.cs" />
     <Compile Include="Combination\BuildUtils.cs" />
     <Compile Include="Combination\CombinerAttribute.cs" />
     <Compile Include="Combination\BuildUtils.Combiners.cs" />
@@ -58,7 +59,7 @@
     <Compile Include="Combination\ICombiner%271.cs" />
     <Compile Include="Combination\ICombinerFactory.cs" />
     <Compile Include="BaseConfigNodeProvider.cs" />
-    <Compile Include="ChangeableConfigNodeProvider.cs" />
+    <Compile Include="DefaultConfigNodeProvider.cs" />
     <Compile Include="CachedConfigNodeProvider.cs" />
     <Compile Include="IConfigNodeProvider.cs" />
     <Compile Include="Ini\SettingsLoaderExtensions.cs" />

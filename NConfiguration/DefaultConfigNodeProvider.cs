@@ -7,15 +7,13 @@ using System.Threading.Tasks;
 
 namespace NConfiguration
 {
-	public sealed class ChangeableConfigNodeProvider : BaseConfigNodeProvider, IChangeable
+	public sealed class DefaultConfigNodeProvider : BaseConfigNodeProvider
 	{
-		private readonly IChangeable _changeable;
 		private IReadOnlyList<KeyValuePair<string, ICfgNode>> _items;
 		private Dictionary<string, List<ICfgNode>> _index;
 
-		public ChangeableConfigNodeProvider(IEnumerable<KeyValuePair<string, ICfgNode>> items, IChangeable changeable)
+		public DefaultConfigNodeProvider(IEnumerable<KeyValuePair<string, ICfgNode>> items)
 		{
-			_changeable = changeable;
 			_items = items.ToList().AsReadOnly();
 			_index = CreateIndex();
 		}
@@ -23,11 +21,5 @@ namespace NConfiguration
 		public override IReadOnlyList<KeyValuePair<string, ICfgNode>> Items { get { return _items; } }
 
 		protected override Dictionary<string, List<ICfgNode>> Index { get { return _index; } }
-
-		public event EventHandler Changed
-		{
-			add { _changeable.Changed += value; }
-			remove { _changeable.Changed -= value; }
-		}
 	}
 }

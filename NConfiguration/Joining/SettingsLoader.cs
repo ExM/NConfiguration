@@ -62,10 +62,9 @@ namespace NConfiguration.Joining
 			OnLoaded(setting);
 			context.CheckLoaded(setting);
 
-			return new ChangeableAppSettings(
-				new ChangeableConfigNodeProvider(ScanInclude(setting, context).ToList(), context.FirstChange),
-				_deserializer,
-				DefaultCombiner.Instance);
+			var provider = new DefaultConfigNodeProvider(ScanInclude(setting, context).ToList());
+			var settings = new AppSettings(provider, _deserializer, DefaultCombiner.Instance);
+			return new ChangeableAppSettings(settings, context.FirstChange);
 		}
 
 		private IEnumerable<KeyValuePair<string, ICfgNode>> ScanInclude(IIdentifiedSource source, Context context)

@@ -7,12 +7,7 @@ namespace NConfiguration
 	/// <summary>
 	/// Store application settings
 	/// </summary>
-	public interface IAppSettings
+	public interface IAppSettings : IConfigNodeProvider, IDeserializer, ICombiner
 	{
-		IConfigNodeProvider Nodes { get; }
-
-		IDeserializer Deserializer { get; }
-
-		ICombiner Combiner { get; }
 	}
 }

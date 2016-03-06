@@ -35,7 +35,7 @@ namespace NConfiguration.Monitoring
 			string cfgFile = Path.GetTempFileName();
 			File.WriteAllText(cfgFile, _xmlCfgAutoOrigin);
 
-			var settings = new XmlFileSettings(cfgFile).AsSingleSettings();
+			var settings = new XmlFileSettings(cfgFile).ToChangeableAppSettings();
 			
 			var wait = new ManualResetEvent(false);
 			settings.Changed += (a, e) => { wait.Set(); };
@@ -49,7 +49,7 @@ namespace NConfiguration.Monitoring
 
 			Assert.IsTrue(wait.WaitOne(10000), "10 sec elapsed");
 
-			settings = new XmlFileSettings(cfgFile).AsSingleSettings();
+			settings = new XmlFileSettings(cfgFile).ToChangeableAppSettings();
 			Assert.That(settings.First<ExampleCombineConfig>("AdditionalConfig").F, Is.EqualTo("Modify"));
 		}
 

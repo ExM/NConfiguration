@@ -8,38 +8,39 @@ namespace NConfiguration
 {
 	public sealed class ChangeableAppSettings : IAppSettings, IChangeable
 	{
-		public ChangeableAppSettings(IConfigNodeProvider nodeProvider)
-			: this(nodeProvider, DefaultDeserializer.Instance, DefaultCombiner.Instance)
+		private readonly IChangeable _changeable;
+		private readonly IAppSettings _source;
+
+		public ChangeableAppSettings(IAppSettings source, IChangeable changeable)
 		{
+			_source = source;
+			_changeable = changeable;
 		}
-
-		public ChangeableAppSettings(IConfigNodeProvider nodeProvider, IDeserializer deserializer, ICombiner combiner)
-		{
-			Nodes = nodeProvider;
-			Deserializer = deserializer;
-			Combiner = combiner;
-		}
-
-		public IConfigNodeProvider Nodes { get; private set; }
-
-		public IDeserializer Deserializer { get; private set; }
-
-		public ICombiner Combiner { get; private set; }
 
 		public event EventHandler Changed
 		{
-			add
-			{
-				var changeable = Nodes as IChangeable;
-				if (changeable != null)
-					changeable.Changed += value;
-			}
-			remove
-			{
-				var changeable = Nodes as IChangeable;
-				if (changeable != null)
-					changeable.Changed -= value;
-			}
+			add { _changeable.Changed += value; }
+			remove { _changeable.Changed -= value; }
+		}
+
+		public IReadOnlyList<KeyValuePair<string, ICfgNode>> Items
+		{
+			get { return _source.Items; }
+		}
+
+		public IEnumerable<ICfgNode> ByName(string sectionName)
+		{
+			return _source.ByName(sectionName);
+		}
+
+		public T Deserialize<T>(IDeserializer context, ICfgNode cfgNode)
+		{
+			return _source.Deserialize<T>(context, cfgNode);
+		}
+
+		public T Combine<T>(ICombiner combiner, T x, T y)
+		{
+			return _source.Combine<T>(combiner, x, y);
 		}
 	}
 }
