@@ -13,7 +13,7 @@ using System.Text;
 
 namespace NConfiguration.Json
 {
-	public class JsonFileSettings : JsonSettings, IFilePathOwner, IIdentifiedSource, IChangeable
+	public sealed class JsonFileSettings : JsonSettings, IFilePathOwner, IIdentifiedSource, IChangeable
 	{
 		public static JsonFileSettings Create(string fileName)
 		{

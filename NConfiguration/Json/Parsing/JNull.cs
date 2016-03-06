@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NConfiguration.Json.Parsing
 {
-	public class JNull: JValue
+	public sealed class JNull: JValue
 	{
 		public static readonly JNull Instance = new JNull();
 

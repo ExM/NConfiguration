@@ -23,7 +23,7 @@ namespace NConfiguration.Combination
 		}
 	*/
 
-	public class ComplexFunctionBuilder
+	internal sealed class ComplexFunctionBuilder
 	{
 		private Type _targetType;
 		private Type _delegateType;

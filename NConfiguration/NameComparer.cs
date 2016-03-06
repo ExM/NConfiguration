@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NConfiguration.Serialization
+namespace NConfiguration
 {
-	internal class NameComparer // UNDONE move to NConfiguration ns
+	internal class NameComparer
 	{
 		public static readonly IEqualityComparer<string> Instance = StringComparer.OrdinalIgnoreCase;
 

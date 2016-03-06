@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace NConfiguration
 {
-	public class SingleAppSettings : IAppSettings, IChangeable
+	public sealed class SingleAppSettings : IAppSettings, IChangeable
 	{
 		public SingleAppSettings(IConfigNodeProvider nodeProvider)
 			: this(nodeProvider, DefaultDeserializer.Instance, DefaultCombiner.Instance)

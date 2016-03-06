@@ -12,7 +12,7 @@ using System.Runtime.Serialization;
 
 namespace NConfiguration.Joining
 {
-	public class SettingsLoader
+	public sealed class SettingsLoader
 	{
 		private delegate IEnumerable<IIdentifiedSource> Include(IConfigNodeProvider target, ICfgNode config);
 

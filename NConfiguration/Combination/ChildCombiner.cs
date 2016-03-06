@@ -6,7 +6,7 @@ using System.Collections.Concurrent;
 
 namespace NConfiguration.Combination
 {
-	public class ChildCombiner: ICombiner
+	public sealed class ChildCombiner: ICombiner
 	{
 		private ICombiner _parent;
 		private Dictionary<Type, object> _funcMap = new Dictionary<Type, object>();
@@ -42,7 +42,7 @@ namespace NConfiguration.Combination
 		{
 			object combine;
 			if (_funcMap.TryGetValue(typeof(T), out combine))
-				return ((Combine<T>)combine)(this, x, y);
+				return ((Combine<T>)combine)(context, x, y);
 
 			return _parent.Combine(context, x, y);
 		}

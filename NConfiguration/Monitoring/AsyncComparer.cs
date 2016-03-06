@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace NConfiguration.Monitoring
 {
-	public class AsyncComparer
+	public sealed class AsyncComparer
 	{
 		private const int ChunkSize = 0x4000;
 

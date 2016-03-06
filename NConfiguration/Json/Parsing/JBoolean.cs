@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NConfiguration.Json.Parsing
 {
-	public class JBoolean: JValue
+	public sealed class JBoolean: JValue
 	{
 		public bool Value { get; private set; }
 

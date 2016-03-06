@@ -7,7 +7,7 @@ namespace NConfiguration
 	/// <summary>
 	/// Store application settings
 	/// </summary>
-	public interface IAppSettings //UNDONE rename
+	public interface IAppSettings
 	{
 		IConfigNodeProvider Nodes { get; }
 

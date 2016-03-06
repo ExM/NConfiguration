@@ -13,7 +13,7 @@ namespace NConfiguration.Xml
 	/// <summary>
 	/// settings loaded from a file
 	/// </summary>
-	public class XmlFileSettings : XmlSettings, IFilePathOwner, IIdentifiedSource, IChangeable
+	public sealed class XmlFileSettings : XmlSettings, IFilePathOwner, IIdentifiedSource, IChangeable
 	{
 		public static XmlFileSettings Create(string fileName)
 		{

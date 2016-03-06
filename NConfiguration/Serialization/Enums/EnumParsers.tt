@@ -18,7 +18,7 @@ using System.Text;
 namespace NConfiguration.Serialization.Enums
 {
 <#foreach(var type in types){#>
-	internal class <#= type#>EnumParser<T>: IEnumParser<T> where T: struct
+	internal sealed class <#= type#>EnumParser<T>: IEnumParser<T> where T: struct
 	{
 		private readonly Dictionary<string, T> _nameMap;
 		private readonly Dictionary<<#= type#>, T> _numMap;

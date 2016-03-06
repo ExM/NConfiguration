@@ -12,7 +12,7 @@ namespace NConfiguration.Xml
 	/// <summary>
 	/// The mapping XML-document to nodes of configuration
 	/// </summary>
-	public class XmlViewNode : CfgNode
+	public sealed class XmlViewNode : CfgNode
 	{
 		private static readonly XNamespace cryptDataNS = XNamespace.Get("http://www.w3.org/2001/04/xmlenc#");
 

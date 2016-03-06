@@ -99,7 +99,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Serialization\NameComparer.cs" />
+    <Compile Include="NameComparer.cs" />
     <Compile Include="Serialization\BuildUtils.cs" />
     <Compile Include="Serialization\ChildDeserializer.cs" />
     <Compile Include="Serialization\DefaultDeserializer.cs" />
@@ -116,7 +116,7 @@
     <Compile Include="CfgNode.cs" />
     <Compile Include="Xml\SettingsLoaderExtensions.cs" />
     <Compile Include="Xml\XmlViewNode.cs" />
-    <Compile Include="Serialization\ICfgNode.cs" />
+    <Compile Include="ICfgNode.cs" />
     <Compile Include="IFilePathOwner.cs" />
     <Compile Include="AppSettingExtensions.cs" />
     <Compile Include="Ini\Section.cs" />

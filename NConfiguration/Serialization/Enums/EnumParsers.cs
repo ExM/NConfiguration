@@ -6,7 +6,7 @@ using System.Text;
 
 namespace NConfiguration.Serialization.Enums
 {
-	internal class ByteEnumParser<T>: IEnumParser<T> where T: struct
+	internal sealed class ByteEnumParser<T>: IEnumParser<T> where T: struct
 	{
 		private readonly Dictionary<string, T> _nameMap;
 		private readonly Dictionary<Byte, T> _numMap;
@@ -119,7 +119,7 @@ namespace NConfiguration.Serialization.Enums
 		}
 	}
 
-	internal class SByteEnumParser<T>: IEnumParser<T> where T: struct
+	internal sealed class SByteEnumParser<T>: IEnumParser<T> where T: struct
 	{
 		private readonly Dictionary<string, T> _nameMap;
 		private readonly Dictionary<SByte, T> _numMap;
@@ -232,7 +232,7 @@ namespace NConfiguration.Serialization.Enums
 		}
 	}
 
-	internal class Int16EnumParser<T>: IEnumParser<T> where T: struct
+	internal sealed class Int16EnumParser<T>: IEnumParser<T> where T: struct
 	{
 		private readonly Dictionary<string, T> _nameMap;
 		private readonly Dictionary<Int16, T> _numMap;
@@ -345,7 +345,7 @@ namespace NConfiguration.Serialization.Enums
 		}
 	}
 
-	internal class Int32EnumParser<T>: IEnumParser<T> where T: struct
+	internal sealed class Int32EnumParser<T>: IEnumParser<T> where T: struct
 	{
 		private readonly Dictionary<string, T> _nameMap;
 		private readonly Dictionary<Int32, T> _numMap;
@@ -458,7 +458,7 @@ namespace NConfiguration.Serialization.Enums
 		}
 	}
 
-	internal class Int64EnumParser<T>: IEnumParser<T> where T: struct
+	internal sealed class Int64EnumParser<T>: IEnumParser<T> where T: struct
 	{
 		private readonly Dictionary<string, T> _nameMap;
 		private readonly Dictionary<Int64, T> _numMap;
@@ -571,7 +571,7 @@ namespace NConfiguration.Serialization.Enums
 		}
 	}
 
-	internal class UInt16EnumParser<T>: IEnumParser<T> where T: struct
+	internal sealed class UInt16EnumParser<T>: IEnumParser<T> where T: struct
 	{
 		private readonly Dictionary<string, T> _nameMap;
 		private readonly Dictionary<UInt16, T> _numMap;
@@ -684,7 +684,7 @@ namespace NConfiguration.Serialization.Enums
 		}
 	}
 
-	internal class UInt32EnumParser<T>: IEnumParser<T> where T: struct
+	internal sealed class UInt32EnumParser<T>: IEnumParser<T> where T: struct
 	{
 		private readonly Dictionary<string, T> _nameMap;
 		private readonly Dictionary<UInt32, T> _numMap;
@@ -797,7 +797,7 @@ namespace NConfiguration.Serialization.Enums
 		}
 	}
 
-	internal class UInt64EnumParser<T>: IEnumParser<T> where T: struct
+	internal sealed class UInt64EnumParser<T>: IEnumParser<T> where T: struct
 	{
 		private readonly Dictionary<string, T> _nameMap;
 		private readonly Dictionary<UInt64, T> _numMap;

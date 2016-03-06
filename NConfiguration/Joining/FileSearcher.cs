@@ -10,7 +10,7 @@ using NConfiguration.Serialization;
 
 namespace NConfiguration.Joining
 {
-	public class FileSearcher: IIncludeHandler<IncludeFileConfig>
+	public sealed class FileSearcher: IIncludeHandler<IncludeFileConfig>
 	{
 		private readonly Func<string, IIdentifiedSource> _creater;
 		private readonly HashSet<string> _validExtensions;

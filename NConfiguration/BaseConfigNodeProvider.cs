@@ -29,7 +29,7 @@ namespace NConfiguration
 
 		protected abstract Dictionary<string, List<ICfgNode>> Index { get; }
 
-		public abstract IReadOnlyList<KeyValuePair<string, Serialization.ICfgNode>> Items { get; }
+		public abstract IReadOnlyList<KeyValuePair<string, ICfgNode>> Items { get; }
 
 		public IEnumerable<ICfgNode> ByName(string sectionName)
 		{

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace NConfiguration.Serialization
 {
-	public class FieldFunctionInfo
+	internal sealed class FieldFunctionInfo
 	{
 		public Type ResultType { get; private set; }
 		public string Name { get; private set; }

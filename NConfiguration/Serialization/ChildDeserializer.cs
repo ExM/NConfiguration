@@ -6,7 +6,7 @@ using System.Collections.Concurrent;
 
 namespace NConfiguration.Serialization
 {
-	public class ChildDeserializer: IDeserializer
+	public sealed class ChildDeserializer: IDeserializer
 	{
 		private IDeserializer _parent;
 		private Dictionary<Type, object> _funcMap = new Dictionary<Type, object>();

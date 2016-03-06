@@ -20,7 +20,7 @@ namespace NConfiguration
 
 		protected abstract IEnumerable<KeyValuePair<string, ICfgNode>> GetAllNodes();
 
-		public override IReadOnlyList<KeyValuePair<string, Serialization.ICfgNode>> Items { get { return _list.Value; } }
+		public override IReadOnlyList<KeyValuePair<string, ICfgNode>> Items { get { return _list.Value; } }
 
 		protected override Dictionary<string, List<ICfgNode>> Index { get { return _index.Value; } }
 	}

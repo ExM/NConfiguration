@@ -8,7 +8,7 @@ using System.Xml;
 
 namespace NConfiguration.Xml.Protected
 {
-	public class ProviderCollection : IProviderCollection
+	public sealed class ProviderCollection : IProviderCollection
 	{
 		private Dictionary<string, ProtectedConfigurationProvider> _map = new Dictionary<string, ProtectedConfigurationProvider>();
 

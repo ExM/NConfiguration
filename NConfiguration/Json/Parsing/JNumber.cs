@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NConfiguration.Json.Parsing
 {
-	public class JNumber: JValue
+	public sealed class JNumber: JValue
 	{
 		public string Value { get; private set; }
 

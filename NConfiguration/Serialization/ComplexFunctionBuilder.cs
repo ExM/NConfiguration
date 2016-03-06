@@ -9,7 +9,7 @@ using System.Runtime.Serialization;
 
 namespace NConfiguration.Serialization
 {
-	public class ComplexFunctionBuilder
+	internal sealed class ComplexFunctionBuilder
 	{
 		private Type _targetType;
 		private bool _supportInitialize;

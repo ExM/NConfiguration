@@ -10,7 +10,7 @@ namespace NConfiguration.Json
 	/// <summary>
 	/// The mapping JSON-document to nodes of configuration
 	/// </summary>
-	public class ViewObject : CfgNode
+	public sealed class ViewObject : CfgNode
 	{
 		private JObject _obj;
 

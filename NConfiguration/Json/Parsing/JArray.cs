@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NConfiguration.Json.Parsing
 {
-	public class JArray: JValue
+	public sealed class JArray: JValue
 	{
 		public List<JValue> Items { get; private set; }
 

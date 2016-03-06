@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NConfiguration
 {
-	public class DeserializeChildException: FormatException
+	public sealed class DeserializeChildException : FormatException
 	{
 		public string Path { get; private set; }
 

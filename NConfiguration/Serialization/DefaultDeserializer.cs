@@ -7,7 +7,7 @@ namespace NConfiguration.Serialization
 {
 	public delegate T Deserialize<T>(IDeserializer context, ICfgNode node);
 
-	public class DefaultDeserializer: IDeserializer
+	public sealed class DefaultDeserializer: IDeserializer
 	{
 		private static readonly IDeserializer _instance = new DefaultDeserializer();
 

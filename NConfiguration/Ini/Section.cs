@@ -6,8 +6,7 @@ using NConfiguration.Ini.Parsing;
 
 namespace NConfiguration.Ini
 {
-	
-	public class Section
+	public sealed class Section
 	{
 		public string Name { get; private set; }
 

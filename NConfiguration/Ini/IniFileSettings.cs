@@ -13,7 +13,7 @@ using System.Text;
 
 namespace NConfiguration.Ini
 {
-	public class IniFileSettings : IniSettings, IFilePathOwner, IIdentifiedSource, IChangeable
+	public sealed class IniFileSettings : IniSettings, IFilePathOwner, IIdentifiedSource, IChangeable
 	{
 		public static IniFileSettings Create(string fileName)
 		{

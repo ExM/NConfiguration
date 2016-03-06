@@ -6,7 +6,7 @@ using System.Text;
 
 namespace NConfiguration.Serialization.Enums
 {
-	public class EnumHelper<T> where T: struct
+	public sealed class EnumHelper<T> where T: struct
 	{
 		private static readonly IEnumParser<T> _parser;
 

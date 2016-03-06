@@ -11,7 +11,7 @@ using NConfiguration.Serialization;
 
 namespace NConfiguration.Xml
 {
-	public class XmlSystemSettings : XmlSettings, IFilePathOwner, IIdentifiedSource
+	public sealed class XmlSystemSettings : XmlSettings, IFilePathOwner, IIdentifiedSource
 	{
 		private readonly XElement _root;
 		private readonly string _sectionName;

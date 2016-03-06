@@ -8,7 +8,7 @@ namespace NConfiguration.Combination
 {
 	public delegate T Combine<T>(ICombiner combiner, T x, T y);
 
-	public class DefaultCombiner: ICombiner
+	public sealed class DefaultCombiner : ICombiner
 	{
 		private static readonly ICombiner _instance = new DefaultCombiner();
 

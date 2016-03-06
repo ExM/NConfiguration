@@ -8,7 +8,7 @@ using NConfiguration.Serialization;
 
 namespace NConfiguration.Monitoring
 {
-	public class FileMonitor
+	public sealed class FileMonitor
 	{
 		internal static readonly string ConfigSectionName = "WatchFile";
 

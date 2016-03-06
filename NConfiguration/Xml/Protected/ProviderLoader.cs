@@ -10,7 +10,7 @@ using NConfiguration.Serialization;
 
 namespace NConfiguration.Xml.Protected
 {
-	public class ProviderLoader
+	public sealed class ProviderLoader
 	{
 		private IProviderCollection _providers;
 

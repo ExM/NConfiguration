@@ -7,7 +7,7 @@ using System.Globalization;
 
 namespace NConfiguration.Json.Parsing
 {
-	internal class CharEnumerator
+	internal sealed class CharEnumerator
 	{
 		private string _text;
 		private int _current = -1;

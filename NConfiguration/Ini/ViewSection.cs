@@ -10,7 +10,7 @@ namespace NConfiguration.Ini
 	/// <summary>
 	/// The mapping section in INI-document to nodes of configuration
 	/// </summary>
-	public class ViewSection: CfgNode
+	public sealed class ViewSection: CfgNode
 	{
 		private List<KeyValuePair<string, string>> _pairs;
 

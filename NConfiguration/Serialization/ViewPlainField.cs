@@ -7,7 +7,7 @@ namespace NConfiguration.Serialization
 	/// <summary>
 	/// Representation of a simple text value.
 	/// </summary>
-	public class ViewPlainField: ICfgNode
+	public sealed class ViewPlainField: ICfgNode
 	{
 		/// <summary>
 		/// Representation of a simple text value.

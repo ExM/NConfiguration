@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NConfiguration
 {
-	public class DefaultConfigNodeProvider : BaseConfigNodeProvider
+	public sealed class DefaultConfigNodeProvider : BaseConfigNodeProvider
 	{
 		private IReadOnlyList<KeyValuePair<string, ICfgNode>> _items;
 		private Dictionary<string, List<ICfgNode>> _index;
@@ -18,7 +18,7 @@ namespace NConfiguration
 			_index = CreateIndex();
 		}
 
-		public override IReadOnlyList<KeyValuePair<string, Serialization.ICfgNode>> Items { get { return _items; } }
+		public override IReadOnlyList<KeyValuePair<string, ICfgNode>> Items { get { return _items; } }
 
 		protected override Dictionary<string, List<ICfgNode>> Index { get { return _index; } }
 	}
