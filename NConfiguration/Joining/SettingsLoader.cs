@@ -19,9 +19,6 @@ namespace NConfiguration.Joining
 		private readonly Dictionary<string, List<Include>> _includeHandlers = new Dictionary<string, List<Include>>(NameComparer.Instance);
 		private readonly IDeserializer _deserializer;
 
-		private HashSet<IdentityKey> _loaded = new HashSet<IdentityKey>();
-		private MultiSettings _result;
-
 		public SettingsLoader()
 			: this(DefaultDeserializer.Instance)
 		{
@@ -57,24 +54,21 @@ namespace NConfiguration.Joining
 				copy(this, new LoadedEventArgs(settings));
 		}
 
-		public MultiSettings LoadSettings(IIdentifiedSource setting)
+		public ChangeableAppSettings LoadSettings(IIdentifiedSource setting)
 		{
-			_result = new MultiSettings();
-			_result.Deserializer = _deserializer;
-			_result.Combiner = DefaultCombiner.Instance;
+			var context = new Context();
 
-			_loaded = new HashSet<IdentityKey>();
-
-			CheckLoaded(setting);
+			context.FirstChange.Observe(setting as IChangeable);
 			OnLoaded(setting);
-			_result.Observe(setting as IChangeable);
+			context.CheckLoaded(setting);
 
-			_result.Nodes = new DefaultConfigNodeProvider(ScanInclude(setting).ToList());
-
-			return _result;
+			return new ChangeableAppSettings(
+				new ChangeableConfigNodeProvider(ScanInclude(setting, context).ToList(), context.FirstChange),
+				_deserializer,
+				DefaultCombiner.Instance);
 		}
 
-		private IEnumerable<KeyValuePair<string, ICfgNode>> ScanInclude(IIdentifiedSource source)
+		private IEnumerable<KeyValuePair<string, ICfgNode>> ScanInclude(IIdentifiedSource source, Context context)
 		{
 			foreach(var pair in source.Items)
 			{
@@ -104,13 +98,13 @@ namespace NConfiguration.Joining
 
 				foreach (var cnProvider in includeSettingsArray)
 				{
-					if (CheckLoaded(cnProvider))
+					if (context.CheckLoaded(cnProvider))
 						continue;
 
 					OnLoaded(cnProvider);
-					_result.Observe(cnProvider as IChangeable);
+					context.FirstChange.Observe(cnProvider as IChangeable);
 
-					foreach(var includePair in ScanInclude(cnProvider))
+					foreach (var includePair in ScanInclude(cnProvider, context))
 						yield return includePair;
 				}
 			}
@@ -122,45 +116,51 @@ namespace NConfiguration.Joining
 			public bool Required { get; set; }
 		}
 
-		private bool CheckLoaded(IIdentifiedSource settings)
+		private class Context
 		{
-			var key = new IdentityKey(settings.GetType(), settings.Identity);
-			return !_loaded.Add(key);
+			public FirstChange FirstChange = new FirstChange();
+
+			private HashSet<IdentityKey> _loaded = new HashSet<IdentityKey>();
+
+			public bool CheckLoaded(IIdentifiedSource settings)
+			{
+				var key = new IdentityKey(settings.GetType(), settings.Identity);
+				return !_loaded.Add(key);
+			}
+
+			private class IdentityKey
+			{
+				private Type _type;
+				private string _id;
+
+				public IdentityKey(Type type, string id)
+				{
+					_type = type;
+					_id = id;
+				}
+
+				public bool Equals(IdentityKey other)
+				{
+					if (other == null)
+						return false;
+
+					if (_type != other._type)
+						return false;
+
+					return string.Equals(_id, other._id, StringComparison.InvariantCulture);
+				}
+
+				public override bool Equals(object obj)
+				{
+					return Equals(obj as IdentityKey);
+				}
+
+				public override int GetHashCode()
+				{
+					return _type.GetHashCode() ^ _id.GetHashCode();
+				}
+			}
 		}
-
-		private class IdentityKey
-		{
-			private Type _type;
-			private string _id;
-
-			public IdentityKey(Type type, string id)
-			{
-				_type = type;
-				_id = id;
-			}
-
-			public bool Equals(IdentityKey other)
-			{
-				if (other == null)
-					return false;
-
-				if (_type != other._type)
-					return false;
-
-				return string.Equals(_id, other._id, StringComparison.InvariantCulture);
-			}
-
-			public override bool Equals(object obj)
-			{
-				return Equals(obj as IdentityKey);
-			}
-
-			public override int GetHashCode()
-			{
-				return _type.GetHashCode() ^ _id.GetHashCode();
-			}
-		}
-
 	}
 }
 

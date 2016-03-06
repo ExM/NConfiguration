@@ -25,9 +25,9 @@ namespace NConfiguration
 			return defaultIdentity;
 		}
 
-		public static SingleAppSettings AsSingleSettings(this IConfigNodeProvider nodeProvider)
+		public static ChangeableAppSettings AsSingleSettings(this IConfigNodeProvider nodeProvider)
 		{
-			return new SingleAppSettings(nodeProvider);
+			return new ChangeableAppSettings(nodeProvider);
 		}
 
 		/// <summary>

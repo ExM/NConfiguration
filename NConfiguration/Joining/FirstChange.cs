@@ -11,17 +11,13 @@ using NConfiguration.Combination;
 
 namespace NConfiguration.Joining
 {
-	public class MultiSettings : IAppSettings, IChangeable
+	public sealed class FirstChange : IChangeable
 	{
 		private readonly object _sync = new object();
 		private bool _changed = false;
 		private object _firstChangedSource = null;
 
-		internal MultiSettings()
-		{
-		}
-
-		internal void Observe(IChangeable changable)
+		public void Observe(IChangeable changable)
 		{
 			if(changable != null)
 				changable.Changed += OnInnerChangableChanged;
@@ -76,12 +72,6 @@ namespace NConfiguration.Joining
 		{
 			((EventHandler)arg)(_firstChangedSource, EventArgs.Empty);
 		}
-
-		public IConfigNodeProvider Nodes { get; internal set; }
-
-		public IDeserializer Deserializer { get; internal set; }
-
-		public ICombiner Combiner { get; internal set; }
 	}
 }
 

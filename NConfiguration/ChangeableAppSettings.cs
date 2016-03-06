@@ -6,14 +6,14 @@ using System.Linq;
 
 namespace NConfiguration
 {
-	public sealed class SingleAppSettings : IAppSettings, IChangeable
+	public sealed class ChangeableAppSettings : IAppSettings, IChangeable
 	{
-		public SingleAppSettings(IConfigNodeProvider nodeProvider)
+		public ChangeableAppSettings(IConfigNodeProvider nodeProvider)
 			: this(nodeProvider, DefaultDeserializer.Instance, DefaultCombiner.Instance)
 		{
 		}
 
-		public SingleAppSettings(IConfigNodeProvider nodeProvider, IDeserializer deserializer, ICombiner combiner)
+		public ChangeableAppSettings(IConfigNodeProvider nodeProvider, IDeserializer deserializer, ICombiner combiner)
 		{
 			Nodes = nodeProvider;
 			Deserializer = deserializer;

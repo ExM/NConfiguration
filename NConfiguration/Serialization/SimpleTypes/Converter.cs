@@ -221,7 +221,6 @@ namespace NConfiguration.Serialization.SimpleTypes
 		/// <summary>
 		/// Converts the specified string representation of a date and time to its System.DateTime equivalent.
 		/// </summary>
-		/// <param name="text">A string containing a date and time to convert.</param>
 		public static DateTime ToDateTime(IDeserializer context, ICfgNode node)
 		{
 			return DateTime.Parse(node.Text, _ci,
