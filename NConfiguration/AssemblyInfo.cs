@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 // Change them to the values specific to your project.
 
 [assembly: AssemblyTitle("NConfiguration")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("C# library for convenient operation with configurations of one or groups of applications. The library supports work with standard XML configurations and  included files in format of XML, JSON, or the INI.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ExM")]
 [assembly: AssemblyProduct("")]

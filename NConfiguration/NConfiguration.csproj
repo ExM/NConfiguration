@@ -148,6 +148,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <None Include="NConfiguration.nuspec" />
     <None Include="Serialization\Enums\EnumParsers.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>EnumParsers.cs</LastGenOutput>

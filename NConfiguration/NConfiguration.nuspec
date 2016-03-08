@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
 	<metadata>
-		<id>NConfiguration</id>
-		<version>2.0.0</version>
+		<id>$id$</id>
+		<version>$version$</version>
 		<title>NConfiguration</title>
 		<authors>Anatoliy Koperin</authors>
 		<owners />
@@ -10,14 +10,15 @@
 		<projectUrl>https://github.com/ExM/NConfiguration</projectUrl>
 		<iconUrl>https://raw.github.com/ExM/NConfiguration/master/NuGet/Icon_details.png</iconUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<description>C# library for convenient operation with configurations of one or groups of applications. The library supports work with standard XML configurations and  included files in format of XML, JSON, or the INI.</description>
+		<description>$description$</description>
+		<copyright>$copyright$</copyright>
 		<summary />
 		<tags>
 			configuration config admin reload
 		</tags>
 	</metadata>
 	<files>
-		<file src="..\Release\lib\*.*" target="lib\net45" />
+		<file src="..\Release\lib\*.pdb" target="lib\net45" />
 		<file src="..\Release\RsaToolkit\*.*" target="tools\RsaToolkit" />
 	</files>
 </package>
