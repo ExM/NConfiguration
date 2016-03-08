@@ -6,6 +6,7 @@ using NConfiguration.Serialization;
 using NConfiguration.Tests;
 using NConfiguration.Ini;
 using System.Collections.Generic;
+using System.IO;
 
 namespace NConfiguration
 {
@@ -14,6 +15,12 @@ namespace NConfiguration
 		public static ICfgNode ToXmlView(this XDocument doc)
 		{
 			return new XmlViewNode(null, doc.Root);
+		}
+
+		public static string ResolveTestPath(this string relativePath)
+		{
+			var testDir = Path.GetDirectoryName(typeof(ExtensionsForTests).Assembly.Location);
+			return Path.Combine(testDir, relativePath);
 		}
 
 		public static IIdentifiedSource ToXmlSettings(this string text)

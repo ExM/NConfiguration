@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2012
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NConfiguration", "NConfiguration\NConfiguration.csproj", "{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NConfiguration.Tests", "NConfiguration.Tests\NConfiguration.Tests.csproj", "{7DC99CFF-DEAC-4D53-B96F-37C1D2A33C8E}"
@@ -8,6 +10,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsaToolkit", "RsaToolkit\RsaToolkit.csproj", "{CDD0A752-AAFC-4D9B-99A2-A23E50A62892}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsaToolkit.Tests", "RsaToolkit.Tests\RsaToolkit.Tests.csproj", "{1562BCA2-3F11-4577-A0BB-F0ED58A73B74}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{80ADFBB2-B6A4-4C64-B16E-C73DB58F22B2}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -9,7 +9,7 @@ using System.IO;
 namespace RsaToolkit
 {
 	[TestFixture]
-	public class CreateTests
+	public class CreateTests : BaseTest
 	{
 		[TestCase("512")]
 		[TestCase("1024")]

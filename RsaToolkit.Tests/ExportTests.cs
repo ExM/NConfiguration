@@ -9,7 +9,7 @@ using System.IO;
 namespace RsaToolkit
 {
 	[TestFixture]
-	public class ExportTests
+	public class ExportTests : BaseTest
 	{
 		[Test]
 		public void NoOutput()

@@ -44,10 +44,9 @@ break""]")]
 		[TestCase(@"[0e+-1]")]
 		[TestCase(@"{""Comma instead if closing brace"": true,")]
 		[TestCase(@"[""mismatch""}")]
-		[ExpectedException(typeof(FormatException))]
 		public void BadParse(string text)
 		{
-			JValue.Parse(text);
+			Assert.Throws<FormatException>(() => JValue.Parse(text));
 		}
 
 		string _text1 = @"[

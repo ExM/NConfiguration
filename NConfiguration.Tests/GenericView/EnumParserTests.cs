@@ -39,10 +39,9 @@ namespace NConfiguration.Serialization
 		[TestCase("3")]
 		[TestCase("Max,One")]
 		[TestCase("0")]
-		[ExpectedException(typeof(FormatException))]
 		public void FailByteParse(string text)
 		{
-			EnumHelper<ByteEn>.Parse(text);
+			Assert.Throws<FormatException>(() => EnumHelper<ByteEn>.Parse(text));
 		}
 
 		[Flags]
@@ -81,10 +80,9 @@ namespace NConfiguration.Serialization
 		[TestCase("300")]
 		[TestCase("Max,One")]
 		[TestCase("0xFFFF")]
-		[ExpectedException(typeof(FormatException))]
 		public void FailFlagByteParse(string text)
 		{
-			EnumHelper<FByteEn>.Parse(text);
+			Assert.Throws<FormatException>(() => EnumHelper<FByteEn>.Parse(text));
 		}
 	}
 }

@@ -17,7 +17,7 @@ namespace NConfiguration
 		[TestFixtureSetUp]
 		public void SetUp()
 		{
-			_settings = new XmlFileSettings("testConfig1.xml").ToAppSettings();
+			_settings = new XmlFileSettings("testConfig1.xml".ResolveTestPath()).ToAppSettings();
 		}
 		
 		[Test]
@@ -29,10 +29,10 @@ namespace NConfiguration
 			Assert.AreEqual("elem field text", cfg.ElemField);
 		}
 		
-		[Test, ExpectedException(typeof(SectionNotFoundException))]
+		[Test]
 		public void SectionNotFound()
 		{
-			_settings.First<MyXmlConfig>("MyCfg3");
+			Assert.Throws<SectionNotFoundException>(() => _settings.First<MyXmlConfig>("MyCfg3"));
 		}
 		
 		[Test]

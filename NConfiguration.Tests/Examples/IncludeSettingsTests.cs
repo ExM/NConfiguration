@@ -28,7 +28,7 @@ namespace NConfiguration.Examples
 				Console.WriteLine("Loaded: {0} ({1})", e.Settings.GetType(), e.Settings.Identity);
 			};
 
-			var settings = loader.LoadSettings(new XmlFileSettings("Examples/AppDirectory/main.config"));
+			var settings = loader.LoadSettings(new XmlFileSettings("Examples/AppDirectory/main.config".ResolveTestPath()));
 
 			var addCfg = settings.TryGet<ExampleCombineConfig>("AdditionalConfig");
 
@@ -49,7 +49,7 @@ namespace NConfiguration.Examples
 				Console.WriteLine("Loaded: {0} ({1})", e.Settings.GetType(), e.Settings.Identity);
 			};
 
-			var settings = loader.LoadSettings(new XmlFileSettings("Examples/AppDirectory/mainJson.config"));
+			var settings = loader.LoadSettings(new XmlFileSettings("Examples/AppDirectory/mainJson.config".ResolveTestPath()));
 
 			var addCfg = settings.TryGet<ExampleCombineConfig>("AdditionalConfig");
 
@@ -67,7 +67,7 @@ namespace NConfiguration.Examples
 				Console.WriteLine("Loaded: {0} ({1})", e.Settings.GetType(), e.Settings.Identity);
 			};
 
-			var settings = loader.LoadSettings(new XmlFileSettings("Examples/AppDirectory/autoMain.config"));
+			var settings = loader.LoadSettings(new XmlFileSettings("Examples/AppDirectory/autoMain.config".ResolveTestPath()));
 
 			var cfg = settings.TryGet<ChildAutoCombinableConnectionConfig>();
 
@@ -91,7 +91,7 @@ namespace NConfiguration.Examples
 				Console.WriteLine("Loaded: {0} ({1})", e.Settings.GetType(), e.Settings.Identity);
 			};
 
-			var settings = loader.LoadSettings(new XmlFileSettings("Examples/AppDirectory/secureMain.config"));
+			var settings = loader.LoadSettings(new XmlFileSettings("Examples/AppDirectory/secureMain.config".ResolveTestPath()));
 
 			var addCfg = settings.TryGet<ExampleCombineConfig>("AdditionalConfig");
 

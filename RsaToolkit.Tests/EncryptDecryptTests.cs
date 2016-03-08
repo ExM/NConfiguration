@@ -10,7 +10,7 @@ using System.Xml.Linq;
 namespace RsaToolkit
 {
 	[TestFixture]
-	public class EncryptDecryptTests
+	public class EncryptDecryptTests : BaseTest
 	{
 
 		[Test]

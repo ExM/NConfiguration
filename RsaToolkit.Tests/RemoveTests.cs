@@ -9,7 +9,7 @@ using System.IO;
 namespace RsaToolkit
 {
 	[TestFixture]
-	public class RemoveTests
+	public class RemoveTests : BaseTest
 	{
 		[Test]
 		public void NoContainer()

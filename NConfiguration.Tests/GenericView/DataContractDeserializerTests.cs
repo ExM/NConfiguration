@@ -68,33 +68,30 @@ namespace NConfiguration.Serialization
 		}
 
 		[Test]
-		[ExpectedException(typeof(DeserializeChildException))]
 		public void BadParse1()
 		{
 			var root =
 @"<Root></Root>".ToXmlView();
 
-			DefaultDeserializer.Instance.Deserialize<TestType1>(root);
+			Assert.Throws<DeserializeChildException>(() => DefaultDeserializer.Instance.Deserialize<TestType1>(root));
 		}
 
 		[Test]
-		[ExpectedException(typeof(DeserializeChildException))]
 		public void BadParse2()
 		{
 			var root =
 @"<Root NInt2=''></Root>".ToXmlView();
 
-			DefaultDeserializer.Instance.Deserialize<TestType1>(root);
+			Assert.Throws<DeserializeChildException>(() => DefaultDeserializer.Instance.Deserialize<TestType1>(root));
 		}
 
 		[Test]
-		[ExpectedException(typeof(DeserializeChildException))]
 		public void BadParse3()
 		{
 			var root =
 @"<Root NInt2='' Int2=''></Root>".ToXmlView();
 
-			DefaultDeserializer.Instance.Deserialize<TestType1>(root);
+			Assert.Throws<DeserializeChildException>(() => DefaultDeserializer.Instance.Deserialize<TestType1>(root));
 		}
 
 		[Test]

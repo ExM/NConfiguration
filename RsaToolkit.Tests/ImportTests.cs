@@ -9,7 +9,7 @@ using System.IO;
 namespace RsaToolkit
 {
 	[TestFixture]
-	public class ImportTests
+	public class ImportTests : BaseTest
 	{
 		[Test]
 		public void NoInput()
