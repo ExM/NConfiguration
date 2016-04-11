@@ -2,12 +2,13 @@ using System;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using NConfiguration.Combination;
+using System.Runtime.Serialization;
 
 namespace NConfiguration.Examples
 {
 	public class ExampleCombineConfig : ICombinable, ICombinable<ExampleCombineConfig>
 	{
-		[XmlAttribute]
+		[DataMember]
 		public string F = null;
 
 		public void Combine(ICombiner combiner, object other)

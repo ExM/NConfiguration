@@ -2,28 +2,29 @@ using System;
 using System.Text;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace NConfiguration.Examples
 {
-	[XmlRoot("Connection")]
+	[DataContract(Name = "Connection")]
 	public class AutoCombinableConnectionConfig
 	{
-		[XmlAttribute("Server")]
+		[DataMember(Name = "Server")]
 		public string Server { get; set; }
 
-		[XmlAttribute("Database")]
+		[DataMember(Name = "Database")]
 		public string Database { get; set; }
 
-		[XmlAttribute("User")]
+		[DataMember(Name = "User")]
 		public string User { get; set; }
 
-		[XmlAttribute("Password")]
+		[DataMember(Name = "Password")]
 		public string Password { get; set; }
 
-		[XmlAttribute("Additional")]
+		[DataMember(Name = "Additional")]
 		public string Additional { get; set; }
 
-		[XmlIgnore]
+		[IgnoreDataMember]
 		public virtual string ConnectionString
 		{
 			get

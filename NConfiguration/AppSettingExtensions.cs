@@ -137,6 +137,12 @@ namespace NConfiguration
 
 			return sum;
 		}
+
+		public static IAppSettings Subsection(this IAppSettings settings, string sectionName)
+		{
+			var childSections = new DefaultConfigNodeProvider(settings.ByName(sectionName).SelectMany(_ => _.Nested));
+			return new AppSettings(childSections, settings, settings);
+		}
 	}
 }
 

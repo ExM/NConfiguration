@@ -3,27 +3,28 @@ using System.Text;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using NConfiguration.Combination;
+using System.Runtime.Serialization;
 
 namespace NConfiguration.Examples
 {
 	public class ConnectionConfig : ICombinable, ICombinable<ConnectionConfig>
 	{
-		[XmlAttribute("Server")]
+		[DataMember(Name = "Server")]
 		public string Server { get; set; }
 
-		[XmlAttribute("Database")]
+		[DataMember(Name = "Database")]
 		public string Database { get; set; }
 
-		[XmlAttribute("User")]
+		[DataMember(Name = "User")]
 		public string User { get; set; }
 
-		[XmlAttribute("Password")]
+		[DataMember(Name = "Password")]
 		public string Password { get; set; }
 
-		[XmlAttribute("Additional")]
+		[DataMember(Name = "Additional")]
 		public string Additional { get; set; }
 
-		[XmlIgnore]
+		[IgnoreDataMember]
 		public string ConnectionString
 		{
 			get

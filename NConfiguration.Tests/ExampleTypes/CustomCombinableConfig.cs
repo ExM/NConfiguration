@@ -1,14 +1,14 @@
 using System;
 using System.Text;
-using System.Xml.Serialization;
 using System.Collections.Generic;
 using NConfiguration.Combination;
+using System.Runtime.Serialization;
 
 namespace NConfiguration.ExampleTypes
 {
 	public class CustomCombinableConfig : ICombinable, ICombinable<CustomCombinableConfig>
 	{
-		[XmlAttribute("Field1")]
+		[DataMember(Name = "Field1")]
 		public string Field1 { get; set; }
 
 		public void Combine(ICombiner combiner, CustomCombinableConfig other)

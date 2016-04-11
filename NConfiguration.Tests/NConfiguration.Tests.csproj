@@ -71,6 +71,7 @@
     <Compile Include="Examples\ChildAutoCombinableConnectionConfig.cs" />
     <Compile Include="Examples\ExampleCombineConfig.cs" />
     <Compile Include="Examples\ConnectionConfig.cs" />
+    <Compile Include="Examples\ConnectionSubsectionTests.cs" />
     <Compile Include="Examples\IncludeSettingsTests.cs" />
     <Compile Include="ExampleTypes\CombinableConfig.cs" />
     <Compile Include="ExampleTypes\CustomCombinableConfig.cs" />
@@ -94,7 +95,6 @@
     <Compile Include="Monitoring\AsyncComparerTests.cs" />
     <Compile Include="Monitoring\AppSettingChangeTests.cs" />
     <Compile Include="Monitoring\FileMonitorTests.cs" />
-    <Compile Include="MultiSettings\CombineConfig.cs" />
     <Compile Include="Protected\XmlCryptoProvidersTests.cs" />
     <Compile Include="CombinableAppSettingsTests.cs" />
     <Compile Include="Serialization\PlaceHolderDeserializer.cs" />
@@ -104,10 +104,8 @@
     <Compile Include="Serialization\AttributeTests.cs" />
     <Compile Include="StringConverterTests.cs" />
     <Compile Include="XmlSystemSettingsTests.cs" />
-    <Compile Include="MultiSettings\FullCombineConfig.cs" />
     <Compile Include="MyXmlConfig.cs" />
     <Compile Include="XmlFileSettingsTests.cs" />
-    <Compile Include="MultiSettings\ReplacedConfig.cs" />
     <Compile Include="XmlStringSettings.cs" />
     <Compile Include="ExtensionsForTests.cs" />
     <Compile Include="Combination\ComplexTests.cs" />
