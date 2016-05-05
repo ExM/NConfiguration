@@ -48,22 +48,28 @@ namespace NConfiguration.Tests.Combination.Collections
 			var x = new GenTestClass()
 			{
 				List = new List<string>() { "L1" },
+				Array = new [] { "A1" },
 			};
 
 			var y = new GenTestClass()
 			{
 				List = new List<string>() { "L2" },
+				Array = new[] { "A2" },
 			};
 
 			var combined = DefaultCombiner.Instance.Combine(x, y);
 
 			Assert.That(combined.List, Is.EquivalentTo(new[] { "L1", "L2" }));
+			Assert.That(combined.Array, Is.EquivalentTo(new[] { "A1", "A2" }));
 		}
 
 		public class GenTestClass
 		{
 			[Combiner(typeof(Union<>))]
 			public List<string> List;
+
+			[Combiner(typeof(Union<>))]
+			public string[] Array;
 		}
 
 		[Test]

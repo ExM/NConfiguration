@@ -55,6 +55,11 @@ namespace NConfiguration.Combination
 				if (genArgs.Length == 1)
 					yield return genArgs[0];
 			}
+
+			if (targetType.IsArray)
+			{
+				yield return targetType.GetElementType();
+			}
 		}
 
 		private static IEnumerable<Type> GetVariants(Type combinerType, Type targetType)
