@@ -18,12 +18,9 @@ In your `web.config` or `app.config` make sure you have a custom section:
 		<section name="ExtConfigure" type="NConfiguration.PlainXmlSection, NConfiguration"/>
 	</configSections>
 	<ExtConfigure>
-		<Include>
-			<XmlFile Path="etc\externalConfig.xml" Search="All" Include="All" Required="true"/>
-			<XmlFile Path="etc\machineSpecific.xml" Search="All" Include="All" Required="true"/>
-		</Include>
+		<IncludeFile Path="etc\externalConfig.xml" Search="All" Include="All" Required="true"/>
+		<IncludeFile Path="etc\machineSpecific.xml" Search="All" Include="All" Required="true"/>
 	</ExtConfigure>
-
 </configuration>
 ```
 
@@ -33,15 +30,9 @@ Tracking changed included files.
 ```c# 
 public IAppSettings LoadSettings()
 {
-	var strConv = new StringConverter();
-	var deserializer = new GenericDeserializer();
-
-	var xmlFileLoader = new XmlFileSettingsLoader(deserializer, strConv);
-	var loader = new SettingsLoader(xmlFileLoader);
-
-	loader.LoadSettings(new XmlSystemSettings("ExtConfigure", strConv, deserializer));
-
-	var result = loader.Settings;
+	var loader = new SettingsLoader();
+	loader.XmlFileBySection();
+	var result = loader.LoadSettings(new XmlSystemSettings("ExtConfigure"));
 	result.Changed += SettingsChanged;
 	return result;
 }
@@ -55,5 +46,5 @@ private void SettingsChanged(object sender, EventArgs e)
 Deserialization section with the name of all downloaded files.
 
 ```c# 
-var configs = settings.LoadCollection<ConfigClass>("MyConfig")
+var configs = settings.Get<ConfigClass>("MyConfig");
 ```
