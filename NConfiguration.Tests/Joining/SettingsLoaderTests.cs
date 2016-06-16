@@ -18,7 +18,9 @@ namespace NConfiguration.Tests.Joining
 			var loader = new SettingsLoader();
 			loader.XmlFileBySection();
 
-			var settings = loader.LoadSettings(XmlFileSettings.Create("Joining/AppDirectory/main.config".ResolveTestPath()));
+			var settings = loader
+				.LoadSettings(XmlFileSettings.Create("Joining/AppDirectory/main.config".ResolveTestPath()))
+				.ToChangeableAppSettings();
 
 			Assert.That(settings.LoadSections<AdditionalConfig>().Select(_ => _.F), Is.EquivalentTo(new[] { "InMainPre", "InAdditional", "InMainPost" }));
 		}

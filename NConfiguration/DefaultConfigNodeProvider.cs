@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NConfiguration
 {
-	public sealed class DefaultConfigNodeProvider : BaseConfigNodeProvider
+	public class DefaultConfigNodeProvider : BaseConfigNodeProvider
 	{
 		private IReadOnlyList<KeyValuePair<string, ICfgNode>> _items;
 		private Dictionary<string, List<ICfgNode>> _index;

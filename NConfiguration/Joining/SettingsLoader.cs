@@ -14,20 +14,9 @@ namespace NConfiguration.Joining
 {
 	public sealed class SettingsLoader
 	{
-		private delegate IEnumerable<IIdentifiedSource> Include(IConfigNodeProvider target, ICfgNode config);
+		private delegate IEnumerable<IIdentifiedSource> Include(IConfigNodeProvider target, IDeserializer deserializer, ICfgNode config);
 
 		private readonly Dictionary<string, List<Include>> _includeHandlers = new Dictionary<string, List<Include>>(NameComparer.Instance);
-		private readonly IDeserializer _deserializer;
-
-		public SettingsLoader()
-			: this(DefaultDeserializer.Instance)
-		{
-		}
-
-		public SettingsLoader(IDeserializer deserializer)
-		{
-			_deserializer = deserializer;
-		}
 
 		public void AddHandler<T>(IIncludeHandler<T> handler)
 		{
@@ -42,7 +31,7 @@ namespace NConfiguration.Joining
 				handlers = new List<Include>();
 				_includeHandlers.Add(sectionName, handlers);
 			}
-			handlers.Add((target, cfgNode) => handler.TryLoad(target, _deserializer.Deserialize<T>(cfgNode)));
+			handlers.Add((target, deserializer, cfgNode) => handler.TryLoad(target, deserializer.Deserialize<T>(cfgNode)));
 		}
 
 		public event EventHandler<LoadedEventArgs> Loaded;
@@ -54,20 +43,23 @@ namespace NConfiguration.Joining
 				copy(this, new LoadedEventArgs(settings));
 		}
 
-		public ChangeableAppSettings LoadSettings(IIdentifiedSource setting)
+		public ChangeableConfigNodeProvider LoadSettings(IIdentifiedSource setting)
 		{
-			var context = new Context();
+			return LoadSettings(setting, DefaultDeserializer.Instance);
+		}
+
+		public ChangeableConfigNodeProvider LoadSettings(IIdentifiedSource setting, IDeserializer deserializer)
+		{
+			var context = new Context(deserializer);
 
 			context.FirstChange.Observe(setting as IChangeable);
 			OnLoaded(setting);
 			context.CheckLoaded(setting);
 
-			var provider = new DefaultConfigNodeProvider(ScanInclude(setting, context).ToList());
-			var settings = new AppSettings(provider, _deserializer, DefaultCombiner.Instance);
-			return new ChangeableAppSettings(settings, context.FirstChange);
+			return new ChangeableConfigNodeProvider(ScanInclude(setting, context), context.FirstChange);
 		}
 
-		private IEnumerable<KeyValuePair<string, ICfgNode>> ScanInclude(IIdentifiedSource source, Context context)
+		private IEnumerable<KeyValuePair<string, ICfgNode>> ScanInclude(IConfigNodeProvider source, Context context)
 		{
 			foreach(var pair in source.Items)
 			{
@@ -83,7 +75,7 @@ namespace NConfiguration.Joining
 				}
 
 				var includeSettings = hadlers
-					.Select(_ => _(source, pair.Value))
+					.Select(_ => _(source, context.Deserializer, pair.Value))
 					.FirstOrDefault(_ => _ != null);
 
 				if (includeSettings == null)
@@ -117,9 +109,15 @@ namespace NConfiguration.Joining
 
 		private class Context
 		{
-			public FirstChange FirstChange = new FirstChange();
+			public readonly IDeserializer Deserializer;
+			public readonly FirstChange FirstChange = new FirstChange();
 
-			private HashSet<IdentityKey> _loaded = new HashSet<IdentityKey>();
+			private readonly HashSet<IdentityKey> _loaded = new HashSet<IdentityKey>();
+
+			public Context(IDeserializer deserializer)
+			{
+				Deserializer = deserializer;
+			}
 
 			public bool CheckLoaded(IIdentifiedSource settings)
 			{
@@ -127,10 +125,10 @@ namespace NConfiguration.Joining
 				return !_loaded.Add(key);
 			}
 
-			private class IdentityKey
+			private class IdentityKey : IEquatable<IdentityKey>
 			{
-				private Type _type;
-				private string _id;
+				private readonly Type _type;
+				private readonly string _id;
 
 				public IdentityKey(Type type, string id)
 				{
