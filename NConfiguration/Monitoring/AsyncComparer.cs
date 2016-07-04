@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using System.Threading;
 
@@ -23,7 +20,7 @@ namespace NConfiguration.Monitoring
 			_src = source;
 			_completed = completed;
 
-			_src.BeginRead(_buffer, 0, ChunkSize, OnRead, null);
+			_src.BeginRead(_buffer, 0, ChunkSize, onRead, null);
 		}
 
 		public static void Compare(string fileName, byte[] expected, Action<bool> completed)
@@ -39,7 +36,7 @@ namespace NConfiguration.Monitoring
 						return;
 					}
 
-					ThreadPool.QueueUserWorkItem(TrueResultWork, completed);
+					ThreadPool.QueueUserWorkItem(trueResultWork, completed);
 					return;
 				}
 				
@@ -49,20 +46,20 @@ namespace NConfiguration.Monitoring
 			{
 			}
 
-			ThreadPool.QueueUserWorkItem(FalseResultWork, completed);
+			ThreadPool.QueueUserWorkItem(falseResultWork, completed);
 		}
 
-		private static void TrueResultWork(object arg)
+		private static void trueResultWork(object arg)
 		{
 			((Action<bool>)arg)(true);
 		}
 
-		private static void FalseResultWork(object arg)
+		private static void falseResultWork(object arg)
 		{
 			((Action<bool>)arg)(false);
 		}
 
-		private void OnRead(IAsyncResult readResult)
+		private void onRead(IAsyncResult readResult)
 		{
 			bool result = true;
 			try
@@ -81,7 +78,7 @@ namespace NConfiguration.Monitoring
 
 				if(result && readed > 0)
 				{
-					_src.BeginRead(_buffer, 0, ChunkSize, OnRead, null);
+					_src.BeginRead(_buffer, 0, ChunkSize, onRead, null);
 					return;
 				}
 			}

@@ -1,8 +1,3 @@
-using NConfiguration.Combination;
-using System;
-using System.Runtime.Serialization;
-using System.Xml.Serialization;
-
 namespace NConfiguration.Tests.Combination.DefaultCombinationTests
 {
 	public class TestComplexClassWithoutConstructor

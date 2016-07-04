@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace NConfiguration.Json.Parsing
+﻿namespace NConfiguration.Json.Parsing
 {
 	public sealed class JString: JValue
 	{

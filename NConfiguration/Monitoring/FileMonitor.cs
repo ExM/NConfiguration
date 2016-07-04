@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using System.Threading;
 using NConfiguration.Serialization;
@@ -48,35 +45,35 @@ namespace NConfiguration.Monitoring
 					if (delay == null)
 						throw new ArgumentNullException("delay time is null");
 
-					SetTimer(delay.Value);
+					setTimer(delay.Value);
 				}
 				else if (mode == WatchMode.Auto)
 				{
-					_watcher = TryCreateWatch(!delay.HasValue);
+					_watcher = tryCreateWatch(!delay.HasValue);
 					if (_watcher == null)
-						SetTimer(delay.Value);
+						setTimer(delay.Value);
 				}
 				else if (mode == WatchMode.System)
 				{
-					_watcher = TryCreateWatch(true);
+					_watcher = tryCreateWatch(true);
 				}
 				else
 					throw new ArgumentOutOfRangeException("unexpected mode");
 			}
 
-			AsyncReview();
+			asyncReview();
 		}
 
-		private void SetTimer(TimeSpan delay)
+		private void setTimer(TimeSpan delay)
 		{
 			_delay = (int)delay.TotalMilliseconds;
 			if (_delay < 100 || _delay > 24 * 60 * 60 * 1000)
 				throw new ArgumentOutOfRangeException("delay must be greater than 100 ms and less than 1 day");
 
-			_timer = new Timer(OnReviewTime, null, _delay, -1);
+			_timer = new Timer(onReviewTime, null, _delay, -1);
 		}
 
-		private void WaitToNextReview()
+		private void waitToNextReview()
 		{
 			lock (_sync)
 			{
@@ -86,12 +83,12 @@ namespace NConfiguration.Monitoring
 				if (_timer != null)
 				{
 					_timer.Dispose();
-					_timer = new Timer(OnReviewTime, null, _delay, -1);
+					_timer = new Timer(onReviewTime, null, _delay, -1);
 				}
 			}
 		}
 
-		private void OnReviewTime(object arg)
+		private void onReviewTime(object arg)
 		{
 			lock (_sync)
 			{
@@ -99,10 +96,10 @@ namespace NConfiguration.Monitoring
 					return;
 			}
 
-			AsyncReview();
+			asyncReview();
 		}
 
-		private FileSystemWatcher TryCreateWatch(bool throwException)
+		private FileSystemWatcher tryCreateWatch(bool throwException)
 		{
 			try
 			{
@@ -112,11 +109,11 @@ namespace NConfiguration.Monitoring
 				watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.Size | NotifyFilters.Security | NotifyFilters.Attributes;
 
 
-				watcher.Created += WatcherOnModify;
-				watcher.Changed += WatcherOnModify;
-				watcher.Deleted += WatcherOnModify;
-				watcher.Renamed += WatcherOnModify;
-				watcher.Error += WatcherError;
+				watcher.Created += watcherOnModify;
+				watcher.Changed += watcherOnModify;
+				watcher.Deleted += watcherOnModify;
+				watcher.Renamed += watcherOnModify;
+				watcher.Error += watcherError;
 
 				watcher.EnableRaisingEvents = true;
 
@@ -131,7 +128,7 @@ namespace NConfiguration.Monitoring
 			}
 		}
 
-		private void WatcherError(object sender, ErrorEventArgs e)
+		private void watcherError(object sender, ErrorEventArgs e)
 		{
 			lock (_sync)
 			{
@@ -141,31 +138,31 @@ namespace NConfiguration.Monitoring
 				if (_watcher != sender)
 					return;
 
-				_watcher = TryCreateWatch(true);
+				_watcher = tryCreateWatch(true);
 			}
 
-			AsyncReview();
+			asyncReview();
 		}
 
-		private void AsyncReview()
+		private void asyncReview()
 		{
-			AsyncComparer.Compare(_fileName, _content, RewiewResult);
+			AsyncComparer.Compare(_fileName, _content, rewiewResult);
 		}
 
-		private void RewiewResult(bool equal)
+		private void rewiewResult(bool equal)
 		{
 			if(equal)
-				WaitToNextReview();
+				waitToNextReview();
 			else
-				OnChanged();
+				onChanged();
 		}
 
-		private void WatcherOnModify(object sender, FileSystemEventArgs e)
+		private void watcherOnModify(object sender, FileSystemEventArgs e)
 		{
-			OnChanged();
+			onChanged();
 		}
 
-		private void OnChanged()
+		private void onChanged()
 		{
 			EventHandler copy;
 			lock (_sync)
@@ -203,7 +200,7 @@ namespace NConfiguration.Monitoring
 				lock (_sync)
 				{
 					if (_changed)
-						ThreadPool.QueueUserWorkItem(AsyncChangedWork, value);
+						ThreadPool.QueueUserWorkItem(asyncChangedWork, value);
 					else
 						_changedHandler += value;
 				}
@@ -218,7 +215,7 @@ namespace NConfiguration.Monitoring
 			}
 		}
 
-		private void AsyncChangedWork(object arg)
+		private void asyncChangedWork(object arg)
 		{
 			((EventHandler)arg)(this, EventArgs.Empty);
 		}

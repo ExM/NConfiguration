@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.ComponentModel;
@@ -24,12 +22,12 @@ namespace NConfiguration.Serialization
 			_supportInitialize = typeof(ISupportInitialize).IsAssignableFrom(_targetType);
 			_pResult = Expression.Parameter(_targetType);
 
-			SetConstructor();
+			setConstructor();
 			if (_supportInitialize)
 				CallBeginInit();
 		}
 
-		private void SetConstructor()
+		private void setConstructor()
 		{
 			if (_targetType.IsValueType)
 				return;
@@ -75,11 +73,11 @@ namespace NConfiguration.Serialization
 			_bodyList.Add(callEndInit);
 		}
 
-		private Expression MakeFieldReader(FieldFunctionInfo ffi)
+		private Expression makeFieldReader(FieldFunctionInfo ffi)
 		{
 			if (ffi.DeserializerFactory != null)
 			{
-				var mi = BuildUtils.CustomFieldMI.MakeGenericMethod(ffi.ResultType);
+				var mi = BuildUtils.CustomFieldMi.MakeGenericMethod(ffi.ResultType);
 				var customDeserializer = Expression.Constant(ffi.DeserializerFactory.CreateInstance(ffi.ResultType));
 				return Expression.Call(null, mi, _pDeserializer, customDeserializer, Expression.Constant(ffi.Name), _pCfgNode, Expression.Constant(ffi.Required));
 			}
@@ -89,20 +87,20 @@ namespace NConfiguration.Serialization
 				if (ffi.ResultType.IsArray)
 				{
 					var itemType = ffi.ResultType.GetElementType();
-					var mi = BuildUtils.ToArrayMI.MakeGenericMethod(itemType);
+					var mi = BuildUtils.ToArrayMi.MakeGenericMethod(itemType);
 					return Expression.Call(null, mi, _pDeserializer, Expression.Constant(ffi.Name), _pCfgNode);
 				}
 
 				if (BuildUtils.IsCollection(ffi.ResultType))
 				{
 					var itemType = ffi.ResultType.GetGenericArguments()[0];
-					var mi = BuildUtils.ToListMI.MakeGenericMethod(itemType);
+					var mi = BuildUtils.ToListMi.MakeGenericMethod(itemType);
 					return Expression.Call(null, mi, _pDeserializer, Expression.Constant(ffi.Name), _pCfgNode);
 				}
 			}
 
 			{
-				var mi = BuildUtils.ReadFieldMI.MakeGenericMethod(ffi.ResultType);
+				var mi = BuildUtils.ReadFieldMi.MakeGenericMethod(ffi.ResultType);
 				return Expression.Call(null, mi, _pDeserializer, Expression.Constant(ffi.Name), _pCfgNode, Expression.Constant(ffi.Required));
 			}
 		}
@@ -121,7 +119,7 @@ namespace NConfiguration.Serialization
 			if (fi.GetCustomAttribute<IgnoreDataMemberAttribute>() != null)
 				return;
 
-			var right = MakeFieldReader(new FieldFunctionInfo(fi));
+			var right = makeFieldReader(new FieldFunctionInfo(fi));
 			if (right == null)
 				return;
 			var left = Expression.Field(_pResult, fi);
@@ -142,7 +140,7 @@ namespace NConfiguration.Serialization
 			if (pi.GetCustomAttribute<IgnoreDataMemberAttribute>() != null)
 				return;
 
-			var right = MakeFieldReader(new FieldFunctionInfo(pi));
+			var right = makeFieldReader(new FieldFunctionInfo(pi));
 			if (right == null)
 				return;
 			var left = Expression.Property(_pResult, pi);

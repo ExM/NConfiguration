@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using NConfiguration.Xml;
-using NConfiguration.Tests;
 using NConfiguration.Examples;
 using NConfiguration.Joining;
-using NConfiguration.Serialization;
 
 namespace NConfiguration.Monitoring
 {

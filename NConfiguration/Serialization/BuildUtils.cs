@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NConfiguration.Serialization
 {
@@ -12,10 +10,10 @@ namespace NConfiguration.Serialization
 		internal static object CreateFunction(Type targetType)
 		{
 			return
-				TryCreateNativeFunction(targetType) ??
-				TryCreateAsAttribute(targetType) ??
+				tryCreateNativeFunction(targetType) ??
+				tryCreateAsAttribute(targetType) ??
 				SimpleTypes.Converter.TryCreateFunction(targetType) ??
-				TryCreateForComplexType(targetType);
+				tryCreateForComplexType(targetType);
 		}
 
 		public static bool IsCollection(Type type)
@@ -31,7 +29,7 @@ namespace NConfiguration.Serialization
 				|| genType == typeof(IEnumerable<>);
 		}
 
-		private static object TryCreateForComplexType(Type targetType)
+		private static object tryCreateForComplexType(Type targetType)
 		{
 			try
 			{
@@ -51,7 +49,7 @@ namespace NConfiguration.Serialization
 			}
 		}
 
-		private static object TryCreateAsAttribute(Type targetType)
+		private static object tryCreateAsAttribute(Type targetType)
 		{
 			var deserializeAttr = targetType.GetCustomAttributes(false).OfType<IDeserializerFactory>().SingleOrDefault();
 
@@ -65,22 +63,22 @@ namespace NConfiguration.Serialization
 			return Delegate.CreateDelegate(funcType, deserializer, mi);
 		}
 
-		private static object TryCreateNativeFunction(Type targetType)
+		private static object tryCreateNativeFunction(Type targetType)
 		{
 			if (targetType != typeof(ICfgNode))
 				return null;
 
 			var funcType = typeof(Deserialize<>).MakeGenericType(typeof(ICfgNode));
-			return Delegate.CreateDelegate(funcType, GetCfgNodeMI);
+			return Delegate.CreateDelegate(funcType, GetCfgNodeMi);
 		}
 
-		internal static readonly MethodInfo GetCfgNodeMI = GetMethod("GetCfgNode");
+		internal static readonly MethodInfo GetCfgNodeMi = getMethod("GetCfgNode");
 		internal static ICfgNode GetCfgNode(IDeserializer context, ICfgNode node)
 		{
 			return node;
 		}
 
-		internal static readonly MethodInfo CustomFieldMI = GetMethod("CustomField");
+		internal static readonly MethodInfo CustomFieldMi = getMethod("CustomField");
 		internal static T CustomField<T>(IDeserializer context, IDeserializer<T> custom, string name, ICfgNode node, bool required)
 		{
 			try
@@ -102,7 +100,7 @@ namespace NConfiguration.Serialization
 			}
 		}
 
-		internal static readonly MethodInfo ReadFieldMI = GetMethod("ReadField");
+		internal static readonly MethodInfo ReadFieldMi = getMethod("ReadField");
 		internal static T ReadField<T>(IDeserializer context, string name, ICfgNode node, bool required)
 		{
 			try
@@ -124,7 +122,7 @@ namespace NConfiguration.Serialization
 			}
 		}
 
-		internal static readonly MethodInfo ToListMI = GetMethod("ToList");
+		internal static readonly MethodInfo ToListMi = getMethod("ToList");
 		internal static List<T> ToList<T>(IDeserializer context, string name, ICfgNode node)
 		{
 			int i = 0;
@@ -145,13 +143,13 @@ namespace NConfiguration.Serialization
 			}
 		}
 
-		internal static readonly MethodInfo ToArrayMI = GetMethod("ToArray");
+		internal static readonly MethodInfo ToArrayMi = getMethod("ToArray");
 		internal static T[] ToArray<T>(IDeserializer context, string name, ICfgNode node)
 		{
 			return ToList<T>(context, name, node).ToArray();
 		}
 
-		private static MethodInfo GetMethod(string name)
+		private static MethodInfo getMethod(string name)
 		{
 			return typeof(BuildUtils).GetMethod(name, BindingFlags.Static | BindingFlags.NonPublic);
 		}

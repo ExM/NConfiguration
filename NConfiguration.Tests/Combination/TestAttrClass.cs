@@ -1,6 +1,4 @@
-using System;
 using System.Runtime.Serialization;
-using System.Xml.Serialization;
 
 namespace NConfiguration.Combination
 {

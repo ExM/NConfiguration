@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace NConfiguration.Combination
 {
@@ -18,7 +17,7 @@ namespace NConfiguration.Combination
 				typeof(ushort), typeof(uint), typeof(ulong)
 			};
 
-		private static bool IsSimplyStruct(Type type)
+		private static bool isSimplyStruct(Type type)
 		{
 			if (type.IsEnum)
 				return true;
@@ -34,7 +33,7 @@ namespace NConfiguration.Combination
 			return _simplySystemStructs.Contains(type);
 		}
 
-		private static Type GetEnumerableType(Type type)
+		private static Type getEnumerableType(Type type)
 		{
 			foreach (Type intType in type.GetInterfaces())
 			{
@@ -49,30 +48,30 @@ namespace NConfiguration.Combination
 
 		public static object CreateFunction(Type targetType)
 		{
-			var supressValue = CreateDefaultSupressor(targetType);
+			var supressValue = createDefaultSupressor(targetType);
 
 			return
 				TryCreateAsCombinable(targetType) ??
 				TryCreateAsAttribute(targetType) ??
 				TryCreateForSimplyStruct(targetType, supressValue) ??
 				TryCreateRecursiveNullableCombiner(targetType, supressValue) ??
-				TryCreateCollectionCombiner(targetType) ??
-				TryCreateComplexCombiner(targetType) ??
+				tryCreateCollectionCombiner(targetType) ??
+				tryCreateComplexCombiner(targetType) ??
 				CreateForwardCombiner(targetType, supressValue);
 		}
 
-		private static object TryCreateCollectionCombiner(Type targetType)
+		private static object tryCreateCollectionCombiner(Type targetType)
 		{
-			var itemType = GetEnumerableType(targetType);
+			var itemType = getEnumerableType(targetType);
 			if (itemType == null)
 				return null;
 
 			var funcType = typeof(Combine<>).MakeGenericType(targetType);
 
-			return Delegate.CreateDelegate(funcType, CollectionCombineMI.MakeGenericMethod(targetType, itemType));
+			return Delegate.CreateDelegate(funcType, CollectionCombineMi.MakeGenericMethod(targetType, itemType));
 		}
 
-		private static object TryCreateComplexCombiner(Type targetType)
+		private static object tryCreateComplexCombiner(Type targetType)
 		{
 			try
 			{
@@ -117,12 +116,12 @@ namespace NConfiguration.Combination
 				return null;
 
 			combinerType = combinerType.MakeGenericType(targetType);
-			return CreateByCombinerInterfaceMI.MakeGenericMethod(combinerType, targetType).Invoke(null, new object[0]);
+			return CreateByCombinerInterfaceMi.MakeGenericMethod(combinerType, targetType).Invoke(null, new object[0]);
 		}
 
 		internal static object TryCreateForSimplyStruct(Type targetType, object supressValue)
 		{
-			if (IsSimplyStruct(targetType))
+			if (isSimplyStruct(targetType))
 			{
 				return CreateForwardCombiner(targetType, supressValue);
 			}
@@ -138,10 +137,10 @@ namespace NConfiguration.Combination
 
 			var funcType = typeof(Combine<>).MakeGenericType(targetType);
 
-			return Delegate.CreateDelegate(funcType, supressValue, RecursiveNullableCombineMI.MakeGenericMethod(ntype));
+			return Delegate.CreateDelegate(funcType, supressValue, RecursiveNullableCombineMi.MakeGenericMethod(ntype));
 		}
 
-		internal static readonly MethodInfo CollectionCombineMI = GetMethod("CollectionCombine");
+		internal static readonly MethodInfo CollectionCombineMi = getMethod("CollectionCombine");
 		internal static T CollectionCombine<T, I>(ICombiner combiner, T x, T y) where T: IEnumerable<I>
 		{
 			if (x == null)
@@ -159,7 +158,7 @@ namespace NConfiguration.Combination
 			return y;
 		}
 
-		internal static readonly MethodInfo RecursiveNullableCombineMI = GetMethod("RecursiveNullableCombine");
+		internal static readonly MethodInfo RecursiveNullableCombineMi = getMethod("RecursiveNullableCombine");
 		internal static T? RecursiveNullableCombine<T>(Predicate<T?> supressValue, ICombiner combiner, T? x, T? y) where T : struct
 		{
 			if (supressValue(x)) return y;
@@ -167,10 +166,10 @@ namespace NConfiguration.Combination
 			return combiner.Combine<T>(x.Value, y.Value);
 		}
 
-		internal static readonly MethodInfo CreateByCombinerInterfaceMI = GetMethod("CreateByCombinerInterface");
-		internal static Combine<T> CreateByCombinerInterface<C, T>() where C: ICombiner<T>
+		internal static readonly MethodInfo CreateByCombinerInterfaceMi = getMethod("CreateByCombinerInterface");
+		internal static Combine<T> CreateByCombinerInterface<TC, T>() where TC: ICombiner<T>
 		{
-			var combiner = Activator.CreateInstance<C>();
+			var combiner = Activator.CreateInstance<TC>();
 			return combiner.Combine;
 		}
 
@@ -178,36 +177,36 @@ namespace NConfiguration.Combination
 		{
 			var funcType = typeof(Combine<>).MakeGenericType(type);
 
-			return Delegate.CreateDelegate(funcType, supressValue, ForwardCombineMI.MakeGenericMethod(type));
+			return Delegate.CreateDelegate(funcType, supressValue, ForwardCombineMi.MakeGenericMethod(type));
 		}
 
-		internal static readonly MethodInfo ForwardCombineMI = GetMethod("ForwardCombine");
+		internal static readonly MethodInfo ForwardCombineMi = getMethod("ForwardCombine");
 		internal static T ForwardCombine<T>(Predicate<T> supressValue, ICombiner combiner, T x, T y)
 		{
 			return supressValue(y) ? x : y;
 		}
 
-		private static object CreateDefaultSupressor(Type type)
+		private static object createDefaultSupressor(Type type)
 		{
 			var funcType = typeof(Predicate<>).MakeGenericType(type);
 
 			var ntype = Nullable.GetUnderlyingType(type);
 			if (ntype != null) // is Nullable<>
-				return Delegate.CreateDelegate(funcType, NullableStructSupressMI.MakeGenericMethod(ntype));
+				return Delegate.CreateDelegate(funcType, NullableStructSupressMi.MakeGenericMethod(ntype));
 
 			if (type.IsValueType)
 				return Delegate.CreateDelegate(funcType, SelectStructSupresssor(type).MakeGenericMethod(type));
 			else
-				return Delegate.CreateDelegate(funcType, ClassSupressMI.MakeGenericMethod(type));
+				return Delegate.CreateDelegate(funcType, ClassSupressMi.MakeGenericMethod(type));
 		}
 
-		internal static readonly MethodInfo NullableStructSupressMI = GetMethod("NullableStructSupress");
+		internal static readonly MethodInfo NullableStructSupressMi = getMethod("NullableStructSupress");
 		internal static bool NullableStructSupress<T>(T? item) where T : struct
 		{
 			return item == null;
 		}
 
-		internal static readonly MethodInfo ClassSupressMI = GetMethod("ClassSupress");
+		internal static readonly MethodInfo ClassSupressMi = getMethod("ClassSupress");
 		internal static bool ClassSupress<T>(T item) where T : class
 		{
 			return item == null;
@@ -217,34 +216,34 @@ namespace NConfiguration.Combination
 		{
 			var eqInterface = typeof(IEquatable<>).MakeGenericType(type);
 			if (eqInterface.IsAssignableFrom(type))
-				return EquatableStructSupressMI;
+				return EquatableStructSupressMi;
 
 			var comInterface = typeof(IComparable<>).MakeGenericType(type);
 			if (comInterface.IsAssignableFrom(type))
-				return ComparableStructSupressMI;
+				return ComparableStructSupressMi;
 
-			return OthersStructSupressMI;
+			return OthersStructSupressMi;
 		}
 
-		internal static readonly MethodInfo EquatableStructSupressMI = GetMethod("EquatableStructSupress");
+		internal static readonly MethodInfo EquatableStructSupressMi = getMethod("EquatableStructSupress");
 		internal static bool EquatableStructSupress<T>(T item) where T : struct, IEquatable<T>
 		{
 			return item.Equals(default(T));
 		}
 
-		internal static readonly MethodInfo ComparableStructSupressMI = GetMethod("ComparableStructSupress");
+		internal static readonly MethodInfo ComparableStructSupressMi = getMethod("ComparableStructSupress");
 		internal static bool ComparableStructSupress<T>(T item) where T : struct, IComparable<T>
 		{
 			return item.CompareTo(default(T)) == 0;
 		}
 
-		internal static readonly MethodInfo OthersStructSupressMI = GetMethod("OthersStructSupress");
+		internal static readonly MethodInfo OthersStructSupressMi = getMethod("OthersStructSupress");
 		internal static bool OthersStructSupress<T>(T item) where T : struct
 		{
 			return item.Equals(default(T));
 		}
 
-		private static MethodInfo GetMethod(string name)
+		private static MethodInfo getMethod(string name)
 		{
 			return typeof(BuildUtils).GetMethod(name, BindingFlags.Static | BindingFlags.NonPublic);
 		}

@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Xml.Linq;
 using System.Linq;
-using NConfiguration.Serialization;
 
 namespace NConfiguration
 {
@@ -14,10 +12,10 @@ namespace NConfiguration
 		protected CfgNode()
 		{
 			_textLazy = new Lazy<string>(GetNodeText);
-			_nestedNodes = new Lazy<IEnumerable<KeyValuePair<string, ICfgNode>>>(CopyNestedNodes);
+			_nestedNodes = new Lazy<IEnumerable<KeyValuePair<string, ICfgNode>>>(copyNestedNodes);
 		}
 
-		private IEnumerable<KeyValuePair<string, ICfgNode>> CopyNestedNodes()
+		private IEnumerable<KeyValuePair<string, ICfgNode>> copyNestedNodes()
 		{
 			return GetNestedNodes().ToList().AsReadOnly();
 		}

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
-using System.Linq;
 using NConfiguration.Serialization;
 using NConfiguration.Xml.Protected;
 using System.Xml;
@@ -14,7 +13,7 @@ namespace NConfiguration.Xml
 	/// </summary>
 	public sealed class XmlViewNode : CfgNode
 	{
-		private static readonly XNamespace cryptDataNS = XNamespace.Get("http://www.w3.org/2001/04/xmlenc#");
+		private static readonly XNamespace _cryptDataNs = XNamespace.Get("http://www.w3.org/2001/04/xmlenc#");
 
 		private IXmlEncryptable _xmlEncryptable;
 		private bool _decrypted = false;
@@ -31,7 +30,7 @@ namespace NConfiguration.Xml
 			_element = element;
 		}
 
-		private XElement Decrypt(XElement el)
+		private XElement decrypt(XElement el)
 		{
 			if (el == null)
 				return null;
@@ -47,7 +46,7 @@ namespace NConfiguration.Xml
 			if (provider == null)
 				throw new InvalidOperationException(string.Format("protection provider `{0}' not found", attr.Value));
 
-			var encData = el.Element(cryptDataNS + "EncryptedData");
+			var encData = el.Element(_cryptDataNs + "EncryptedData");
 			if (encData == null)
 				throw new FormatException(string.Format("element `EncryptedData' not found in element `{0}'", el.Name));
 
@@ -66,25 +65,25 @@ namespace NConfiguration.Xml
 			return xmlData.ToXElement();
 		}
 
-		private void TryDecrypt()
+		private void tryDecrypt()
 		{
 			if (_decrypted)
 				return;
 
-			_element = Decrypt(_element);
+			_element = decrypt(_element);
 			_decrypted = true;
 		}
 
 		public override string GetNodeText()
 		{
-			TryDecrypt();
+			tryDecrypt();
 
 			return _element.Value;
 		}
 
 		public override IEnumerable<KeyValuePair<string, ICfgNode>> GetNestedNodes()
 		{
-			TryDecrypt();
+			tryDecrypt();
 
 			foreach (var attr in _element.Attributes())
 				yield return new KeyValuePair<string, ICfgNode>(attr.Name.LocalName, new ViewPlainField(attr.Value));

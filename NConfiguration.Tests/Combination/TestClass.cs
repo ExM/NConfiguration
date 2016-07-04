@@ -1,5 +1,3 @@
-using System;
-
 namespace NConfiguration.Combination
 {
 	public class TestClass

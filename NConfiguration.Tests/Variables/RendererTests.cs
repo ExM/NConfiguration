@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using NConfiguration.Joining;
-using NConfiguration.Tests.Joining;
-using NConfiguration.Xml;
+﻿using NConfiguration.Joining;
 using NUnit.Framework;
 
 namespace NConfiguration.Variables

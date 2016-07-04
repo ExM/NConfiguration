@@ -1,13 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
-using NConfiguration.Serialization;
 
 namespace NConfiguration.Xml
 {

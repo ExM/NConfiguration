@@ -1,16 +1,9 @@
 using System;
-using System.Linq;
-using NConfiguration.Tests;
 using NUnit.Framework;
-using System.Collections.Specialized;
-using System.Configuration;
 using NConfiguration.Xml;
 using NConfiguration.Joining;
-using NConfiguration.Examples;
 using NConfiguration.Xml.Protected;
-using NConfiguration.Serialization;
 using NConfiguration.Json;
-using NConfiguration.Combination;
 
 namespace NConfiguration.Examples
 {

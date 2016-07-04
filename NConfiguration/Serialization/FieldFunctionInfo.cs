@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace NConfiguration.Serialization
 {
@@ -18,17 +16,17 @@ namespace NConfiguration.Serialization
 		{
 			ResultType = fi.FieldType;
 			Name = fi.Name;
-			InitByAttributes(fi);
+			initByAttributes(fi);
 		}
 
 		public FieldFunctionInfo(PropertyInfo pi)
 		{
 			ResultType = pi.PropertyType;
 			Name = pi.Name;
-			InitByAttributes(pi);
+			initByAttributes(pi);
 		}
 
-		private void InitByAttributes(MemberInfo mi)
+		private void initByAttributes(MemberInfo mi)
 		{
 			DeserializerFactory = mi.GetCustomAttributes(false).OfType<IDeserializerFactory>().SingleOrDefault();
 

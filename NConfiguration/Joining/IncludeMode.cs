@@ -1,5 +1,3 @@
-using System;
-
 namespace NConfiguration.Joining
 {
 	public enum IncludeMode

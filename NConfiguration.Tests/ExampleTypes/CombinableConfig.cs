@@ -1,7 +1,3 @@
-using System;
-using System.Text;
-using System.Xml.Serialization;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace NConfiguration.ExampleTypes

@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NDesk.Options;
 using System.Configuration;
 using System.Collections.Specialized;
 using System.Xml;
-using System.Security.Cryptography;
 
 namespace RsaToolkit.Commands
 {

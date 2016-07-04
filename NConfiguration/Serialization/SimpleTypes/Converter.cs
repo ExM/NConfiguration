@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
-using System.Collections.Concurrent;
-using System.Xml.Linq;
 using NConfiguration.Serialization.Enums;
 
 namespace NConfiguration.Serialization.SimpleTypes

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using NUnit.Framework;
 using System.IO;
 using System.Threading;
@@ -18,7 +15,7 @@ namespace NConfiguration.Monitoring
 			string file = Path.GetTempFileName();
 			File.WriteAllBytes(file, new byte[0]);
 
-			bool result = SyncCompare(file, new byte[0]);
+			bool result = syncCompare(file, new byte[0]);
 
 			Assert.That(result, Is.EqualTo(true));
 		}
@@ -28,7 +25,7 @@ namespace NConfiguration.Monitoring
 		{
 			string file = Path.GetRandomFileName();
 
-			bool result = SyncCompare(file, new byte[0]);
+			bool result = syncCompare(file, new byte[0]);
 
 			Assert.That(result, Is.EqualTo(false));
 		}
@@ -39,7 +36,7 @@ namespace NConfiguration.Monitoring
 			string file = Path.GetTempFileName();
 			File.WriteAllBytes(file, new byte[3]{1, 2, 3});
 
-			bool result = SyncCompare(file, new byte[2]{1, 2});
+			bool result = syncCompare(file, new byte[2]{1, 2});
 
 			Assert.That(result, Is.EqualTo(false));
 		}
@@ -74,12 +71,12 @@ namespace NConfiguration.Monitoring
 			string file = Path.GetTempFileName();
 			File.WriteAllBytes(file, Encoding.ASCII.GetBytes(content));
 
-			bool result = SyncCompare(file, Encoding.ASCII.GetBytes(expected));
+			bool result = syncCompare(file, Encoding.ASCII.GetBytes(expected));
 
 			Assert.That(result, Is.EqualTo(content == expected));
 		}
 
-		private static bool SyncCompare(string file, byte[] expected)
+		private static bool syncCompare(string file, byte[] expected)
 		{
 			var wait = new ManualResetEvent(false);
 			bool result = false;

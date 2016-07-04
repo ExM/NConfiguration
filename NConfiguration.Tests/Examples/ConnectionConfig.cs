@@ -1,7 +1,4 @@
-using System;
 using System.Text;
-using System.Xml.Serialization;
-using System.Collections.Generic;
 using NConfiguration.Combination;
 using System.Runtime.Serialization;
 
@@ -30,10 +27,10 @@ namespace NConfiguration.Examples
 			get
 			{
 				var sb = new StringBuilder();
-				Set(sb, "Server", Server);
-				Set(sb, "Database", Database);
-				Set(sb, "User ID", User);
-				Set(sb, "Password", Password);
+				set(sb, "Server", Server);
+				set(sb, "Database", Database);
+				set(sb, "User ID", User);
+				set(sb, "Password", Password);
 
 				if (!string.IsNullOrWhiteSpace(Additional))
 					sb.Append(Additional[0] == ';' ? Additional.Substring(1) : Additional);
@@ -42,7 +39,7 @@ namespace NConfiguration.Examples
 			}
 		}
 
-		private static void Set(StringBuilder sb, string name, string value)
+		private static void set(StringBuilder sb, string name, string value)
 		{
 			if (string.IsNullOrWhiteSpace(value))
 				return;

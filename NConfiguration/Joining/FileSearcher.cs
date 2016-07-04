@@ -1,12 +1,7 @@
 using System;
-using System.Xml;
 using System.IO;
 using System.Linq;
-using System.Xml.Linq;
-using System.Xml.Serialization;
 using System.Collections.Generic;
-using NConfiguration.Joining;
-using NConfiguration.Serialization;
 
 namespace NConfiguration.Joining
 {
@@ -23,7 +18,7 @@ namespace NConfiguration.Joining
 
 		public event EventHandler<FindingSettingsArgs> FindingSettings;
 
-		private void OnFindingSettings(IConfigNodeProvider source, IncludeFileConfig cfg, string searchPath)
+		private void onFindingSettings(IConfigNodeProvider source, IncludeFileConfig cfg, string searchPath)
 		{
 			var copy = FindingSettings;
 			if (copy != null)
@@ -39,7 +34,7 @@ namespace NConfiguration.Joining
 
 			if (Path.IsPathRooted(filePath))
 			{
-				OnFindingSettings(owner, cfg, null);
+				onFindingSettings(owner, cfg, null);
 
 				if (!File.Exists(filePath) && !cfg.Required)
 					yield break;
@@ -67,8 +62,8 @@ namespace NConfiguration.Joining
 				basePath = rpo.Path;
 			}
 
-			OnFindingSettings(owner, cfg, basePath);
-			var found = SearchSettings(basePath, filePath, cfg.Search);
+			onFindingSettings(owner, cfg, basePath);
+			var found = searchSettings(basePath, filePath, cfg.Search);
 
 			if (found.Count == 0)
 			{
@@ -87,7 +82,7 @@ namespace NConfiguration.Joining
 					yield return item;
 		}
 
-		private List<IIdentifiedSource> SearchSettings(string basePath, string fileName, SearchMode mode)
+		private List<IIdentifiedSource> searchSettings(string basePath, string fileName, SearchMode mode)
 		{
 			var result = new List<IIdentifiedSource>();
 

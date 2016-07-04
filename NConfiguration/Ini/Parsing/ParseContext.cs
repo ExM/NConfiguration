@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Collections.Specialized;
 
 namespace NConfiguration.Ini.Parsing
 {
 	internal class ParseContext
 	{
-		private char BeginComment = ';';
-		private char BeginSection = '[';
-		private char EndSection = ']';
-		private char KeyValueSeparator = '=';
-		private char NewLine = '\n';
-		private char CarriageReturn = '\r';
-		private char TextQuote = '\"';
+		private char _beginComment = ';';
+		private char _beginSection = '[';
+		private char _endSection = ']';
+		private char _keyValueSeparator = '=';
+		private char _newLine = '\n';
+		private char _carriageReturn = '\r';
+		private char _textQuote = '\"';
 
 		private LinkedList<Section> _sections = new LinkedList<Section>();
 
@@ -33,12 +32,12 @@ namespace NConfiguration.Ini.Parsing
 				throw new NotImplementedException("unexpected state: " + _state.ToString());
 
 			foreach (char ch in chars)
-				_state = AppendChar(ch);
+				_state = appendChar(ch);
 
-			EndChars();
+			endChars();
 		}
 
-		private void EndChars()
+		private void endChars()
 		{
 			switch (_state)
 			{
@@ -59,7 +58,7 @@ namespace NConfiguration.Ini.Parsing
 				case ParseState.BeginValue:
 				case ParseState.SimpleValue:
 				case ParseState.EscValue:
-					EndValue();
+					endValue();
 					return;
 
 				case ParseState.QuotedValue:
@@ -70,98 +69,98 @@ namespace NConfiguration.Ini.Parsing
 			}
 		}
 
-		private ParseState AppendChar(char ch)
+		private ParseState appendChar(char ch)
 		{
 			//Console.WriteLine("{0} <{1}>", _state, ch);
 			switch (_state)
 			{
 				case ParseState.BeginLine:
-					return ProcessBeginLine(ch);
+					return processBeginLine(ch);
 
 				case ParseState.EmptyLine:
-					return ProcessEmptyLine(ch);
+					return processEmptyLine(ch);
 
 				case ParseState.Comment:
-					return ProcessComment(ch);
+					return processComment(ch);
 
 				case ParseState.SectionName:
-					return ProcessSectionName(ch);
+					return processSectionName(ch);
 
 				case ParseState.SectionEnd:
-					return ProcessSectionEnd(ch);
+					return processSectionEnd(ch);
 
 				case ParseState.KeyName:
-					return ProcessKeyName(ch);
+					return processKeyName(ch);
 
 				case ParseState.EndKeyName:
-					return ProcessEndKeyName(ch);
+					return processEndKeyName(ch);
 
 				case ParseState.BeginValue:
-					return ProcessBeginValue(ch);
+					return processBeginValue(ch);
 
 				case ParseState.SimpleValue:
-					return ProcessSimpleValue(ch);
+					return processSimpleValue(ch);
 
 				case ParseState.QuotedValue:
-					return ProcessQuotedValue(ch);
+					return processQuotedValue(ch);
 
 				case ParseState.EscValue:
-					return ProcessEscValue(ch);
+					return processEscValue(ch);
 
 				case ParseState.EndQuotedValue:
-					return ProcessEndQuotedValue(ch);
+					return processEndQuotedValue(ch);
 
 				default:
 					throw new NotImplementedException("unexpected state: " + _state.ToString());
 			}
 		}
 
-		private ParseState ProcessEndQuotedValue(char ch)
+		private ParseState processEndQuotedValue(char ch)
 		{
-			if(ch == BeginComment)
+			if(ch == _beginComment)
 				return ParseState.Comment;
 
-			if(ch == NewLine || ch == CarriageReturn)
+			if(ch == _newLine || ch == _carriageReturn)
 				return ParseState.BeginLine;
 
 			if(Char.IsWhiteSpace(ch))
 				return ParseState.EndQuotedValue;
 
-			throw new FormatException(string.Format("unexpected char '{0}' after '{1}'", ch, TextQuote));
+			throw new FormatException(string.Format("unexpected char '{0}' after '{1}'", ch, _textQuote));
 		}
 
-		private ParseState ProcessEscValue(char ch)
+		private ParseState processEscValue(char ch)
 		{
-			if(ch == TextQuote)
+			if(ch == _textQuote)
 			{
 				_tokenValue.Append(ch);
 				return ParseState.QuotedValue;
 			}
 
-			if(ch == BeginComment)
+			if(ch == _beginComment)
 			{
-				EndValue();
+				endValue();
 				return ParseState.Comment;
 			}
 
-			if(ch == NewLine || ch == CarriageReturn)
+			if(ch == _newLine || ch == _carriageReturn)
 			{
-				EndValue();
+				endValue();
 				return ParseState.BeginLine;
 			}
 
 			if(Char.IsWhiteSpace(ch))
 			{
-				EndValue();
+				endValue();
 				return ParseState.EndQuotedValue;
 			}
 
-			throw new FormatException(string.Format("unexpected char '{0}' after '{1}'", ch, TextQuote));
+			throw new FormatException(string.Format("unexpected char '{0}' after '{1}'", ch, _textQuote));
 		}
 
-		private ParseState ProcessQuotedValue(char ch)
+		private ParseState processQuotedValue(char ch)
 		{
-			if(ch == TextQuote)
+			if(ch == _textQuote)
 				return ParseState.EscValue;
 
 			// *
@@ -169,17 +168,17 @@ namespace NConfiguration.Ini.Parsing
 			return ParseState.QuotedValue;
 		}
 
-		private ParseState ProcessSimpleValue(char ch)
+		private ParseState processSimpleValue(char ch)
 		{
-			if (ch == BeginComment)
+			if (ch == _beginComment)
 			{
-				EndValue();
+				endValue();
 				return ParseState.Comment;
 			}
 
-			if (ch == NewLine || ch == CarriageReturn)
+			if (ch == _newLine || ch == _carriageReturn)
 			{
-				EndValue();
+				endValue();
 				return ParseState.BeginLine;
 			}
 
@@ -188,18 +187,18 @@ namespace NConfiguration.Ini.Parsing
 			return ParseState.SimpleValue;
 		}
 
-		private ParseState ProcessBeginValue(char ch)
+		private ParseState processBeginValue(char ch)
 		{
 			if (Char.IsWhiteSpace(ch))
 				return ParseState.BeginValue;
 
-			if (ch == NewLine || ch == CarriageReturn)
+			if (ch == _newLine || ch == _carriageReturn)
 			{
-				EndValue();
+				endValue();
 				return ParseState.BeginLine;
 			}
 
-			if (ch == TextQuote)
+			if (ch == _textQuote)
 				return ParseState.QuotedValue;
 
 			// *
@@ -207,7 +206,7 @@ namespace NConfiguration.Ini.Parsing
 			return ParseState.SimpleValue;
 		}
 
-		private void EndValue()
+		private void endValue()
 		{
 			var value = _tokenValue.ToString();
 			_tokenValue.Clear();
@@ -215,34 +214,34 @@ namespace NConfiguration.Ini.Parsing
 			_sections.Last.Value.Pairs.Add(new KeyValuePair<string,string>(_curentKey, value));
 		}
 
-		private ParseState ProcessEndKeyName(char ch)
+		private ParseState processEndKeyName(char ch)
 		{
-			if (ch == NewLine || ch == CarriageReturn)
+			if (ch == _newLine || ch == _carriageReturn)
 				throw new FormatException("unexpected end line in key name");
 
 			if (Char.IsWhiteSpace(ch))
 				return ParseState.EndKeyName;
 
-			if (ch == KeyValueSeparator)
+			if (ch == _keyValueSeparator)
 				return ParseState.BeginValue;
 
-			throw new FormatException(string.Format("unexpected char '{0}' before '{1}'", ch, KeyValueSeparator));
+			throw new FormatException(string.Format("unexpected char '{0}' before '{1}'", ch, _keyValueSeparator));
 		}
 
-		private ParseState ProcessKeyName(char ch)
+		private ParseState processKeyName(char ch)
 		{
-			if (ch == NewLine || ch == CarriageReturn)
+			if (ch == _newLine || ch == _carriageReturn)
 				throw new FormatException("unexpected end line in key name");
 
 			if (Char.IsWhiteSpace(ch))
 			{
-				KeyNameEnd();
+				keyNameEnd();
 				return ParseState.EndKeyName;
 			}
 
-			if (ch == KeyValueSeparator)
+			if (ch == _keyValueSeparator)
 			{
-				KeyNameEnd();
+				keyNameEnd();
 				return ParseState.BeginValue;
 			}
 
@@ -251,18 +250,18 @@ namespace NConfiguration.Ini.Parsing
 			return ParseState.KeyName;
 		}
 
-		private void KeyNameEnd()
+		private void keyNameEnd()
 		{
 			_curentKey = _tokenValue.ToString();
 			_tokenValue.Clear();
 		}
 
-		private ParseState ProcessSectionEnd(char ch)
+		private ParseState processSectionEnd(char ch)
 		{
-			if (ch == NewLine || ch == CarriageReturn)
+			if (ch == _newLine || ch == _carriageReturn)
 				return ParseState.BeginLine;
 
-			if (ch == BeginComment)
+			if (ch == _beginComment)
 				return ParseState.Comment;
 
 			if (Char.IsWhiteSpace(ch))
@@ -271,15 +270,15 @@ namespace NConfiguration.Ini.Parsing
 			throw new FormatException(string.Format("non white char '{0}' after section name", ch));
 		}
 
-		private ParseState ProcessSectionName(char ch)
+		private ParseState processSectionName(char ch)
 		{
-			if (ch == NewLine || ch == CarriageReturn)
+			if (ch == _newLine || ch == _carriageReturn)
 				throw new FormatException("unexpected end line in section name");
 
 
-			if (ch == EndSection)
+			if (ch == _endSection)
 			{
-				EndSectionName();
+				endSectionName();
 				return ParseState.SectionEnd;
 			}
 
@@ -287,24 +286,24 @@ namespace NConfiguration.Ini.Parsing
 			return ParseState.SectionName;
 		}
 
-		private void EndSectionName()
+		private void endSectionName()
 		{
 			var sectionName = _tokenValue.ToString();
 			_sections.AddLast(new Section(sectionName));
 			_tokenValue.Clear();
 		}
 
-		private ParseState ProcessComment(char ch)
+		private ParseState processComment(char ch)
 		{
-			if (ch == NewLine)
+			if (ch == _newLine)
 				return ParseState.BeginLine;
 
 			return ParseState.Comment;
 		}
 
-		private ParseState ProcessEmptyLine(char ch)
+		private ParseState processEmptyLine(char ch)
 		{
-			if (ch == NewLine)
+			if (ch == _newLine)
 				return ParseState.BeginLine;
 
 			if (Char.IsWhiteSpace(ch))
@@ -313,21 +312,21 @@ namespace NConfiguration.Ini.Parsing
 			throw new FormatException(string.Format("non white char '{0}' in empty line", ch));
 		}
 
-		private ParseState ProcessBeginLine(char ch)
+		private ParseState processBeginLine(char ch)
 		{
-			if (ch == NewLine)
+			if (ch == _newLine)
 				return ParseState.BeginLine;
 
-			if (ch == CarriageReturn)
+			if (ch == _carriageReturn)
 				return ParseState.BeginLine;
 
 			if (Char.IsWhiteSpace(ch))
 				return ParseState.EmptyLine;
 
-			if (ch == BeginComment)
+			if (ch == _beginComment)
 				return ParseState.Comment;
 
-			if (ch == BeginSection)
+			if (ch == _beginSection)
 				return ParseState.SectionName;
 
 			// *

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NDesk.Options;
 using System.Security.Cryptography;
 using System.IO;
@@ -47,7 +46,7 @@ namespace RsaToolkit.Commands
 				var cp = new CspParameters();
 				cp.KeyContainerName = _containerName;
 				cp.Flags = CspProviderFlags.UseMachineKeyStore;
-				cp.CryptoKeySecurity = CreateAccessRules();
+				cp.CryptoKeySecurity = createAccessRules();
 
 				rsa = new RSACryptoServiceProvider(cp);
 				rsa.FromXmlString(File.ReadAllText(_keyFile));
@@ -66,18 +65,18 @@ namespace RsaToolkit.Commands
 			}
 		}
 
-		private CryptoKeySecurity CreateAccessRules()
+		private CryptoKeySecurity createAccessRules()
 		{
 			var defaultRules = true;
 			var result = new CryptoKeySecurity();
 
-			foreach(var identity in GetIdentityList(_writeAccess))
+			foreach(var identity in getIdentityList(_writeAccess))
 			{
 				result.AddAccessRule(new CryptoKeyAccessRule(new NTAccount(identity), CryptoKeyRights.FullControl, AccessControlType.Allow));
 				defaultRules = false;
 			}
 
-			foreach (var identity in GetIdentityList(_readAccess))
+			foreach (var identity in getIdentityList(_readAccess))
 			{
 				result.AddAccessRule(new CryptoKeyAccessRule(new NTAccount(identity), CryptoKeyRights.GenericRead, AccessControlType.Allow));
 				defaultRules = false;
@@ -86,7 +85,7 @@ namespace RsaToolkit.Commands
 			return defaultRules ? null : result;
 		}
 
-		private IEnumerable<string> GetIdentityList(string identityList)
+		private IEnumerable<string> getIdentityList(string identityList)
 		{
 			if (identityList == null)
 				return Enumerable.Empty<string>();

@@ -1,12 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Xml;
-using System.IO;
 using System.Xml.Linq;
-using System.Linq;
-using System.Xml.Serialization;
 using NConfiguration.Xml.Protected;
-using System.Security.Cryptography;
 using NConfiguration.Serialization;
 
 namespace NConfiguration.Xml

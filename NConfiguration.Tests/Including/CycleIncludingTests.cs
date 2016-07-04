@@ -1,14 +1,10 @@
 using System;
-using NConfiguration.Tests;
 using NUnit.Framework;
-using System.Linq;
 using NConfiguration.Xml;
-using System.Collections.Generic;
 using NConfiguration.Joining;
 using NConfiguration.Json;
 using NConfiguration.Ini;
 using System.IO;
-using NConfiguration.Serialization;
 
 namespace NConfiguration.Including
 {
@@ -19,7 +15,7 @@ namespace NConfiguration.Including
 		[TestCase("jsonPartial.json")]
 		public void DefaultIdentity(string file)
 		{
-			var settings = LoadSettings(file);
+			var settings = loadSettings(file);
 
 			Assert.AreEqual("ini", settings.First<OneField>("iniPartialConfig").Field);
 			Assert.AreEqual("json", settings.First<OneField>("jsonPartialConfig").Field);
@@ -32,14 +28,14 @@ namespace NConfiguration.Including
 		[TestCase("jsonPartial_id2.json", "json id2", "xml id1")]
 		public void CustomIdentity(string file, string jsonId, string xmlId)
 		{
-			var settings = LoadSettings(file);
+			var settings = loadSettings(file);
 
 			Assert.AreEqual("ini id1", settings.First<OneField>("iniPartialConfig").Field);
 			Assert.AreEqual(jsonId, settings.First<OneField>("jsonPartialConfig").Field);
 			Assert.AreEqual(xmlId, settings.First<OneField>("xmlPartialConfig").Field);
 		}
 
-		private static IAppSettings LoadSettings(string file)
+		private static IAppSettings loadSettings(string file)
 		{
 			var loader = new SettingsLoader();
 			loader.XmlFileBySection();

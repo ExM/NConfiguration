@@ -1,6 +1,3 @@
-using System;
-using System.Text;
-using System.Collections.Generic;
 using NConfiguration.Combination;
 using System.Runtime.Serialization;
 

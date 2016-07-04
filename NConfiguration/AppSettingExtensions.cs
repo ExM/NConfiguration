@@ -1,11 +1,8 @@
 using System;
 using System.Linq;
-using System.Xml.Serialization;
 using System.Runtime.Serialization;
-using NConfiguration.Monitoring;
 using System.Collections.Generic;
 using NConfiguration.Combination;
-using NConfiguration.Joining;
 using NConfiguration.Serialization;
 
 namespace NConfiguration
@@ -79,7 +76,6 @@ namespace NConfiguration
 		/// Gets the name of the section in DataContractAttribute or class name
 		/// </summary>
 		/// <returns>The section name.</returns>
-		/// <typeparam name='T'>type of configuration</typeparam>
 		public static string GetSectionName(this Type type)
 		{
 			var dataAttrName = type.GetCustomAttributes(typeof(DataContractAttribute), false)

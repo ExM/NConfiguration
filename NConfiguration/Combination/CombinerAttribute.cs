@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace NConfiguration.Combination
 {
@@ -25,7 +24,7 @@ namespace NConfiguration.Combination
 			var requiredCombinerType = typeof(ICombiner<>).MakeGenericType(targetType);
 
 
-			var candidate = CombinerTypes.SelectMany(ct => GetVariants(ct, targetType)).FirstOrDefault(_ => requiredCombinerType.IsAssignableFrom(_));
+			var candidate = CombinerTypes.SelectMany(ct => getVariants(ct, targetType)).FirstOrDefault(_ => requiredCombinerType.IsAssignableFrom(_));
 
 			if(candidate == null)
 				throw new InvalidOperationException(string.Format("supported combiner for type '{0}' not found", targetType.FullName));
@@ -33,7 +32,7 @@ namespace NConfiguration.Combination
 			return Activator.CreateInstance(candidate);
 		}
 
-		private static Type TryMakeCombinerType(Type genericCombinerType, Type targetType)
+		private static Type tryMakeCombinerType(Type genericCombinerType, Type targetType)
 		{
 			try
 			{
@@ -45,7 +44,7 @@ namespace NConfiguration.Combination
 			}
 		}
 
-		private static IEnumerable<Type> GetVariantGenericArgument(Type targetType)
+		private static IEnumerable<Type> getVariantGenericArgument(Type targetType)
 		{
 			yield return targetType;
 
@@ -62,13 +61,13 @@ namespace NConfiguration.Combination
 			}
 		}
 
-		private static IEnumerable<Type> GetVariants(Type combinerType, Type targetType)
+		private static IEnumerable<Type> getVariants(Type combinerType, Type targetType)
 		{
 			if(combinerType.IsGenericTypeDefinition)
 			{
-				foreach(var genArg in GetVariantGenericArgument(targetType))
+				foreach(var genArg in getVariantGenericArgument(targetType))
 				{
-					var candidate = TryMakeCombinerType(combinerType, genArg);
+					var candidate = tryMakeCombinerType(combinerType, genArg);
 					if (candidate != null)
 						yield return candidate;
 				}

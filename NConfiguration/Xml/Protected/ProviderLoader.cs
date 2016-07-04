@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Configuration;
 using System.Collections.Specialized;
-using System.Xml;
 using NConfiguration.Joining;
 using NConfiguration.Serialization;
 
@@ -40,12 +37,12 @@ namespace NConfiguration.Xml.Protected
 				throw new ArgumentNullException("type", "missing parameter");
 			parameters.Remove("type");
 
-			Resolve(name, type, parameters);
+			resolve(name, type, parameters);
 		}
 
-		private void Resolve(string name, string type, NameValueCollection parameters)
+		private void resolve(string name, string type, NameValueCollection parameters)
 		{
-			if (OnLoading(name, type, parameters))
+			if (onLoading(name, type, parameters))
 				return;
 
 			Type providerType = Type.GetType(type, true);
@@ -79,7 +76,7 @@ namespace NConfiguration.Xml.Protected
 
 		public event EventHandler<CancelableEventArgs> Clearing;
 		
-		private bool OnClearing()
+		private bool onClearing()
 		{
 			var copy = Clearing;
 			if (copy == null)
@@ -92,7 +89,7 @@ namespace NConfiguration.Xml.Protected
 
 		public event EventHandler<ProviderLoadingEventArgs> Loading;
 
-		private bool OnLoading(string name, string type, NameValueCollection parameters)
+		private bool onLoading(string name, string type, NameValueCollection parameters)
 		{
 			var copy = Loading;
 			if (copy == null)
@@ -127,14 +124,14 @@ namespace NConfiguration.Xml.Protected
 
 		public ProviderLoader TryLoadAppSettings(IConfigNodeProvider provider)
 		{
-			var cfg = TryGetConfig(provider);
+			var cfg = tryGetConfig(provider);
 			if (cfg != null)
-				LoadConfig(cfg);
+				loadConfig(cfg);
 			
 			return this;
 		}
 
-		private ConfigProtectedData TryGetConfig(IConfigNodeProvider nodeProvider)
+		private ConfigProtectedData tryGetConfig(IConfigNodeProvider nodeProvider)
 		{
 			foreach (var node in nodeProvider.ByName(typeof(ConfigProtectedData).GetSectionName()))
 				return DefaultDeserializer.Instance.Deserialize<ConfigProtectedData>(node);
@@ -144,17 +141,17 @@ namespace NConfiguration.Xml.Protected
 
 		public ProviderLoader LoadAppSettings(IAppSettings settings)
 		{
-			LoadConfig(settings.TryFirst<ConfigProtectedData>());
+			loadConfig(settings.TryFirst<ConfigProtectedData>());
 			return this;
 		}
 
-		private void LoadConfig(ConfigProtectedData cfg)
+		private void loadConfig(ConfigProtectedData cfg)
 		{
 			foreach(var pair in cfg.Providers.Nested)
 			{
 				if (pair.Key == "clear")
 				{
-					if (OnClearing())
+					if (onClearing())
 						continue;
 
 					_providers.Clear();
@@ -163,7 +160,7 @@ namespace NConfiguration.Xml.Protected
 
 				if (pair.Key == "add")
 				{
-					Append(GetNameValueCollection(pair.Value));
+					Append(getNameValueCollection(pair.Value));
 					continue;
 				}
 
@@ -171,7 +168,7 @@ namespace NConfiguration.Xml.Protected
 			}
 		}
 
-		private static NameValueCollection GetNameValueCollection(ICfgNode node)
+		private static NameValueCollection getNameValueCollection(ICfgNode node)
 		{
 			var result = new NameValueCollection();
 			foreach (var pair in node.Nested)
@@ -187,7 +184,7 @@ namespace NConfiguration.Xml.Protected
 		public ProviderLoader LoadConfigProtectedData()
 		{
 			foreach (var settings in ConfigProtectedDataProviders)
-				Resolve(settings.Name, settings.Type, settings.Parameters);
+				resolve(settings.Name, settings.Type, settings.Parameters);
 
 			return this;
 		}

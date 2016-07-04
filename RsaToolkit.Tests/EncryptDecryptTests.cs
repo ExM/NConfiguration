@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
-using System.Diagnostics;
+﻿using NUnit.Framework;
 using System.IO;
 using System.Xml.Linq;
 
@@ -16,7 +11,7 @@ namespace RsaToolkit
 		[Test]
 		public void WrongDecrypt()
 		{
-			File.WriteAllText("testConfig.xml", XmlConfigContent);
+			File.WriteAllText("testConfig.xml", _xmlConfigContent);
 
 			"create -n=TestContainer".SuccessRun();
 
@@ -26,7 +21,7 @@ namespace RsaToolkit
 
 			var cryptedContent = File.ReadAllText("testConfig.xml");
 
-			Assert.AreNotEqual(XmlConfigContent, cryptedContent);
+			Assert.AreNotEqual(_xmlConfigContent, cryptedContent);
 
 			"decrypt -n=TestContainer2 -c=testConfig.xml -s=MySecuredConnection".FailRun();
 
@@ -36,20 +31,20 @@ namespace RsaToolkit
 		[Test]
 		public void FromNewContainer()
 		{
-			File.WriteAllText("testConfig.xml", XmlConfigContent);
+			File.WriteAllText("testConfig.xml", _xmlConfigContent);
 
 			"create -n=TestContainer".SuccessRun();
 
 			"encrypt -n=TestContainer -c=testConfig.xml -s=MySecuredConnection -p=TestProvider".SuccessRun();
 
-			Assert.AreNotEqual(XmlConfigContent, File.ReadAllText("testConfig.xml"));
+			Assert.AreNotEqual(_xmlConfigContent, File.ReadAllText("testConfig.xml"));
 
 			"decrypt -n=TestContainer -c=testConfig.xml -s=MySecuredConnection".SuccessRun();
 
-			Assert.AreEqual(XmlConfigContent, File.ReadAllText("testConfig.xml"));
+			Assert.AreEqual(_xmlConfigContent, File.ReadAllText("testConfig.xml"));
 		}
 
-		private static string XmlConfigContent = XDocument.Parse(@"<configuration>
+		private static string _xmlConfigContent = XDocument.Parse(@"<configuration>
 	<AdditionalConfig F='InUpDirectory' />
 	<MyExtConnection Server='localhost' Database='workDb' User='admin' Password='pass' />
 	<MySecuredConnection Server='localhost' Database='workDb' User='admin' Password='pass' />

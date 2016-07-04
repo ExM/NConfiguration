@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Xml.Serialization;
 
 namespace NConfiguration.Combination
 {
@@ -69,21 +67,21 @@ namespace NConfiguration.Combination
 			_bodyList.Add(Expression.Assign(_vResult, resultInstance));
 		}
 
-		private Expression CallMemberCombiner(MemberInfo mi, Type targetType, Expression prev, Expression next)
+		private Expression callMemberCombiner(MemberInfo mi, Type targetType, Expression prev, Expression next)
 		{
 			try
 			{
 				var combinerAttr = mi.GetCustomAttributes(false).OfType<ICombinerFactory>().SingleOrDefault();
 				if (combinerAttr == null)
 				{
-					var combineMI = typeof(ICombiner).GetMethod("Combine").MakeGenericMethod(targetType);
-					return Expression.Call(_pCombiner, combineMI, _pCombiner, prev, next);
+					var combineMi = typeof(ICombiner).GetMethod("Combine").MakeGenericMethod(targetType);
+					return Expression.Call(_pCombiner, combineMi, _pCombiner, prev, next);
 				}
 				else
 				{
 					var customCombiner = Expression.Constant(combinerAttr.CreateInstance(targetType));
-					var combineMI = typeof(ICombiner<>).MakeGenericType(targetType).GetMethod("Combine");
-					return Expression.Call(customCombiner, combineMI, _pCombiner, prev, next);
+					var combineMi = typeof(ICombiner<>).MakeGenericType(targetType).GetMethod("Combine");
+					return Expression.Call(customCombiner, combineMi, _pCombiner, prev, next);
 				}
 			}
 			catch(Exception ex)
@@ -109,7 +107,7 @@ namespace NConfiguration.Combination
 			var prevField = Expression.Field(_pPrev, fi);
 			var nextField = Expression.Field(_pNext, fi);
 			var resultField = Expression.Field(_vResult, fi);
-			var right = CallMemberCombiner(fi, fi.FieldType, prevField, nextField);
+			var right = callMemberCombiner(fi, fi.FieldType, prevField, nextField);
 
 			_bodyList.Add(Expression.Assign(resultField, right));
 			_assingExist = true;
@@ -133,7 +131,7 @@ namespace NConfiguration.Combination
 			var nextField = Expression.Property(_pNext, pi);
 			var resultField = Expression.Property(_vResult, pi);
 
-			var right = CallMemberCombiner(pi, pi.PropertyType, prevField, nextField);
+			var right = callMemberCombiner(pi, pi.PropertyType, prevField, nextField);
 
 			_bodyList.Add(Expression.Assign(resultField, right));
 			_assingExist = true;

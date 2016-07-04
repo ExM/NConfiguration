@@ -1,9 +1,7 @@
 using System;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Xml;
 using NUnit.Framework;
-using System.Configuration;
 using NConfiguration.Xml.Protected;
 using System.Collections.Generic;
 

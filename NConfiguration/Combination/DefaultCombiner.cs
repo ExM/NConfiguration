@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Collections.Concurrent;
 
 namespace NConfiguration.Combination
 {
@@ -28,9 +24,9 @@ namespace NConfiguration.Combination
 
 		private static class Cache<T>
 		{
-			public static readonly Lazy<Combine<T>> CombineLazy = new Lazy<Combine<T>>(CombineCreater);
+			public static readonly Lazy<Combine<T>> CombineLazy = new Lazy<Combine<T>>(combineCreater);
 
-			private static Combine<T> CombineCreater()
+			private static Combine<T> combineCreater()
 			{
 				return (Combine<T>)BuildUtils.CreateFunction(typeof (T));
 			}

@@ -1,12 +1,7 @@
 using System;
-using System.Xml;
-using System.IO;
 using System.Linq;
-using System.Xml.Linq;
-using System.Xml.Serialization;
 using System.Collections.Generic;
 using NConfiguration.Serialization;
-using NConfiguration.Combination;
 using NConfiguration.Monitoring;
 using System.Runtime.Serialization;
 
@@ -50,7 +45,7 @@ namespace NConfiguration.Joining
 
 		public event EventHandler<LoadedEventArgs> Loaded;
 
-		private void OnLoaded(IIdentifiedSource settings)
+		private void onLoaded(IIdentifiedSource settings)
 		{
 			var copy = Loaded;
 			if (copy != null)
@@ -74,13 +69,13 @@ namespace NConfiguration.Joining
 			var context = new Context(deserializer, searchPath);
 
 			context.FirstChange.Observe(setting as IChangeable);
-			OnLoaded(setting);
+			onLoaded(setting);
 			context.CheckLoaded(setting);
 
-			return new ChangeableConfigNodeProvider(ScanInclude(setting, context), context.FirstChange);
+			return new ChangeableConfigNodeProvider(scanInclude(setting, context), context.FirstChange);
 		}
 
-		private IEnumerable<KeyValuePair<string, ICfgNode>> ScanInclude(IConfigNodeProvider source, Context context)
+		private IEnumerable<KeyValuePair<string, ICfgNode>> scanInclude(IConfigNodeProvider source, Context context)
 		{
 			foreach(var pair in source.Items)
 			{
@@ -119,10 +114,10 @@ namespace NConfiguration.Joining
 					if (context.CheckLoaded(cnProvider))
 						continue;
 
-					OnLoaded(cnProvider);
+					onLoaded(cnProvider);
 					context.FirstChange.Observe(cnProvider as IChangeable);
 
-					foreach (var includePair in ScanInclude(cnProvider, context))
+					foreach (var includePair in scanInclude(cnProvider, context))
 						yield return includePair;
 				}
 			}

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace NConfiguration.Xml.Protected
+﻿namespace NConfiguration.Xml.Protected
 {
 	/// <summary>
 	/// This configuration can decrypt XML section

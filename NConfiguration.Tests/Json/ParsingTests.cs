@@ -1,7 +1,4 @@
-using NConfiguration.Xml;
 using NUnit.Framework;
-using NConfiguration.Serialization;
-using NConfiguration.Tests;
 using System;
 using NConfiguration.Json.Parsing;
 using System.Linq;

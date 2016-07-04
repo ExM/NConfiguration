@@ -1,11 +1,5 @@
 using System;
-using System.Xml;
 using System.IO;
-using System.Linq;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using NConfiguration.Xml.Protected;
-using NConfiguration.Serialization;
 using System.Collections.Generic;
 using NConfiguration.Ini.Parsing;
 using NConfiguration.Monitoring;

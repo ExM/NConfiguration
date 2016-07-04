@@ -1,12 +1,4 @@
-using System;
 using NUnit.Framework;
-using System.Collections.Specialized;
-using System.Configuration;
-using NConfiguration.Xml;
-using System.IO;
-using NConfiguration.Serialization;
-using NConfiguration.Tests;
-using NConfiguration.Examples;
 using NConfiguration.ExampleTypes;
 
 namespace NConfiguration

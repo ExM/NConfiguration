@@ -1,13 +1,5 @@
 using System;
-using System.Linq;
-using System.Xml;
-using System.IO;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using System.Collections.Generic;
 using System.Threading;
-using NConfiguration.Serialization;
-using NConfiguration.Combination;
 
 namespace NConfiguration.Joining
 {
@@ -20,10 +12,10 @@ namespace NConfiguration.Joining
 		public void Observe(IChangeable changable)
 		{
 			if(changable != null)
-				changable.Changed += OnInnerChangableChanged;
+				changable.Changed += onInnerChangableChanged;
 		}
 
-		private void OnInnerChangableChanged(object sender, EventArgs e)
+		private void onInnerChangableChanged(object sender, EventArgs e)
 		{
 			EventHandler copy;
 			lock (_sync)
@@ -53,7 +45,7 @@ namespace NConfiguration.Joining
 				lock (_sync)
 				{
 					if (_changed)
-						ThreadPool.QueueUserWorkItem(AsyncChangedWork, value);
+						ThreadPool.QueueUserWorkItem(asyncChangedWork, value);
 					else
 						_changedHandler += value;
 				}
@@ -68,7 +60,7 @@ namespace NConfiguration.Joining
 			}
 		}
 
-		private void AsyncChangedWork(object arg)
+		private void asyncChangedWork(object arg)
 		{
 			((EventHandler)arg)(_firstChangedSource, EventArgs.Empty);
 		}

@@ -1,9 +1,6 @@
-using System;
 using NConfiguration.Joining;
 using NConfiguration.Xml;
 using NUnit.Framework;
-using NConfiguration.Serialization;
-using NConfiguration.Tests;
 
 namespace NConfiguration
 {

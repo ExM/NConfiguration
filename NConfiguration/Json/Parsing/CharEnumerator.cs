@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Globalization;
@@ -86,7 +85,7 @@ namespace NConfiguration.Json.Parsing
 
 		internal bool MoveTo(params Char[] ends)
 		{
-			int N = ends.Length;
+			int n = ends.Length;
 
 			while (MoveNext())
 			{
@@ -94,7 +93,7 @@ namespace NConfiguration.Json.Parsing
 				if (Char.IsWhiteSpace(cur))
 					continue;
 
-				for (int i = 0; i < N; i++)
+				for (int i = 0; i < n; i++)
 					if (cur == ends[i])
 						return true;
 
@@ -118,7 +117,7 @@ namespace NConfiguration.Json.Parsing
 					case '\"':
 						return new JString(text.ToString());
 					case '\\':
-						text.Append(ReadEscapeSymbol());
+						text.Append(readEscapeSymbol());
 						break;
 					case '\b':
 					case '\f':
@@ -133,7 +132,7 @@ namespace NConfiguration.Json.Parsing
 			}
 		}
 
-		private char ReadEscapeSymbol()
+		private char readEscapeSymbol()
 		{
 			if (!MoveNext())
 				throw new FormatException("unexpected end in the reading of string");
@@ -157,13 +156,13 @@ namespace NConfiguration.Json.Parsing
 				case 't':
 					return '\t';
 				case 'u':
-					return ReadUnicodeSymbol();
+					return readUnicodeSymbol();
 				default:
 					throw new FormatException(string.Format("unexpected escape symbol '{0}'", Current));
 			}
 		}
 
-		private char ReadUnicodeSymbol()
+		private char readUnicodeSymbol()
 		{
 			StringBuilder text = new StringBuilder(4);
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 
 namespace NConfiguration.Serialization.Enums
 {
@@ -68,7 +67,7 @@ namespace NConfiguration.Serialization.Enums
 			}
 		}
 		
-		private T ParseOne(string text)
+		private T parseOne(string text)
 		{
 			T exist;
 			if (_nameMap.TryGetValue(text, out exist))
@@ -84,7 +83,7 @@ namespace NConfiguration.Serialization.Enums
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
 
-		private Byte ParseToNumber(string text)
+		private Byte parseToNumber(string text)
 		{
 			T exist;
 			if (_nameMap.TryGetValue(text, out exist))
@@ -108,12 +107,12 @@ namespace NConfiguration.Serialization.Enums
 				return default(T);
 
 			if (items.Length == 1)
-				return ParseOne(items[0]);
+				return parseOne(items[0]);
 
 			Byte result = 0;
 
 			foreach (var item in items)
-				result |= ParseToNumber(item);
+				result |= parseToNumber(item);
 
 			return (T)(ValueType)result;
 		}
@@ -181,7 +180,7 @@ namespace NConfiguration.Serialization.Enums
 			}
 		}
 		
-		private T ParseOne(string text)
+		private T parseOne(string text)
 		{
 			T exist;
 			if (_nameMap.TryGetValue(text, out exist))
@@ -197,7 +196,7 @@ namespace NConfiguration.Serialization.Enums
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
 
-		private SByte ParseToNumber(string text)
+		private SByte parseToNumber(string text)
 		{
 			T exist;
 			if (_nameMap.TryGetValue(text, out exist))
@@ -221,12 +220,12 @@ namespace NConfiguration.Serialization.Enums
 				return default(T);
 
 			if (items.Length == 1)
-				return ParseOne(items[0]);
+				return parseOne(items[0]);
 
 			SByte result = 0;
 
 			foreach (var item in items)
-				result |= ParseToNumber(item);
+				result |= parseToNumber(item);
 
 			return (T)(ValueType)result;
 		}
@@ -294,7 +293,7 @@ namespace NConfiguration.Serialization.Enums
 			}
 		}
 		
-		private T ParseOne(string text)
+		private T parseOne(string text)
 		{
 			T exist;
 			if (_nameMap.TryGetValue(text, out exist))
@@ -310,7 +309,7 @@ namespace NConfiguration.Serialization.Enums
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
 
-		private Int16 ParseToNumber(string text)
+		private Int16 parseToNumber(string text)
 		{
 			T exist;
 			if (_nameMap.TryGetValue(text, out exist))
@@ -334,12 +333,12 @@ namespace NConfiguration.Serialization.Enums
 				return default(T);
 
 			if (items.Length == 1)
-				return ParseOne(items[0]);
+				return parseOne(items[0]);
 
 			Int16 result = 0;
 
 			foreach (var item in items)
-				result |= ParseToNumber(item);
+				result |= parseToNumber(item);
 
 			return (T)(ValueType)result;
 		}
@@ -407,7 +406,7 @@ namespace NConfiguration.Serialization.Enums
 			}
 		}
 		
-		private T ParseOne(string text)
+		private T parseOne(string text)
 		{
 			T exist;
 			if (_nameMap.TryGetValue(text, out exist))
@@ -423,7 +422,7 @@ namespace NConfiguration.Serialization.Enums
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
 
-		private Int32 ParseToNumber(string text)
+		private Int32 parseToNumber(string text)
 		{
 			T exist;
 			if (_nameMap.TryGetValue(text, out exist))
@@ -447,12 +446,12 @@ namespace NConfiguration.Serialization.Enums
 				return default(T);
 
 			if (items.Length == 1)
-				return ParseOne(items[0]);
+				return parseOne(items[0]);
 
 			Int32 result = 0;
 
 			foreach (var item in items)
-				result |= ParseToNumber(item);
+				result |= parseToNumber(item);
 
 			return (T)(ValueType)result;
 		}
@@ -520,7 +519,7 @@ namespace NConfiguration.Serialization.Enums
 			}
 		}
 		
-		private T ParseOne(string text)
+		private T parseOne(string text)
 		{
 			T exist;
 			if (_nameMap.TryGetValue(text, out exist))
@@ -536,7 +535,7 @@ namespace NConfiguration.Serialization.Enums
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
 
-		private Int64 ParseToNumber(string text)
+		private Int64 parseToNumber(string text)
 		{
 			T exist;
 			if (_nameMap.TryGetValue(text, out exist))
@@ -560,12 +559,12 @@ namespace NConfiguration.Serialization.Enums
 				return default(T);
 
 			if (items.Length == 1)
-				return ParseOne(items[0]);
+				return parseOne(items[0]);
 
 			Int64 result = 0;
 
 			foreach (var item in items)
-				result |= ParseToNumber(item);
+				result |= parseToNumber(item);
 
 			return (T)(ValueType)result;
 		}
@@ -633,7 +632,7 @@ namespace NConfiguration.Serialization.Enums
 			}
 		}
 		
-		private T ParseOne(string text)
+		private T parseOne(string text)
 		{
 			T exist;
 			if (_nameMap.TryGetValue(text, out exist))
@@ -649,7 +648,7 @@ namespace NConfiguration.Serialization.Enums
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
 
-		private UInt16 ParseToNumber(string text)
+		private UInt16 parseToNumber(string text)
 		{
 			T exist;
 			if (_nameMap.TryGetValue(text, out exist))
@@ -673,12 +672,12 @@ namespace NConfiguration.Serialization.Enums
 				return default(T);
 
 			if (items.Length == 1)
-				return ParseOne(items[0]);
+				return parseOne(items[0]);
 
 			UInt16 result = 0;
 
 			foreach (var item in items)
-				result |= ParseToNumber(item);
+				result |= parseToNumber(item);
 
 			return (T)(ValueType)result;
 		}
@@ -746,7 +745,7 @@ namespace NConfiguration.Serialization.Enums
 			}
 		}
 		
-		private T ParseOne(string text)
+		private T parseOne(string text)
 		{
 			T exist;
 			if (_nameMap.TryGetValue(text, out exist))
@@ -762,7 +761,7 @@ namespace NConfiguration.Serialization.Enums
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
 
-		private UInt32 ParseToNumber(string text)
+		private UInt32 parseToNumber(string text)
 		{
 			T exist;
 			if (_nameMap.TryGetValue(text, out exist))
@@ -786,12 +785,12 @@ namespace NConfiguration.Serialization.Enums
 				return default(T);
 
 			if (items.Length == 1)
-				return ParseOne(items[0]);
+				return parseOne(items[0]);
 
 			UInt32 result = 0;
 
 			foreach (var item in items)
-				result |= ParseToNumber(item);
+				result |= parseToNumber(item);
 
 			return (T)(ValueType)result;
 		}
@@ -859,7 +858,7 @@ namespace NConfiguration.Serialization.Enums
 			}
 		}
 		
-		private T ParseOne(string text)
+		private T parseOne(string text)
 		{
 			T exist;
 			if (_nameMap.TryGetValue(text, out exist))
@@ -875,7 +874,7 @@ namespace NConfiguration.Serialization.Enums
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
 
-		private UInt64 ParseToNumber(string text)
+		private UInt64 parseToNumber(string text)
 		{
 			T exist;
 			if (_nameMap.TryGetValue(text, out exist))
@@ -899,12 +898,12 @@ namespace NConfiguration.Serialization.Enums
 				return default(T);
 
 			if (items.Length == 1)
-				return ParseOne(items[0]);
+				return parseOne(items[0]);
 
 			UInt64 result = 0;
 
 			foreach (var item in items)
-				result |= ParseToNumber(item);
+				result |= parseToNumber(item);
 
 			return (T)(ValueType)result;
 		}

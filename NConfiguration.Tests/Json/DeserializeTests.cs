@@ -1,10 +1,5 @@
-using NConfiguration.Xml;
 using NUnit.Framework;
-using NConfiguration.Serialization;
-using NConfiguration.Tests;
 using System;
-using NConfiguration.Json.Parsing;
-using System.Linq;
 using System.Collections.Generic;
 
 namespace NConfiguration.Json
@@ -12,7 +7,7 @@ namespace NConfiguration.Json
 	[TestFixture]
 	public class DeserializeTests
 	{
-		IAppSettings settings = new JsonStringSettings(@"{
+		IAppSettings _settings = new JsonStringSettings(@"{
 	""Section1"":
 	{
 		""Item1"":""item1.value1"",
@@ -55,7 +50,7 @@ namespace NConfiguration.Json
 		[Test]
 		public void Simple()
 		{
-			var section = settings.First<Section1>("Section1");
+			var section = _settings.First<Section1>("Section1");
 			Assert.That(section.item1, Is.EqualTo("item1.value1"));
 			Assert.That(section.item2, Is.EqualTo(1231232));
 			Assert.That(section.nullItem, Is.Null);
@@ -65,14 +60,14 @@ namespace NConfiguration.Json
 		[Test]
 		public void MultiIntArray()
 		{
-			var section = settings.First<Section2>("Section2");
+			var section = _settings.First<Section2>("Section2");
 			Assert.That(section.Item1, Is.EquivalentTo(new int?[] { 1, 2, null, null, 1, 2}));
 		}
 
 		[Test]
 		public void MultiStringArray()
 		{
-			var section = settings.First<Section3>("Section3");
+			var section = _settings.First<Section3>("Section3");
 			Assert.That(section.Item1, Is.EquivalentTo(new string[] {"item1.value1", "1", "2", null, null, "1", "2" }));
 		}
 	}

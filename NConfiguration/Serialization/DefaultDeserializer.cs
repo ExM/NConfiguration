@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace NConfiguration.Serialization
 {
@@ -27,9 +24,9 @@ namespace NConfiguration.Serialization
 
 		private static class Cache<T>
 		{
-			public static readonly Lazy<Deserialize<T>> DeserializeLazy = new Lazy<Deserialize<T>>(DeserializeCreater);
+			public static readonly Lazy<Deserialize<T>> DeserializeLazy = new Lazy<Deserialize<T>>(deserializeCreater);
 
-			private static Deserialize<T> DeserializeCreater()
+			private static Deserialize<T> deserializeCreater()
 			{
 				return (Deserialize<T>)BuildUtils.CreateFunction(typeof(T));
 			}

@@ -1,8 +1,6 @@
 using NConfiguration.Combination;
 using NConfiguration.Serialization;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace NConfiguration
 {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NDesk.Options;
@@ -28,7 +27,7 @@ namespace RsaToolkit
 				args = p.Parse(args).ToArray();
 				if (showHelp)
 				{
-					ShowHelp(p);
+					Program.showHelp(p);
 					return 0;
 				}
 
@@ -44,7 +43,7 @@ namespace RsaToolkit
 			}
 			catch(Exception e)
 			{
-				Console.WriteLine("RsaToolkit: {0}", BuildMessage(e));
+				Console.WriteLine("RsaToolkit: {0}", buildMessage(e));
 				Console.WriteLine("Try `RsaToolkit --help' for more information.");
 				return 1;
 			}
@@ -59,12 +58,12 @@ namespace RsaToolkit
 				if(trace)
 					Console.WriteLine("Exception: {0}", ex);
 				else
-					Console.WriteLine("Exception: {0}", BuildMessage(ex));
+					Console.WriteLine("Exception: {0}", buildMessage(ex));
 				return 1;
 			}
 		}
 
-		static string BuildMessage(Exception ex)
+		static string buildMessage(Exception ex)
 		{
 			var sb = new StringBuilder(ex.Message);
 			ex = ex.InnerException;
@@ -77,7 +76,7 @@ namespace RsaToolkit
 			return sb.ToString();
 		}
 
-		static void ShowHelp(OptionSet p)
+		static void showHelp(OptionSet p)
 		{
 			Console.WriteLine("Usage: RsaToolkit [OPTIONS]");
 			Console.WriteLine("Options:");

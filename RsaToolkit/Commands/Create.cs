@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NDesk.Options;
 using System.Security.Cryptography;
 using System.IO;
@@ -18,10 +16,10 @@ namespace RsaToolkit.Commands
 		public override void Initialize(IEnumerable<string> args)
 		{
 			base.Initialize(args);
-			SetKeySize();
+			setKeySize();
 		}
 
-		private void SetKeySize()
+		private void setKeySize()
 		{
 			if (_keySizeText == null)
 			{
