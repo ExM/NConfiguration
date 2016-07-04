@@ -57,6 +57,11 @@ namespace NConfiguration.Joining
 			return LoadSettings(setting, DefaultDeserializer.Instance);
 		}
 
+		public ChangeableConfigNodeProvider LoadSettings(IIdentifiedSource setting, string searchPath)
+		{
+			return LoadSettings(setting, DefaultDeserializer.Instance, searchPath);
+		}
+
 		public ChangeableConfigNodeProvider LoadSettings(IIdentifiedSource setting, IDeserializer deserializer, string searchPath = null)
 		{
 			if(searchPath == null)
