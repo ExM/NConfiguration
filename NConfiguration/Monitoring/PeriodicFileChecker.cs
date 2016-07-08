@@ -1,0 +1,46 @@
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace NConfiguration.Monitoring
+{
+	public class PeriodicFileChecker: FileChecker
+	{
+		private readonly TimeSpan _delay;
+		private readonly CancellationTokenSource _cts;
+
+		public PeriodicFileChecker(ReadedFileInfo fileInfo, TimeSpan delay, CheckMode checkMode)
+			:base(fileInfo, checkMode)
+		{
+			if(delay <= TimeSpan.FromMilliseconds(1))
+				throw new ArgumentOutOfRangeException("delay should be greater of 1 ms");
+
+			_delay = delay;
+			_cts = new CancellationTokenSource();
+			checkLoop();
+		}
+
+		private async void checkLoop()
+		{
+			do
+			{
+				try
+				{
+					await Task.Delay(_delay, _cts.Token).ConfigureAwait(false);
+				}
+				catch (OperationCanceledException)
+				{
+					return;
+				}
+			} while (!await checkFile().ConfigureAwait(false));
+
+			onChanged();
+		}
+
+		public override void Dispose()
+		{
+			_cts.Cancel();
+			base.Dispose();
+		}
+	}
+}

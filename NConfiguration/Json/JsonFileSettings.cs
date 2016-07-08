@@ -6,7 +6,7 @@ using System.Text;
 
 namespace NConfiguration.Json
 {
-	public sealed class JsonFileSettings : JsonSettings, IFilePathOwner, IIdentifiedSource, IChangeable
+	public class JsonFileSettings : JsonSettings, IFilePathOwner, IIdentifiedSource, ILoadedFromFile
 	{
 		public static JsonFileSettings Create(string fileName)
 		{
@@ -14,24 +14,23 @@ namespace NConfiguration.Json
 		}
 
 		private readonly JObject _obj;
-		private readonly FileMonitor _fm;
+		private readonly ReadedFileInfo _fileInfo;
 
 		public JsonFileSettings(string fileName)
 		{
 			try
 			{
-				fileName = System.IO.Path.GetFullPath(fileName);
-				var content = File.ReadAllBytes(fileName);
+				JValue val = null;
+				_fileInfo = ReadedFileInfo.Create(fileName, stream =>
+				{
+					using (var sr = new StreamReader(stream, Encoding.UTF8))
+						val = JValue.Parse(sr.ReadToEnd());
+				});
 
-				var val = JValue.Parse(Encoding.UTF8.GetString(content));
 				if (val.Type != TokenType.Object)
 					throw new FormatException("required json object in content");
 
 				_obj = (JObject)val;
-
-				Identity = this.GetIdentitySource(fileName);
-				Path = System.IO.Path.GetDirectoryName(fileName);
-				_fm = FileMonitor.TryCreate(this, fileName, content);
 			}
 			catch(SystemException ex)
 			{
@@ -47,28 +46,25 @@ namespace NConfiguration.Json
 		/// <summary>
 		/// source identifier the application settings
 		/// </summary>
-		public string Identity { get; private set; }
+		public virtual string Identity
+		{
+			get
+			{
+				return this.GetIdentitySource(_fileInfo.FullName);
+			}
+		}
 
 		/// <summary>
 		/// Directory containing the configuration file
 		/// </summary>
-		public string Path { get; private set; }
-
-		/// <summary>
-		/// Instance changed.
-		/// </summary>
-		public event EventHandler Changed
+		public virtual string Path
 		{
-			add
-			{
-				if (_fm != null)
-					_fm.Changed += value;
-			}
-			remove
-			{
-				if (_fm != null)
-					_fm.Changed -= value;
-			}
+			get { return System.IO.Path.GetDirectoryName(_fileInfo.FullName); }
+		}
+
+		public virtual ReadedFileInfo FileInfo
+		{
+			get { return _fileInfo; }
 		}
 	}
 }

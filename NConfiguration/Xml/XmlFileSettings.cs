@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Xml.Linq;
 using NConfiguration.Monitoring;
 
@@ -8,15 +7,15 @@ namespace NConfiguration.Xml
 	/// <summary>
 	/// settings loaded from a file
 	/// </summary>
-	public sealed class XmlFileSettings : XmlSettings, IFilePathOwner, IIdentifiedSource, IChangeable
+	public class XmlFileSettings : XmlSettings, IFilePathOwner, IIdentifiedSource, ILoadedFromFile
 	{
 		public static XmlFileSettings Create(string fileName)
 		{
 			return new XmlFileSettings(fileName);
 		}
 
-		private readonly XElement _root;
-		private readonly FileMonitor _fm;
+		private readonly ReadedFileInfo _fileInfo;
+		private XElement _root;
 
 		/// <summary>
 		/// settings loaded from a file
@@ -26,13 +25,8 @@ namespace NConfiguration.Xml
 		{
 			try
 			{
-				fileName = System.IO.Path.GetFullPath(fileName);
-				var content = File.ReadAllBytes(fileName);
-
-				_root = XDocument.Load(new MemoryStream(content)).Root;
-				Identity = this.GetIdentitySource(fileName);
-				Path = System.IO.Path.GetDirectoryName(fileName);
-				_fm = FileMonitor.TryCreate(this, fileName, content);
+				_fileInfo = ReadedFileInfo.Create(fileName,
+					stream => { _root = XDocument.Load(stream).Root; });
 			}
 			catch(SystemException ex)
 			{
@@ -54,28 +48,25 @@ namespace NConfiguration.Xml
 		/// <summary>
 		/// source identifier the application settings
 		/// </summary>
-		public string Identity { get; private set; }
+		public virtual string Identity
+		{
+			get
+			{
+				return this.GetIdentitySource(_fileInfo.FullName);
+			}
+		}
 
 		/// <summary>
 		/// Directory containing the configuration file
 		/// </summary>
-		public string Path { get; private set; }
-
-		/// <summary>
-		/// Instance changed.
-		/// </summary>
-		public event EventHandler Changed
+		public virtual string Path
 		{
-			add
-			{
-				if (_fm != null)
-					_fm.Changed += value;
-			}
-			remove
-			{
-				if (_fm != null)
-					_fm.Changed -= value;
-			}
+			get { return System.IO.Path.GetDirectoryName(_fileInfo.FullName); }
+		}
+
+		public virtual ReadedFileInfo FileInfo
+		{
+			get { return _fileInfo; }
 		}
 	}
 }

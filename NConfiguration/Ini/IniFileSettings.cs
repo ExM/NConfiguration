@@ -7,7 +7,7 @@ using System.Text;
 
 namespace NConfiguration.Ini
 {
-	public sealed class IniFileSettings : IniSettings, IFilePathOwner, IIdentifiedSource, IChangeable
+	public class IniFileSettings : IniSettings, IFilePathOwner, IIdentifiedSource, ILoadedFromFile
 	{
 		public static IniFileSettings Create(string fileName)
 		{
@@ -15,22 +15,19 @@ namespace NConfiguration.Ini
 		}
 
 		private readonly List<Section> _sections;
-		private readonly FileMonitor _fm;
+		private readonly ReadedFileInfo _fileInfo;
 
 		public IniFileSettings(string fileName)
 		{
 			try
 			{
-				fileName = System.IO.Path.GetFullPath(fileName);
-				var content = File.ReadAllBytes(fileName);
-				
 				var context = new ParseContext();
-				context.ParseSource(Encoding.UTF8.GetString(content));
+				_fileInfo = ReadedFileInfo.Create(fileName, stream =>
+				{
+					using (var sr = new StreamReader(stream, Encoding.UTF8))
+						context.ParseSource(sr.ReadToEnd());
+				});
 				_sections = new List<Section>(context.Sections);
-
-				Identity = this.GetIdentitySource(fileName);
-				Path = System.IO.Path.GetDirectoryName(fileName);
-				_fm = FileMonitor.TryCreate(this, fileName, content);
 			}
 			catch(SystemException ex)
 			{
@@ -49,28 +46,25 @@ namespace NConfiguration.Ini
 		/// <summary>
 		/// source identifier the application settings
 		/// </summary>
-		public string Identity {get; private set;}
+		public virtual string Identity
+		{
+			get
+			{
+				return this.GetIdentitySource(_fileInfo.FullName);
+			}
+		}
 
 		/// <summary>
 		/// Directory containing the configuration file
 		/// </summary>
-		public string Path {get; private set;}
-
-		/// <summary>
-		/// Instance changed.
-		/// </summary>
-		public event EventHandler Changed
+		public virtual string Path
 		{
-			add
-			{
-				if (_fm != null)
-					_fm.Changed += value;
-			}
-			remove
-			{
-				if (_fm != null)
-					_fm.Changed -= value;
-			}
+			get { return System.IO.Path.GetDirectoryName(_fileInfo.FullName); }
+		}
+
+		public virtual ReadedFileInfo FileInfo
+		{
+			get { return _fileInfo; }
 		}
 	}
 }

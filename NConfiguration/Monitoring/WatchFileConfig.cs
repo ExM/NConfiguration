@@ -11,6 +11,9 @@ namespace NConfiguration.Monitoring
 
 		[DataMember(Name = "Delay", IsRequired = false)]
 		public TimeSpan? Delay { get; set;}
+
+		[DataMember(Name = "Check", IsRequired = false)]
+		public CheckMode? Check { get; set; }
 	}
 }
 

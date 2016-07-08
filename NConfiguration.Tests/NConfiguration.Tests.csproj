@@ -92,9 +92,10 @@
     <Compile Include="Json\JsonStringSettings.cs" />
     <Compile Include="Json\ParsingTests.cs" />
     <Compile Include="KeyManager.cs" />
-    <Compile Include="Monitoring\AsyncComparerTests.cs" />
     <Compile Include="Monitoring\AppSettingChangeTests.cs" />
-    <Compile Include="Monitoring\FileMonitorTests.cs" />
+    <Compile Include="Monitoring\FileCheckerCreateTests.cs" />
+    <Compile Include="Monitoring\WatchedFileCheckerTests.cs" />
+    <Compile Include="Monitoring\FileCheckerTests.cs" />
     <Compile Include="Protected\XmlCryptoProvidersTests.cs" />
     <Compile Include="CombinableAppSettingsTests.cs" />
     <Compile Include="Serialization\ChildDeserializerTests.cs" />

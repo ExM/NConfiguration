@@ -23,7 +23,8 @@ namespace NConfiguration.Examples
 
 			var settings = loader
 				.LoadSettings(new XmlFileSettings("Examples/AppDirectory/main.config".ResolveTestPath()))
-				.ToChangeableAppSettings();
+				.Joined
+				.ToAppSettings();
 
 			var addCfg = settings.TryGet<ExampleCombineConfig>("AdditionalConfig");
 
@@ -46,7 +47,8 @@ namespace NConfiguration.Examples
 
 			var settings = loader
 				.LoadSettings(new XmlFileSettings("Examples/AppDirectory/mainJson.config".ResolveTestPath()))
-				.ToChangeableAppSettings();
+				.Joined
+				.ToAppSettings();
 
 			var addCfg = settings.TryGet<ExampleCombineConfig>("AdditionalConfig");
 
@@ -66,7 +68,8 @@ namespace NConfiguration.Examples
 
 			var settings = loader
 				.LoadSettings(new XmlFileSettings("Examples/AppDirectory/autoMain.config".ResolveTestPath()))
-				.ToChangeableAppSettings();
+				.Joined
+				.ToAppSettings();
 
 			var cfg = settings.TryGet<ChildAutoCombinableConnectionConfig>();
 
@@ -92,7 +95,7 @@ namespace NConfiguration.Examples
 
 			var settings = loader
 				.LoadSettings(new XmlFileSettings("Examples/AppDirectory/secureMain.config".ResolveTestPath()))
-				.ToChangeableAppSettings();
+				.Joined.ToAppSettings();
 
 			var addCfg = settings.TryGet<ExampleCombineConfig>("AdditionalConfig");
 

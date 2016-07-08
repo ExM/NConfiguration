@@ -7,26 +7,37 @@ using System.Threading.Tasks;
 namespace NConfiguration.Monitoring
 {
 	[TestFixture]
-	public class FileMonitorTests
+	public class FileCheckerCreateTests
 	{
-		[TestCase(WatchMode.None, 1000)]
-		[TestCase(WatchMode.Time, 1)]
-		[TestCase(WatchMode.None, null)]
-		[TestCase(WatchMode.Time, null)]
-		public void WrongArguments(WatchMode mode, int? ms)
+		[Test]
+		public void WrongTimeArguments_Null()
+		{
+			var fileInfo = ReadedFileInfo.Create(Path.GetTempFileName(), _ => _.CopyTo(Stream.Null));
+
+			Assert.Throws<ArgumentNullException>(() => FileChecker.TryCreate(fileInfo, WatchMode.Time, null, CheckMode.All));
+		}
+
+		[Test]
+		public void WrongTimeArguments_OutOfRange()
+		{
+			var fileInfo = ReadedFileInfo.Create(Path.GetTempFileName(), _ => _.CopyTo(Stream.Null));
+
+			Assert.Throws<ArgumentOutOfRangeException>(() => FileChecker.TryCreate(fileInfo, WatchMode.Time, TimeSpan.FromMilliseconds(1), CheckMode.All));
+		}
+
+		[TestCase(1000)]
+		[TestCase(1)]
+		[TestCase(null)]
+		public void None(int? ms)
 		{
 			TimeSpan? ts = null;
 			if (ms != null)
 				ts = TimeSpan.FromMilliseconds(ms.Value);
 
 			string file = Path.GetTempFileName();
-			try
-			{
-				new FileMonitor(file, new byte[] { 1, 2, 3 }, mode, ts);
-			}
-			catch (ArgumentException)
-			{
-			}
+			var fileInfo = ReadedFileInfo.Create(file, _ => _.CopyTo(Stream.Null));
+
+			Assert.IsNull(FileChecker.TryCreate(fileInfo, WatchMode.None, ts, CheckMode.All));
 		}
 
 		[TestCase(WatchMode.System, null)]
@@ -42,7 +53,9 @@ namespace NConfiguration.Monitoring
 			string file = Path.GetTempFileName();
 			File.WriteAllBytes(file, new byte[]{1, 2, 3});
 
-			var m = new FileMonitor(file, new byte[] { 1, 2, 3 }, mode, ts);
+			var fileInfo = ReadedFileInfo.Create(file, _ => _.CopyTo(Stream.Null));
+
+			var m = FileChecker.TryCreate(fileInfo, mode, ts, CheckMode.All);
 
 			var wait = new ManualResetEvent(false);
 
@@ -54,7 +67,7 @@ namespace NConfiguration.Monitoring
 			var t = Task.Factory.StartNew(() =>
 			{
 				Thread.Sleep(1000);
-				using (var fs = new FileStream(file, FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
+				using (var fs = new FileStream(file, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
 				{
 					fs.Position = 2;
 					fs.WriteByte(1);

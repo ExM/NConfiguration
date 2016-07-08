@@ -2,7 +2,7 @@ namespace NConfiguration.Monitoring
 {
 	public enum WatchMode
 	{
-		Auto,
+		Auto = 0,
 		System,
 		None,
 		Time

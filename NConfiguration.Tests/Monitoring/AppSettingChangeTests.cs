@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NConfiguration.Xml;
@@ -29,10 +30,13 @@ namespace NConfiguration.Monitoring
 			string cfgFile = Path.GetTempFileName();
 			File.WriteAllText(cfgFile, _xmlCfgAutoOrigin);
 
-			var settings = new XmlFileSettings(cfgFile).ToChangeableAppSettings();
+			var fileSettings = new XmlFileSettings(cfgFile);
 			
 			var wait = new ManualResetEvent(false);
-			settings.Changed += (a, e) => { wait.Set(); };
+			FileChecker.TryCreate(fileSettings).Changed += (a, e) =>
+			{
+				wait.Set();
+			};
 
 			var t = Task.Factory.StartNew(() =>
 			{
@@ -43,8 +47,8 @@ namespace NConfiguration.Monitoring
 
 			Assert.IsTrue(wait.WaitOne(10000), "10 sec elapsed");
 
-			settings = new XmlFileSettings(cfgFile).ToChangeableAppSettings();
-			Assert.That(settings.First<ExampleCombineConfig>("AdditionalConfig").F, Is.EqualTo("Modify"));
+			var appSettings = new XmlFileSettings(cfgFile).ToAppSettings();
+			Assert.That(appSettings.First<ExampleCombineConfig>("AdditionalConfig").F, Is.EqualTo("Modify"));
 		}
 
 		private string _xmlCfgMain = @"<?xml version='1.0' encoding='utf-8' ?>
@@ -55,21 +59,26 @@ namespace NConfiguration.Monitoring
 </configuration>";
 
 		[Test]
-		public void MultiChange()
+		public void IncludedChange()
 		{
 			string cfgMainFile = Path.GetTempFileName();
 			string cfgAdditionalFile = Path.GetTempFileName();
-
 
 			File.WriteAllText(cfgAdditionalFile, _xmlCfgAutoOrigin);
 			File.WriteAllText(cfgMainFile, string.Format(_xmlCfgMain, cfgAdditionalFile));
 
 			var loader = new SettingsLoader();
 			loader.XmlFileBySection();
-			var settings = loader.LoadSettings(new XmlFileSettings(cfgMainFile));
+			var loadResult = loader.LoadSettings(new XmlFileSettings(cfgMainFile));
 
 			var wait = new ManualResetEvent(false);
-			settings.Changed += (s, e) => { wait.Set(); };
+			var fileCheckers = FileChecker.TryCreate(loadResult.Sources).ToArray();
+			new FirstChange(fileCheckers).Changed += (s, e) =>
+			{
+				wait.Set();
+				foreach (var fileChecker in fileCheckers)
+					fileChecker.Dispose();
+			};
 
 			var t = Task.Factory.StartNew(() =>
 			{

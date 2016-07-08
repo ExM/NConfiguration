@@ -47,7 +47,7 @@ namespace NConfiguration.Variables
 	<After Field='${machineName} ${var1}' />
 </configuration>".ToXmlSettings();
 
-			var settings = loader.LoadSettings(xmlCfg).ToAppSettings();
+			var settings = loader.LoadSettings(xmlCfg).Joined.ToAppSettings();
 
 			Assert.AreEqual("TestServer value1", settings.Get<TestConfig>("Before").Field);
 			Assert.AreEqual("TestServer value1", settings.Get<TestConfig>("After").Field);

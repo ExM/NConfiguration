@@ -16,7 +16,7 @@ namespace NConfiguration.Tests.Joining
 
 			var settings = loader
 				.LoadSettings(XmlFileSettings.Create("Joining/AppDirectory/IncludeInMiddle.config".ResolveTestPath()))
-				.ToChangeableAppSettings();
+				.Joined.ToAppSettings();
 
 			Assert.That(settings.LoadSections<AdditionalConfig>().Select(_ => _.F), Is.EquivalentTo(new[] { "InMainPre", "InAdditional", "InMainPost" }));
 		}
@@ -29,7 +29,7 @@ namespace NConfiguration.Tests.Joining
 
 			var settings = loader
 				.LoadSettings(XmlFileSettings.Create("Joining/AppDirectory/Deeper/RelativeInclude.config".ResolveTestPath()))
-				.ToChangeableAppSettings();
+				.Joined.ToAppSettings();
 
 			Assert.That(settings.LoadSections<AdditionalConfig>().Select(_ => _.F), Is.EquivalentTo(
 				new[] { "BeginMain", "BeginUpper", "InAdditional", "EndUpper", "EndMain" }));
@@ -43,7 +43,7 @@ namespace NConfiguration.Tests.Joining
 
 			var settings = loader
 				.LoadSettings(XmlFileSettings.Create("Joining/AppDirectory/Deeper/BaseInclude.config".ResolveTestPath()))
-				.ToChangeableAppSettings();
+				.Joined.ToAppSettings();
 
 			Assert.That(settings.LoadSections<AdditionalConfig>().Select(_ => _.F), Is.EquivalentTo(
 				new[] { "BeginMain", "BeginUpper", "InDeeperAdditional", "InAdditional", "EndUpper", "EndMain" }));

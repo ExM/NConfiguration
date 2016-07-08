@@ -1,7 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 
-namespace NConfiguration.Joining
+namespace NConfiguration.Monitoring
 {
 	public sealed class FirstChange : IChangeable
 	{
@@ -9,9 +10,9 @@ namespace NConfiguration.Joining
 		private bool _changed = false;
 		private object _firstChangedSource = null;
 
-		public void Observe(IChangeable changable)
+		public FirstChange(IEnumerable<IChangeable> changables)
 		{
-			if(changable != null)
+			foreach(var changable in changables)
 				changable.Changed += onInnerChangableChanged;
 		}
 

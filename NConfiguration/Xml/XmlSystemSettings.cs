@@ -1,34 +1,18 @@
 using System;
-using System.Configuration;
 using System.Xml.Linq;
 
 namespace NConfiguration.Xml
 {
-	public sealed class XmlSystemSettings : XmlSettings, IFilePathOwner, IIdentifiedSource
+	public sealed class XmlSystemSettings : XmlFileSettings
 	{
-		private readonly XElement _root;
 		private readonly string _sectionName;
-		private readonly string _directory;
+		private readonly string _configPath;
 
-		public XmlSystemSettings(string sectionName)
+		public XmlSystemSettings(string sectionName, string configPath = null)
+			: base(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile)
 		{
 			_sectionName = sectionName;
-			var confFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-			confFile = System.IO.Path.GetFullPath(confFile);
-			_directory = System.IO.Path.GetDirectoryName(confFile);
-
-			try
-			{
-				var section = ConfigurationManager.GetSection(_sectionName) as PlainXmlSection;
-				if(section == null || section.PlainXml == null)
-					throw new FormatException("section not found");
-
-				_root = section.PlainXml.Root;
-			}
-			catch(SystemException ex)
-			{
-				throw new ApplicationException(string.Format("Unable to system section `{0}'", sectionName), ex);
-			}
+			_configPath = configPath;
 		}
 
 		/// <summary>
@@ -38,29 +22,19 @@ namespace NConfiguration.Xml
 		{
 			get
 			{
-				return _root;
+				var root = base.Root.Element(XName.Get(_sectionName));
+				if (root == null)
+					throw new FormatException(string.Format("section '{0}' not found ", _sectionName));
+
+				return root;
 			}
 		}
 
-		/// <summary>
-		/// source identifier the application settings
-		/// </summary>
-		public string Identity
+		public override string Path
 		{
 			get
 			{
-				return _sectionName;
-			}
-		}
-
-		/// <summary>
-		/// Directory containing the configuration file
-		/// </summary>
-		public string Path
-		{
-			get
-			{
-				return _directory;
+				return _configPath ?? base.Path;
 			}
 		}
 	}

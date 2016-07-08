@@ -48,9 +48,9 @@ namespace NConfiguration.Including
 			};
 
 			if (Path.GetExtension(file) == ".xml")
-				return loader.LoadSettings(new XmlFileSettings(Path.Combine("Including".ResolveTestPath(), file))).ToChangeableAppSettings();
+				return loader.LoadSettings(new XmlFileSettings(Path.Combine("Including".ResolveTestPath(), file))).Joined.ToAppSettings();
 			else
-				return loader.LoadSettings(new JsonFileSettings(Path.Combine("Including".ResolveTestPath(), file))).ToChangeableAppSettings();
+				return loader.LoadSettings(new JsonFileSettings(Path.Combine("Including".ResolveTestPath(), file))).Joined.ToAppSettings();
 		}
 
 		public class OneField

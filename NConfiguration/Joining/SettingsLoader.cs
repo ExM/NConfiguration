@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using NConfiguration.Serialization;
-using NConfiguration.Monitoring;
 using System.Runtime.Serialization;
 
 namespace NConfiguration.Joining
@@ -52,17 +51,17 @@ namespace NConfiguration.Joining
 				copy(this, new LoadedEventArgs(settings));
 		}
 
-		public ChangeableConfigNodeProvider LoadSettings(IIdentifiedSource setting)
+		public Result LoadSettings(IIdentifiedSource setting)
 		{
 			return LoadSettings(setting, DefaultDeserializer.Instance);
 		}
 
-		public ChangeableConfigNodeProvider LoadSettings(IIdentifiedSource setting, string searchPath)
+		public Result LoadSettings(IIdentifiedSource setting, string searchPath)
 		{
 			return LoadSettings(setting, DefaultDeserializer.Instance, searchPath);
 		}
 
-		public ChangeableConfigNodeProvider LoadSettings(IIdentifiedSource setting, IDeserializer deserializer, string searchPath = null)
+		public Result LoadSettings(IIdentifiedSource setting, IDeserializer deserializer, string searchPath = null)
 		{
 			if(searchPath == null)
 			{
@@ -73,11 +72,13 @@ namespace NConfiguration.Joining
 
 			var context = new Context(deserializer, searchPath);
 
-			context.FirstChange.Observe(setting as IChangeable);
+			context.Sources.Add(setting);
 			onLoaded(setting);
 			context.CheckLoaded(setting);
 
-			return new ChangeableConfigNodeProvider(scanInclude(setting, context), context.FirstChange);
+			return new Result(
+				new DefaultConfigNodeProvider(scanInclude(setting, context)),
+				context.Sources.AsReadOnly());
 		}
 
 		private IEnumerable<KeyValuePair<string, ICfgNode>> scanInclude(IConfigNodeProvider source, Context context)
@@ -86,8 +87,7 @@ namespace NConfiguration.Joining
 			{
 				var configName = pair.Key;
 
-				if (NameComparer.Equals(configName, AppSettingExtensions.IdentitySectionName) ||
-					NameComparer.Equals(configName, FileMonitor.ConfigSectionName))
+				if (NameComparer.Equals(configName, AppSettingExtensions.IdentitySectionName))
 					continue;
 
 				var configNode = _cfgNodeConverter(configName, pair.Value);
@@ -120,11 +120,23 @@ namespace NConfiguration.Joining
 						continue;
 
 					onLoaded(cnProvider);
-					context.FirstChange.Observe(cnProvider as IChangeable);
+					context.Sources.Add(cnProvider);
 
 					foreach (var includePair in scanInclude(cnProvider, context))
 						yield return includePair;
 				}
+			}
+		}
+
+		public class Result
+		{
+			public IConfigNodeProvider Joined { get; private set; }
+			public IReadOnlyList<IIdentifiedSource> Sources { get; private set; }
+
+			public Result(IConfigNodeProvider joined, IReadOnlyList<IIdentifiedSource> sources)
+			{
+				Joined = joined;
+				Sources = sources;
 			}
 		}
 
@@ -138,8 +150,7 @@ namespace NConfiguration.Joining
 		{
 			public readonly string SearchPath;
 			public readonly IDeserializer Deserializer;
-			public readonly FirstChange FirstChange = new FirstChange();
-
+			public readonly List<IIdentifiedSource> Sources = new List<IIdentifiedSource>();
 			private readonly HashSet<IdentityKey> _loaded = new HashSet<IdentityKey>();
 
 			public Context(IDeserializer deserializer, string searchPath)
