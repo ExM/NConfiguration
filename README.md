@@ -33,8 +33,11 @@ public IAppSettings LoadSettings()
 	var loader = new SettingsLoader();
 	loader.XmlFileBySection();
 	var result = loader.LoadSettings(new XmlSystemSettings("ExtConfigure"));
-	result.Changed += SettingsChanged;
-	return result;
+	
+	var fileCheckers = FileChecker.TryCreate(result.Sources).ToArray();
+	new FirstChange(fileCheckers).Changed += SettingsChanged;
+
+	return result.Joined.ToAppSettings();
 }
 
 private void SettingsChanged(object sender, EventArgs e)
@@ -42,6 +45,24 @@ private void SettingsChanged(object sender, EventArgs e)
 	//TODO: reload settings or application
 }
 ```
+
+Watch file configuration:
+
+```xml
+	<WatchFile Mode='Auto' Delay='0:0:30' Check='Attr,Hash' />
+```
+
+* **Mode** - mode of watch from file
+ * `Auto` - try create FileSystemWatcher, otherwise create delayed monitor
+ * `System` - create FileSystemWatcher
+ * `Time` - create delayed monitor
+ * `None` - not watching, default value
+* **Delay** - delay between checking of monitored file
+* **Check** - what is required to check
+ * `None` - only exists file and lenght
+ * `Attr` - last write time and other file attributes
+ * `Hash` - MD5 hash sum of reader file
+ * `All` or `Attr,Hash` - check same as in `Attr` and `Hash`
 
 Deserialization section with the name of all downloaded files.
 

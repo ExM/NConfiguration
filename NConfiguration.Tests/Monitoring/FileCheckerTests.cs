@@ -6,24 +6,65 @@ using NUnit.Framework;
 
 namespace NConfiguration.Monitoring
 {
-	[TestFixture("Periodic")]
-	[TestFixture("Watched")]
+	[TestFixture("Periodic", true)]
+	[TestFixture("Watched", true)]
+	[TestFixture("Periodic", false)]
+	[TestFixture("Watched", false)]
 	public class FileCheckerTests
 	{
 		private readonly string _monitorType;
+		private readonly bool _fromConfig;
 
-		public FileCheckerTests(string monitorType)
+		public FileCheckerTests(string monitorType, bool fromConfig)
 		{
 			_monitorType = monitorType;
+			_fromConfig = fromConfig;
 		}
+
+		private string _xmlFormat = @"<?xml version='1.0' encoding='utf-8' ?>
+<configuration>
+	<WatchFile Mode='{0}' Check='{1}' {2}/>
+</configuration>";
 
 		public IChangeable createChecker(ReadedFileInfo fileInfo, CheckMode checkMode)
 		{
-			if(_monitorType == "Periodic")
-				return new PeriodicFileChecker(fileInfo, TimeSpan.FromMilliseconds(100), checkMode);
+			if (_fromConfig)
+			{
+				string modeText;
+				string timeText = "";
+				if (_monitorType == "Periodic")
+				{
+					modeText = "Time";
+					timeText = "Delay='0:0:0.100'";
+				}
+				else if(_monitorType == "Watched")
+					modeText = "System";
+				else
+					throw new NotImplementedException();
 
-			if (_monitorType == "Watched")
-				return new WatchedFileChecker(fileInfo, checkMode);
+				string checkText = "None";
+				if(checkMode.HasFlag(CheckMode.Hash))
+					checkText = "Hash";
+				if(checkMode.HasFlag(CheckMode.Attr))
+				{
+					if(checkText == "None")
+						checkText = "Attr";
+					else
+						checkText += ",Attr";
+				}
+
+				var settings = string.Format(_xmlFormat, modeText, checkText, timeText).ToXmlSettings();
+
+				return FileChecker.TryCreate(settings, fileInfo);
+			}
+			else
+			{
+				if (_monitorType == "Periodic")
+					return new PeriodicFileChecker(fileInfo, TimeSpan.FromMilliseconds(100), checkMode);
+
+				if (_monitorType == "Watched")
+					return new WatchedFileChecker(fileInfo, checkMode);
+			}
 
 			throw new NotImplementedException();
 		}
