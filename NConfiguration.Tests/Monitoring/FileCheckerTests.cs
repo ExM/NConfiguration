@@ -23,7 +23,7 @@ namespace NConfiguration.Monitoring
 
 		private string _xmlFormat = @"<?xml version='1.0' encoding='utf-8' ?>
 <configuration>
-	<WatchFile Mode='{0}' Check='{1}' {2}/>
+	<WatchFile Mode='{0}' Check='{1}' Delay='0:0:0.100'/>
 </configuration>";
 
 		public IChangeable createChecker(ReadedFileInfo fileInfo, CheckMode checkMode)
@@ -31,12 +31,8 @@ namespace NConfiguration.Monitoring
 			if (_fromConfig)
 			{
 				string modeText;
-				string timeText = "";
 				if (_monitorType == "Periodic")
-				{
 					modeText = "Time";
-					timeText = "Delay='0:0:0.100'";
-				}
 				else if(_monitorType == "Watched")
 					modeText = "System";
 				else
@@ -53,7 +49,7 @@ namespace NConfiguration.Monitoring
 						checkText += ",Attr";
 				}
 
-				var settings = string.Format(_xmlFormat, modeText, checkText, timeText).ToXmlSettings();
+				var settings = string.Format(_xmlFormat, modeText, checkText).ToXmlSettings();
 
 				return FileChecker.TryCreate(settings, fileInfo);
 			}
@@ -63,7 +59,7 @@ namespace NConfiguration.Monitoring
 					return new PeriodicFileChecker(fileInfo, TimeSpan.FromMilliseconds(100), checkMode);
 
 				if (_monitorType == "Watched")
-					return new WatchedFileChecker(fileInfo, checkMode);
+					return new WatchedFileChecker(fileInfo, TimeSpan.FromMilliseconds(100), checkMode);
 			}
 
 			throw new NotImplementedException();

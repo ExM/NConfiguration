@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading;
 
 namespace NConfiguration.Monitoring
@@ -7,29 +8,47 @@ namespace NConfiguration.Monitoring
 	{
 		private readonly ReadedFileInfo _fileInfo;
 		private readonly CheckMode _checkMode;
+		private readonly TimeSpan _delay;
 
-		public WatchedFileChecker(ReadedFileInfo fileInfo, CheckMode checkMode)
-			:base(fileInfo, checkMode)
+		public WatchedFileChecker(ReadedFileInfo fileInfo, TimeSpan? delay, CheckMode checkMode)
+			:base(fileInfo)
 		{
+			_delay = delay.GetValueOrDefault(TimeSpan.FromSeconds(10));
+
+			if (_delay <= TimeSpan.FromMilliseconds(1))
+				throw new ArgumentOutOfRangeException("delay should be greater of 1 ms");
+
 			_fileInfo = fileInfo;
 			_checkMode = checkMode;
 			_watcher = createWatch();
 			checkLoop();
 		}
 
-		private AutoResetEvent _are = new AutoResetEvent(true);
+		private AutoResetEvent _are = new AutoResetEvent(false);
 
 		private async void checkLoop()
 		{
-			do
+			await _are.AsTask(_delay).ConfigureAwait(false);
+			if (await checkFile(_checkMode).ConfigureAwait(false))
 			{
-				await _are.AsTask().ConfigureAwait(false);
-				lock(_sync)
+				onChanged();
+				return;
+			}
+
+			while (true)
+			{
+				var timeout = await _are.AsTask(_delay).ConfigureAwait(false);
+
+				lock (_sync)
 					if (_disposed)
 						return;
-			} while (!await checkFile().ConfigureAwait(false));
 
-			onChanged();
+				if (await checkFile(timeout ? CheckMode.None : _checkMode).ConfigureAwait(false))
+				{
+					onChanged();
+					return;
+				}
+			}
 		}
 
 		private FileSystemWatcher createWatch()
@@ -41,7 +60,7 @@ namespace NConfiguration.Monitoring
 				Filter = Path.GetFileName(_fileInfo.FullName),
 				NotifyFilter =
 					NotifyFilters.Size | NotifyFilters.DirectoryName | NotifyFilters.LastWrite | NotifyFilters.CreationTime |
-					NotifyFilters.Security | NotifyFilters.Attributes
+					NotifyFilters.Security | NotifyFilters.Attributes | NotifyFilters.FileName
 			};
 
 			watcher.Created += watcherOnModify;
@@ -56,16 +75,29 @@ namespace NConfiguration.Monitoring
 
 		private void watcherError(object sender, ErrorEventArgs e)
 		{
+			bool watchCreated;
 			lock (_sync)
 			{
+				((FileSystemWatcher)sender).Dispose();
+
 				if (_watcher != sender)
 					return;
 
-				stopWatch();
-				_watcher = createWatch();
+				try
+				{
+					_watcher = createWatch();
+					watchCreated = true;
+				}
+				catch (Exception)
+				{
+					watchCreated = false;
+				}
 			}
 
-			_are.Set();
+			if (watchCreated)
+				_are.Set();
+			else
+				base.onChanged();
 		}
 
 		private void watcherOnModify(object sender, FileSystemEventArgs e)
@@ -89,7 +121,6 @@ namespace NConfiguration.Monitoring
 			if (_watcher == null)
 				return;
 
-			_watcher.EnableRaisingEvents = false;
 			_watcher.Dispose();
 			_watcher = null;
 		}

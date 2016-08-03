@@ -26,7 +26,7 @@ namespace NConfiguration.Monitoring
 			File.WriteAllText(watchedFile, _xmlCfg);
 
 			var fileInfo = ReadedFileInfo.Create(watchedFile, _ => _.CopyTo(Stream.Null));
-			var fileChecker = FileChecker.TryCreate(fileInfo, WatchMode.System, null, CheckMode.All);
+			var fileChecker = FileChecker.TryCreate(fileInfo, WatchMode.System, TimeSpan.FromMilliseconds(100), CheckMode.All);
 
 			var wait = new ManualResetEvent(false);
 			fileChecker.Changed += (a, e) =>
@@ -37,7 +37,7 @@ namespace NConfiguration.Monitoring
 			Directory.Move(Path.Combine(tempPath, dirName), Path.Combine(tempPath, dirName + "_moved"));
 			Directory.CreateDirectory(Path.Combine(tempPath, dirName)); //no lock directory
 
-			Assert.IsTrue(wait.WaitOne(1000), "no event");
+			Assert.IsTrue(wait.WaitOne(5000), "no event");
 		}
 
 		[TestCase]
@@ -52,7 +52,7 @@ namespace NConfiguration.Monitoring
 			File.WriteAllText(watchedFile, _xmlCfg);
 
 			var fileInfo = ReadedFileInfo.Create(watchedFile, _ => _.CopyTo(Stream.Null));
-			var fileChecker = FileChecker.TryCreate(fileInfo, WatchMode.System, null, CheckMode.All);
+			var fileChecker = FileChecker.TryCreate(fileInfo, WatchMode.System, TimeSpan.FromMilliseconds(100), CheckMode.All);
 
 			var wait = new ManualResetEvent(false);
 			fileChecker.Changed += (a, e) =>
@@ -63,7 +63,7 @@ namespace NConfiguration.Monitoring
 			Directory.Delete(Path.Combine(tempPath, dirName), true);
 			Directory.CreateDirectory(Path.Combine(tempPath, dirName)); //no lock directory
 
-			Assert.IsTrue(wait.WaitOne(1000), "no event");
+			Assert.IsTrue(wait.WaitOne(5000), "no event");
 		}
 	}
 }

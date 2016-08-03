@@ -26,7 +26,7 @@ namespace NConfiguration.Monitoring
 				case WatchMode.Auto:
 					try
 					{
-						return new WatchedFileChecker(fileInfo, check);
+						return new WatchedFileChecker(fileInfo, delay, check);
 					}
 					catch (Exception)
 					{
@@ -36,7 +36,7 @@ namespace NConfiguration.Monitoring
 					return new PeriodicFileChecker(fileInfo, delay.Value, check);
 
 				case WatchMode.System:
-					return new WatchedFileChecker(fileInfo, check);
+					return new WatchedFileChecker(fileInfo, delay, check);
 
 				default:
 					throw new ArgumentOutOfRangeException("unexpected mode");
@@ -69,12 +69,10 @@ namespace NConfiguration.Monitoring
 		}
 
 		private readonly ReadedFileInfo _fileInfo;
-		private readonly CheckMode _checkMode;
 
-		protected FileChecker(ReadedFileInfo fileInfo, CheckMode checkMode)
+		protected FileChecker(ReadedFileInfo fileInfo)
 		{
 			_fileInfo = fileInfo;
-			_checkMode = checkMode;
 		}
 
 		public string WatchedFile {
@@ -84,16 +82,16 @@ namespace NConfiguration.Monitoring
 			}
 		}
 
-		protected async Task<bool> checkFile()
+		protected async Task<bool> checkFile(CheckMode check)
 		{
 			lock(_sync)
 				if (_disposed)
 					return false;
 
-			if (_fileInfo.WasChanged(_checkMode.HasFlag(CheckMode.Attr)))
+			if (_fileInfo.WasChanged(check.HasFlag(CheckMode.Attr)))
 				return true;
 
-			if (_checkMode.HasFlag(CheckMode.Hash))
+			if (check.HasFlag(CheckMode.Hash))
 			{
 				if (await _fileInfo.WasHashChanged().ConfigureAwait(false))
 					return true;
