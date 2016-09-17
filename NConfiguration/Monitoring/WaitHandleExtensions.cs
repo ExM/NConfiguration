@@ -6,9 +6,16 @@ namespace NConfiguration.Monitoring
 {
 	internal static class WaitHandleExtensions
 	{
-		public static Task AsTask(this WaitHandle handle)
+		public static void ThrowUnhandledException<TTask>(this TTask task, string errorMessage) where TTask : Task
 		{
-			return AsTask(handle, Timeout.InfiniteTimeSpan);
+			task.ContinueWith(
+				t => ThreadPool.QueueUserWorkItem(throwWork, new Exception(errorMessage, t.Exception.InnerException)),
+				TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously);
+		}
+
+		private static void throwWork(object arg)
+		{
+			throw (Exception) arg;
 		}
 
 		public static Task<bool> AsTask(this WaitHandle wait, TimeSpan timeout)
@@ -46,6 +53,5 @@ namespace NConfiguration.Monitoring
 				}
 			}
 		}
-
 	}
 }

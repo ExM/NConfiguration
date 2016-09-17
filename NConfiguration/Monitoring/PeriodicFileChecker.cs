@@ -4,25 +4,25 @@ using System.Threading.Tasks;
 
 namespace NConfiguration.Monitoring
 {
-	public class PeriodicFileChecker: FileChecker
+	public class PeriodicFileChecker : FileChecker
 	{
 		private readonly TimeSpan _delay;
 		private readonly CheckMode _checkMode;
 		private readonly CancellationTokenSource _cts;
 
 		public PeriodicFileChecker(ReadedFileInfo fileInfo, TimeSpan delay, CheckMode checkMode)
-			:base(fileInfo)
+			: base(fileInfo)
 		{
-			if(delay <= TimeSpan.FromMilliseconds(1))
+			if (delay <= TimeSpan.FromMilliseconds(1))
 				throw new ArgumentOutOfRangeException("delay should be greater of 1 ms");
 
 			_delay = delay;
 			_checkMode = checkMode;
 			_cts = new CancellationTokenSource();
-			checkLoop();
+			Task.Run(() => checkLoop()).ThrowUnhandledException("Error while file checking.");
 		}
 
-		private async void checkLoop()
+		private async Task checkLoop()
 		{
 			do
 			{

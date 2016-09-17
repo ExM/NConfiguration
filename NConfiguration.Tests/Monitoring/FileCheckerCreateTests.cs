@@ -40,6 +40,28 @@ namespace NConfiguration.Monitoring
 			Assert.IsNull(FileChecker.TryCreate(fileInfo, WatchMode.None, ts, CheckMode.All));
 		}
 
+		[Test]
+		public void DeletedFile()
+		{
+			string file = Path.GetTempFileName();
+			File.WriteAllBytes(file, new byte[] { 1, 2, 3 });
+
+			var fileInfo = ReadedFileInfo.Create(file, _ => _.CopyTo(Stream.Null));
+
+			File.Delete(file);
+
+			var m = FileChecker.TryCreate(fileInfo, WatchMode.System, null, CheckMode.All);
+
+			var wait = new ManualResetEvent(false);
+
+			m.Changed += (a, e) =>
+			{
+				wait.Set();
+			};
+
+			Assert.IsTrue(wait.WaitOne(10000), "10 sec elapsed");
+		}
+
 		[TestCase(WatchMode.System, null)]
 		[TestCase(WatchMode.Auto, null)]
 		[TestCase(WatchMode.Auto, 1000)]

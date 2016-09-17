@@ -1,19 +1,20 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace NConfiguration.Monitoring
 {
-	public class WatchedFileChecker: FileChecker
+	public class WatchedFileChecker : FileChecker
 	{
 		private readonly ReadedFileInfo _fileInfo;
 		private readonly CheckMode _checkMode;
 		private readonly TimeSpan _delay;
 
 		public WatchedFileChecker(ReadedFileInfo fileInfo, TimeSpan? delay, CheckMode checkMode)
-			:base(fileInfo)
+			: base(fileInfo)
 		{
-			_delay = delay.GetValueOrDefault(TimeSpan.FromSeconds(10));
+			_delay = delay.GetValueOrDefault(TimeSpan.FromSeconds(5 * 60));
 
 			if (_delay <= TimeSpan.FromMilliseconds(1))
 				throw new ArgumentOutOfRangeException("delay should be greater of 1 ms");
@@ -21,14 +22,13 @@ namespace NConfiguration.Monitoring
 			_fileInfo = fileInfo;
 			_checkMode = checkMode;
 			_watcher = createWatch();
-			checkLoop();
+			Task.Run(() => checkLoop()).ThrowUnhandledException("Error while file checking.");
 		}
 
 		private AutoResetEvent _are = new AutoResetEvent(false);
 
-		private async void checkLoop()
+		private async Task checkLoop()
 		{
-			await _are.AsTask(_delay).ConfigureAwait(false);
 			if (await checkFile(_checkMode).ConfigureAwait(false))
 			{
 				onChanged();
@@ -75,66 +75,95 @@ namespace NConfiguration.Monitoring
 
 		private void watcherError(object sender, ErrorEventArgs e)
 		{
-			bool watchCreated;
-			lock (_sync)
+			try
 			{
 				((FileSystemWatcher)sender).Dispose();
 
-				if (_watcher != sender)
-					return;
+				FileSystemWatcher copy;
 
-				try
+				lock (_sync)
 				{
+					if (_disposed)
+						return;
+
+					if (_watcher != sender)
+						return;
+
+					if (_watcher == null)
+						return;
+
+					copy = _watcher;
 					_watcher = createWatch();
-					watchCreated = true;
 				}
-				catch (Exception)
-				{
-					watchCreated = false;
-				}
-			}
 
-			if (watchCreated)
+				copy.EnableRaisingEvents = false;
+				copy.Dispose();
+
 				_are.Set();
-			else
-				base.onChanged();
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Error while file checking.", ex);
+			}
 		}
 
 		private void watcherOnModify(object sender, FileSystemEventArgs e)
 		{
-			if (_checkMode.HasFlag(CheckMode.Attr))
-				onChanged();
-			else
-				_are.Set();
+			try
+			{
+				if (_checkMode.HasFlag(CheckMode.Attr))
+					onChanged();
+				else
+					_are.Set();
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Error while file checking.", ex);
+			}
 		}
 
 		protected override void onChanged()
 		{
-			lock (_sync)
-				stopWatch();
+			FileSystemWatcher copy;
 
-			base.onChanged();
-		}
-
-		private void stopWatch()
-		{
-			if (_watcher == null)
-				return;
-
-			_watcher.Dispose();
-			_watcher = null;
-		}
-
-		public override void Dispose()
-		{
 			lock (_sync)
 			{
 				if (_disposed)
 					return;
 
-				stopWatch();
+				copy = _watcher;
+				_watcher = null;
+			}
+
+			if (copy != null)
+			{
+				copy.EnableRaisingEvents = false;
+				copy.Dispose();
+			}
+
+			base.onChanged();
+		}
+
+		public override void Dispose()
+		{
+			FileSystemWatcher copy;
+
+			lock (_sync)
+			{
+				if (_disposed)
+					return;
+
+				copy = _watcher;
+				_watcher = null;
 				_disposed = true;
 			}
+
+			if (copy != null)
+			{
+				copy.EnableRaisingEvents = false;
+				copy.Dispose();
+			}
+
 			_are.Set();
 			base.Dispose();
 		}

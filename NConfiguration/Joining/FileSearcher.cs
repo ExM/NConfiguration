@@ -43,24 +43,7 @@ namespace NConfiguration.Joining
 				yield break;
 			}
 
-			string basePath;
-
-			if(filePath[0] == '~')
-			{
-				if(searchPath == null || !Path.IsPathRooted(searchPath))
-					throw new InvalidOperationException(
-						string.Format("path '{0}' required rooted search path. But was define '{1}'", filePath, searchPath));
-
-				filePath = filePath.Substring(2); // remove ~ and path separator
-				basePath = searchPath;
-			}
-			else
-			{
-				var rpo = owner as IFilePathOwner;
-				if (rpo == null)
-					throw new InvalidOperationException("can not be searched for a relative path because the settings do not provide an absolute path");
-				basePath = rpo.Path;
-			}
+			var basePath = selectBasePath(owner as IFilePathOwner, searchPath, ref filePath);
 
 			onFindingSettings(owner, cfg, basePath);
 			var found = searchSettings(basePath, filePath, cfg.Search);
@@ -80,6 +63,20 @@ namespace NConfiguration.Joining
 			else
 				foreach (var item in found)
 					yield return item;
+		}
+
+		private static string selectBasePath(IFilePathOwner owner, string searchPath, ref string filePath)
+		{
+			if (filePath[0] == '~')
+				filePath = filePath.Substring(2); // remove ~ and path separator
+			else if (owner != null)
+				return owner.Path;
+
+			if (searchPath == null || !Path.IsPathRooted(searchPath))
+				throw new InvalidOperationException(
+					string.Format("path '{0}' required rooted search path. But was define '{1}'", filePath, searchPath));
+
+			return searchPath;
 		}
 
 		private List<IIdentifiedSource> searchSettings(string basePath, string fileName, SearchMode mode)
