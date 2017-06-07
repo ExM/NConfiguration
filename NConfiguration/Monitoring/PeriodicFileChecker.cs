@@ -19,7 +19,7 @@ namespace NConfiguration.Monitoring
 			_delay = delay;
 			_checkMode = checkMode;
 			_cts = new CancellationTokenSource();
-			Task.Run(() => checkLoop()).ThrowUnhandledException("Error while file checking.");
+			Task.Run(() => checkLoop()).ThrowUnhandledException(MsgErrorWhileFileChecking);
 		}
 
 		private async Task checkLoop()

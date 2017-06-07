@@ -9,6 +9,7 @@ namespace NConfiguration.Monitoring
 {
 	public abstract class FileChecker: IChangeable, IDisposable
 	{
+		internal const string MsgErrorWhileFileChecking  = "Error while file checking.";
 		internal static readonly string ConfigSectionName = "WatchFile";
 
 		public static FileChecker TryCreate(ReadedFileInfo fileInfo, WatchMode watch, TimeSpan? delay, CheckMode check)
@@ -152,7 +153,14 @@ namespace NConfiguration.Monitoring
 
 		private void asyncChangedWork(object arg)
 		{
-			((EventHandler)arg)(this, EventArgs.Empty);
+			try
+			{
+				((EventHandler)arg)(this, EventArgs.Empty);
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MsgErrorWhileFileChecking, ex);
+			}
 		}
 
 		private readonly object _sync = new object();

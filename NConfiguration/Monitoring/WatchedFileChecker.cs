@@ -22,7 +22,7 @@ namespace NConfiguration.Monitoring
 			_fileInfo = fileInfo;
 			_checkMode = checkMode;
 			_watcher = createWatch();
-			Task.Run(() => checkLoop()).ThrowUnhandledException("Error while file checking.");
+			Task.Run(() => checkLoop()).ThrowUnhandledException(MsgErrorWhileFileChecking);
 		}
 
 		private AutoResetEvent _are = new AutoResetEvent(false);
@@ -103,7 +103,7 @@ namespace NConfiguration.Monitoring
 			}
 			catch (Exception ex)
 			{
-				throw new Exception("Error while file checking.", ex);
+				throw new Exception(MsgErrorWhileFileChecking, ex);
 			}
 		}
 
@@ -118,7 +118,7 @@ namespace NConfiguration.Monitoring
 			}
 			catch (Exception ex)
 			{
-				throw new Exception("Error while file checking.", ex);
+				throw new Exception(MsgErrorWhileFileChecking, ex);
 			}
 		}
 
