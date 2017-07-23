@@ -13,7 +13,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 
 namespace NConfiguration.Serialization.Enums
 {
@@ -80,7 +79,7 @@ namespace NConfiguration.Serialization.Enums
 			}
 		}
 		
-		private T ParseOne(string text)
+		private T parseOne(string text)
 		{
 			T exist;
 			if (_nameMap.TryGetValue(text, out exist))
@@ -96,7 +95,7 @@ namespace NConfiguration.Serialization.Enums
 			throw new FormatException(string.Format("enum {0} not contain value '{1}'", typeof(T).FullName, text));
 		}
 
-		private <#= type#> ParseToNumber(string text)
+		private <#= type#> parseToNumber(string text)
 		{
 			T exist;
 			if (_nameMap.TryGetValue(text, out exist))
@@ -120,12 +119,12 @@ namespace NConfiguration.Serialization.Enums
 				return default(T);
 
 			if (items.Length == 1)
-				return ParseOne(items[0]);
+				return parseOne(items[0]);
 
 			<#= type#> result = 0;
 
 			foreach (var item in items)
-				result |= ParseToNumber(item);
+				result |= parseToNumber(item);
 
 			return (T)(ValueType)result;
 		}
