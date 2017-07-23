@@ -118,7 +118,7 @@ namespace NConfiguration.Combination
 			if (!pi.CanWrite || !pi.CanRead)
 				return;
 
-			if(pi.SetMethod.IsPrivate && pi.GetMethod.IsPrivate)
+			if(pi.GetSetMethod(true).IsPrivate && pi.GetGetMethod(true).IsPrivate)
 			{ // require DataMemberAttribute
 				if (pi.GetCustomAttribute<DataMemberAttribute>() == null)
 					return;

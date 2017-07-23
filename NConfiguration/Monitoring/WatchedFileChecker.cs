@@ -22,14 +22,14 @@ namespace NConfiguration.Monitoring
 			_fileInfo = fileInfo;
 			_checkMode = checkMode;
 			_watcher = createWatch();
-			Task.Run(() => checkLoop()).ThrowUnhandledException(MsgErrorWhileFileChecking);
+			Task.Factory.StartNew(checkLoop, TaskCreationOptions.LongRunning).ThrowUnhandledException(MsgErrorWhileFileChecking);
 		}
 
 		private AutoResetEvent _are = new AutoResetEvent(false);
 
-		private async Task checkLoop()
+		private void checkLoop()
 		{
-			if (await checkFile(_checkMode).ConfigureAwait(false))
+			if (checkFile(_checkMode))
 			{
 				onChanged();
 				return;
@@ -37,13 +37,13 @@ namespace NConfiguration.Monitoring
 
 			while (true)
 			{
-				var timeout = await _are.AsTask(_delay).ConfigureAwait(false);
+				var timeout = _are.AsTask(_delay).Result;
 
 				lock (_sync)
 					if (_disposed)
 						return;
 
-				if (await checkFile(timeout ? CheckMode.None : _checkMode).ConfigureAwait(false))
+				if (checkFile(timeout ? CheckMode.None : _checkMode))
 				{
 					onChanged();
 					return;

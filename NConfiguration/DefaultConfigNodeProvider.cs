@@ -5,7 +5,7 @@ namespace NConfiguration
 {
 	public class DefaultConfigNodeProvider : BaseConfigNodeProvider
 	{
-		private IReadOnlyList<KeyValuePair<string, ICfgNode>> _items;
+		private IList<KeyValuePair<string, ICfgNode>> _items;
 		private Dictionary<string, List<ICfgNode>> _index;
 
 		public DefaultConfigNodeProvider(IEnumerable<KeyValuePair<string, ICfgNode>> items)
@@ -14,7 +14,7 @@ namespace NConfiguration
 			_index = CreateIndex();
 		}
 
-		public override IReadOnlyList<KeyValuePair<string, ICfgNode>> Items { get { return _items; } }
+		public override IList<KeyValuePair<string, ICfgNode>> Items { get { return _items; } }
 
 		protected override Dictionary<string, List<ICfgNode>> Index { get { return _index; } }
 	}
