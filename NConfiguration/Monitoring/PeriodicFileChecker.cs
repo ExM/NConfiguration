@@ -19,22 +19,26 @@ namespace NConfiguration.Monitoring
 			_delay = delay;
 			_checkMode = checkMode;
 			_cts = new CancellationTokenSource();
-			Task.Run(() => checkLoop()).ThrowUnhandledException(MsgErrorWhileFileChecking);
+			Task.Factory.StartNew(checkLoop, TaskCreationOptions.LongRunning).ThrowUnhandledException(MsgErrorWhileFileChecking);
 		}
 
-		private async Task checkLoop()
+		private void checkLoop()
 		{
 			do
 			{
 				try
 				{
-					await Task.Delay(_delay, _cts.Token).ConfigureAwait(false);
+					Thread.Sleep(_delay);
 				}
 				catch (OperationCanceledException)
 				{
 					return;
 				}
-			} while (!await checkFile(_checkMode).ConfigureAwait(false));
+				catch (ThreadAbortException)
+				{
+					return;
+				}
+			} while (!checkFile(_checkMode));
 
 			onChanged();
 		}

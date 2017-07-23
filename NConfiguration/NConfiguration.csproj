@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>NConfiguration</RootNamespace>
     <AssemblyName>NConfiguration</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -60,6 +60,7 @@
     <Compile Include="Combination\ICombinerFactory.cs" />
     <Compile Include="BaseConfigNodeProvider.cs" />
     <Compile Include="Combination\Collections\Union%271.cs" />
+    <Compile Include="ReflectionExt.cs" />
     <Compile Include="DefaultConfigNodeProvider.cs" />
     <Compile Include="CachedConfigNodeProvider.cs" />
     <Compile Include="IConfigNodeProvider.cs" />

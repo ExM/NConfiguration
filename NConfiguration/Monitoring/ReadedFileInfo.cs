@@ -59,7 +59,7 @@ namespace NConfiguration.Monitoring
 			}
 		}
 
-		public async Task<bool> WasHashChanged()
+		public bool WasHashChanged()
 		{
 			try
 			{
@@ -67,7 +67,7 @@ namespace NConfiguration.Monitoring
 				using (var md5 = MD5.Create())
 				{
 					using (var crStream = new CryptoStream(fileStream, md5, CryptoStreamMode.Read))
-						await crStream.CopyToAsync(Stream.Null);
+						crStream.CopyTo(Stream.Null);
 
 					return !_hash.SequenceEqual(md5.Hash);
 				}

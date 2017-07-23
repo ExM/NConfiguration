@@ -6,7 +6,7 @@ namespace NConfiguration.Serialization
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
 	public class DeserializerAttribute : Attribute, IDeserializerFactory
 	{
-		public readonly IReadOnlyCollection<Type> DeserializerTypes;
+		public readonly ICollection<Type> DeserializerTypes;
 
 		public DeserializerAttribute(params Type[] deserializerTypes)
 		{

@@ -4,7 +4,7 @@ namespace NConfiguration
 {
 	public interface IConfigNodeProvider
 	{
-		IReadOnlyList<KeyValuePair<string, ICfgNode>> Items { get; }
+		IList<KeyValuePair<string, ICfgNode>> Items { get; }
 
 		IEnumerable<ICfgNode> ByName(string sectionName);
 	}

@@ -131,9 +131,9 @@ namespace NConfiguration.Joining
 		public class Result
 		{
 			public IConfigNodeProvider Joined { get; private set; }
-			public IReadOnlyList<IIdentifiedSource> Sources { get; private set; }
-
-			public Result(IConfigNodeProvider joined, IReadOnlyList<IIdentifiedSource> sources)
+			public IList<IIdentifiedSource> Sources { get; private set; }
+			
+			public Result(IConfigNodeProvider joined, IList<IIdentifiedSource> sources)
 			{
 				Joined = joined;
 				Sources = sources;
