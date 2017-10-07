@@ -22,7 +22,11 @@ namespace NConfiguration
 			_combiner = combiner;
 		}
 
+#if NET40
+		public IList<KeyValuePair<string, ICfgNode>> Items
+#else
 		public IReadOnlyList<KeyValuePair<string, ICfgNode>> Items
+#endif
 		{
 			get { return _nodeProvider.Items; }
 		}

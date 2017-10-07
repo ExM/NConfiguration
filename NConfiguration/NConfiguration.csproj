@@ -35,6 +35,20 @@
     <DebugSymbols>true</DebugSymbols>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release_NET40|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Release_NET40\lib\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <DocumentationFile>..\Release_NET40\lib\NConfiguration.xml</DocumentationFile>
+    <GenerateDocumentation>true</GenerateDocumentation>
+    <DebugSymbols>true</DebugSymbols>
+    <Prefer32Bit>false</Prefer32Bit>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <DefineConstants>NET40</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Runtime.Serialization" />
@@ -80,6 +94,7 @@
     <Compile Include="Monitoring\WatchedFileChecker.cs" />
     <Compile Include="Monitoring\PeriodicFileChecker.cs" />
     <Compile Include="Monitoring\CheckMode.cs" />
+    <Compile Include="ReflectionExt.cs" />
     <Compile Include="Serialization\DeserializerAttribute.cs" />
     <Compile Include="Serialization\IDeserializerFactory.cs" />
     <Compile Include="Serialization\ViewPlainField.cs" />
@@ -158,7 +173,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <None Include="NConfiguration.nuspec" />
+    <None Include="NConfiguration.nuspec">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Serialization\Enums\EnumParsers.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>EnumParsers.cs</LastGenOutput>
@@ -171,5 +188,4 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
 </Project>

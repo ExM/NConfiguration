@@ -24,7 +24,11 @@ namespace NConfiguration
 
 		protected abstract Dictionary<string, List<ICfgNode>> Index { get; }
 
+#if NET40
+		public abstract IList<KeyValuePair<string, ICfgNode>> Items { get; }
+#else
 		public abstract IReadOnlyList<KeyValuePair<string, ICfgNode>> Items { get; }
+#endif
 
 		public IEnumerable<ICfgNode> ByName(string sectionName)
 		{
