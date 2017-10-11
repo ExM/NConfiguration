@@ -26,11 +26,11 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\Release\lib\</OutputPath>
+    <OutputPath>..\Release\lib\net45\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <DocumentationFile>..\Release\lib\NConfiguration.xml</DocumentationFile>
+    <DocumentationFile>..\Release\lib\net45\NConfiguration.xml</DocumentationFile>
     <GenerateDocumentation>true</GenerateDocumentation>
     <DebugSymbols>true</DebugSymbols>
     <Prefer32Bit>false</Prefer32Bit>
@@ -38,11 +38,11 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release_NET40|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\Release_NET40\lib\</OutputPath>
+    <OutputPath>..\Release\lib\net40\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <DocumentationFile>..\Release_NET40\lib\NConfiguration.xml</DocumentationFile>
+    <DocumentationFile>..\Release\lib\net40\NConfiguration.xml</DocumentationFile>
     <GenerateDocumentation>true</GenerateDocumentation>
     <DebugSymbols>true</DebugSymbols>
     <Prefer32Bit>false</Prefer32Bit>
@@ -173,9 +173,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <None Include="NConfiguration.nuspec">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="paket.references" />
     <None Include="Serialization\Enums\EnumParsers.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>EnumParsers.cs</LastGenOutput>
@@ -188,4 +186,5 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <Import Project="..\.paket\paket.targets" />
 </Project>

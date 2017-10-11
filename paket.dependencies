@@ -1,0 +1,7 @@
+version 5.114.0
+
+framework: net40, net45
+
+source https://www.nuget.org/api/v2/
+nuget NDesk.Options 0.2.1
+nuget NUnit 3.2.0

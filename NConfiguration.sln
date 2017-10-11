@@ -3,6 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{CC6AF470-C9F2-4645-B696-99A9F29D49B8}"
+	ProjectSection(SolutionItems) = preProject
+		packet.template = packet.template
+		paket.dependencies = paket.dependencies
+		paket.lock = paket.lock
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NConfiguration", "NConfiguration\NConfiguration.csproj", "{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{CDD0A752-AAFC-4D9B-99A2-A23E50A62892} = {CDD0A752-AAFC-4D9B-99A2-A23E50A62892}
@@ -13,14 +20,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsaToolkit", "RsaToolkit\RsaToolkit.csproj", "{CDD0A752-AAFC-4D9B-99A2-A23E50A62892}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsaToolkit.Tests", "RsaToolkit.Tests\RsaToolkit.Tests.csproj", "{1562BCA2-3F11-4577-A0BB-F0ED58A73B74}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{80ADFBB2-B6A4-4C64-B16E-C73DB58F22B2}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-		.nuget\packages.config = .nuget\packages.config
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

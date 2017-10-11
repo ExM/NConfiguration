@@ -3,9 +3,9 @@ NConfiguration
 
 Library for simple configuration management
 
-Source code:
- git://github.com/ExM/NConfiguration.git
-
+[![Build status](https://ci.appveyor.com/api/projects/status/sxmvo3hgntuxivfj?svg=true)](https://ci.appveyor.com/project/ExM/nconfiguration)
+[![NuGet Version](http://img.shields.io/nuget/v/NConfiguration.svg?style=flat)](https://www.nuget.org/packages/NConfiguration/) 
+[![NuGet Downloads](http://img.shields.io/nuget/dt/NConfiguration.svg?style=flat)](https://www.nuget.org/packages/NConfiguration/)
  
 Examples:
 ---
