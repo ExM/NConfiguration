@@ -36,17 +36,12 @@ namespace NConfiguration.Monitoring
 				wait.Set();
 			};
 
-#if NET40
 			moveDirectory(dirPath, movedDirPath, attempts: 5);
-#else
-			Directory.Move(dirPath, movedDirPath);
-#endif
 			Directory.CreateDirectory(dirPath); //no lock directory
 
 			Assert.IsTrue(wait.WaitOne(5000), "no event");
 		}
 
-#if NET40
 		private static void moveDirectory(string source, string target, int attempts)
 		{
 			for (int i = 0; i < attempts; i++)
@@ -56,13 +51,15 @@ namespace NConfiguration.Monitoring
 					Directory.Move(source, target);
 					break;
 				}
-				catch (IOException) when (i < attempts - 1)
+				catch (IOException)
 				{
-					Thread.Sleep(200);
+					if (i < attempts - 1)
+						Thread.Sleep(200);
+					else
+						throw;
 				}
 			}
 		}
-#endif
 
 		[TestCase]
 		public void DeleteDirectory()
