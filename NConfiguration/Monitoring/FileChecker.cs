@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+#if !NET40
 using System.Threading.Tasks;
+#endif
 using NConfiguration.Serialization;
 
 namespace NConfiguration.Monitoring
@@ -83,7 +85,11 @@ namespace NConfiguration.Monitoring
 			}
 		}
 
+#if NET40
+		protected bool checkFile(CheckMode check)
+#else
 		protected async Task<bool> checkFile(CheckMode check)
+#endif
 		{
 			lock(_sync)
 				if (_disposed)
@@ -94,7 +100,11 @@ namespace NConfiguration.Monitoring
 
 			if (check.HasFlag(CheckMode.Hash))
 			{
+#if NET40
+				if (_fileInfo.WasHashChanged())
+#else
 				if (await _fileInfo.WasHashChanged().ConfigureAwait(false))
+#endif
 					return true;
 			}
 

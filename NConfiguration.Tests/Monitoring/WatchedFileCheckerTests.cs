@@ -21,7 +21,9 @@ namespace NConfiguration.Monitoring
 			var dirName = Guid.NewGuid().ToString();
 			var watchedFile = Path.Combine(tempPath, dirName, "test.xml");
 
-			Directory.CreateDirectory(Path.Combine(tempPath, dirName));
+			string dirPath = Path.Combine(tempPath, dirName);
+			string movedDirPath = dirPath + "_moved";
+			Directory.CreateDirectory(dirPath);
 
 			File.WriteAllText(watchedFile, _xmlCfg);
 
@@ -34,11 +36,33 @@ namespace NConfiguration.Monitoring
 				wait.Set();
 			};
 
-			Directory.Move(Path.Combine(tempPath, dirName), Path.Combine(tempPath, dirName + "_moved"));
-			Directory.CreateDirectory(Path.Combine(tempPath, dirName)); //no lock directory
+#if NET40
+			moveDirectory(dirPath, movedDirPath, attempts: 5);
+#else
+			Directory.Move(dirPath, movedDirPath);
+#endif
+			Directory.CreateDirectory(dirPath); //no lock directory
 
 			Assert.IsTrue(wait.WaitOne(5000), "no event");
 		}
+
+#if NET40
+		private static void moveDirectory(string source, string target, int attempts)
+		{
+			for (int i = 0; i < attempts; i++)
+			{
+				try
+				{
+					Directory.Move(source, target);
+					break;
+				}
+				catch (IOException) when (i < attempts - 1)
+				{
+					Thread.Sleep(200);
+				}
+			}
+		}
+#endif
 
 		[TestCase]
 		public void DeleteDirectory()

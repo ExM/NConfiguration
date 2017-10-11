@@ -5,6 +5,7 @@
 */obj/*
 */bin/*
 Release/*
+Release_NET40/*
 test-results
 *.user
 TestResults

@@ -90,10 +90,10 @@ namespace NConfiguration.Monitoring
 					fs.Position = 2;
 					fs.WriteByte(1);
 					fs.Close();
-				};
+				}
 			}, TaskCreationOptions.LongRunning);
 
-			Assert.AreEqual(expectedEvent, wait.WaitOne(700), "700 sec elapsed");
+			Assert.AreEqual(expectedEvent, wait.WaitOne(700), "700 ms elapsed");
 		}
 
 		[TestCase(CheckMode.All)]
@@ -121,10 +121,10 @@ namespace NConfiguration.Monitoring
 					fs.Position = 3;
 					fs.WriteByte(1);
 					fs.Close();
-				};
+				}
 			}, TaskCreationOptions.LongRunning);
 
-			Assert.IsTrue(wait.WaitOne(700), "700 sec elapsed");
+			Assert.IsTrue(wait.WaitOne(700), "700 ms elapsed");
 
 			wait.Reset();
 
@@ -133,7 +133,7 @@ namespace NConfiguration.Monitoring
 				wait.Set();
 			};
 
-			Assert.IsTrue(wait.WaitOne(100), "100 sec elapsed");
+			Assert.IsTrue(wait.WaitOne(100), "100 ms elapsed");
 		}
 
 		[TestCase(CheckMode.All, true)]
@@ -161,7 +161,7 @@ namespace NConfiguration.Monitoring
 					fs.Position = 1;
 					fs.WriteByte(2);
 					fs.Close();
-				};
+				}
 			}, TaskCreationOptions.LongRunning);
 
 			Assert.AreEqual(expectedEvent, wait.WaitOne(500));

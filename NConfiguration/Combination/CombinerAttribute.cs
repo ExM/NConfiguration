@@ -7,7 +7,11 @@ namespace NConfiguration.Combination
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
 	public class CombinerAttribute : Attribute, ICombinerFactory
 	{
+#if NET40
+		public readonly ICollection<Type> CombinerTypes;
+#else
 		public readonly IReadOnlyCollection<Type> CombinerTypes;
+#endif
 
 		public CombinerAttribute(params Type[] combinerTypes)
 		{
