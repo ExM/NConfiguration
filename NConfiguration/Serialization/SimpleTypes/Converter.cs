@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using NConfiguration.Serialization.Enums;
+using NConfiguration.Serialization.SimpleTypes.Parsing;
+using NConfiguration.Serialization.SimpleTypes.Parsing.Time;
 
 namespace NConfiguration.Serialization.SimpleTypes
 {
@@ -26,6 +28,7 @@ namespace NConfiguration.Serialization.SimpleTypes
 		}
 
 		private static readonly CultureInfo _ci = CultureInfo.InvariantCulture;
+	    private static readonly IParser<TimeSpan> _timeSpanParser = new AggregateTimeSpanParser();
 
 		public static object TryCreateFunction(Type targetType)
 		{
@@ -205,7 +208,12 @@ namespace NConfiguration.Serialization.SimpleTypes
 		/// </summary>
 		public static TimeSpan ToTimeSpan(IDeserializer context, ICfgNode node)
 		{
-			return TimeSpan.Parse(node.Text, _ci);
+		    TimeSpan result;
+		    if (_timeSpanParser.TryParse(node.Text, out result))
+		    {
+		        return result;
+		    }
+            throw new FormatException();
 		}
 
 		/// <summary>

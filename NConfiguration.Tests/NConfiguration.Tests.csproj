@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -81,6 +82,7 @@
     <Compile Include="Examples\IncludeSettingsTests.cs" />
     <Compile Include="ExampleTypes\CombinableConfig.cs" />
     <Compile Include="ExampleTypes\CustomCombinableConfig.cs" />
+    <Compile Include="Extensions\MoqExtensions.cs" />
     <Compile Include="GenericView\DataContractDeserializerTests.cs" />
     <Compile Include="GenericView\PrivateDeserializerTests.cs" />
     <Compile Include="GenericView\SupportInitializeTest.cs" />
@@ -105,12 +107,16 @@
     <Compile Include="Monitoring\FileCheckerTests.cs" />
     <Compile Include="Protected\XmlCryptoProvidersTests.cs" />
     <Compile Include="CombinableAppSettingsTests.cs" />
+    <Compile Include="Serialization\AggregateTimeSpanParserTests.cs" />
     <Compile Include="Serialization\ChildDeserializerTests.cs" />
     <Compile Include="Serialization\PlaceHolderDeserializer.cs" />
+    <Compile Include="Serialization\ShortFormatTimeSpanParserTests.cs" />
+    <Compile Include="Serialization\ShortFormatTimeSpansTests.cs" />
     <Compile Include="Serialization\TestAttrClass.cs" />
     <Compile Include="Serialization\TestGenericAttrClass.cs" />
     <Compile Include="Serialization\TestMemberAttrClass.cs" />
     <Compile Include="Serialization\AttributeTests.cs" />
+    <Compile Include="Serialization\TimeConfig.cs" />
     <Compile Include="StringConverterTests.cs" />
     <Compile Include="Variables\RendererTests.cs" />
     <Compile Include="XmlSystemSettingsTests.cs" />
@@ -254,6 +260,28 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="..\.paket\paket.targets" />
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5'">
+      <ItemGroup>
+        <Reference Include="Castle.Core">
+          <HintPath>..\packages\Castle.Core\lib\net45\Castle.Core.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5'">
+      <ItemGroup>
+        <Reference Include="Moq">
+          <HintPath>..\packages\Moq\lib\net45\Moq.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.0'">
       <ItemGroup>
