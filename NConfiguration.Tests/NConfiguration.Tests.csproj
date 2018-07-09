@@ -116,7 +116,6 @@
     <Compile Include="Serialization\TestGenericAttrClass.cs" />
     <Compile Include="Serialization\TestMemberAttrClass.cs" />
     <Compile Include="Serialization\AttributeTests.cs" />
-    <Compile Include="Serialization\TimeConfig.cs" />
     <Compile Include="StringConverterTests.cs" />
     <Compile Include="Variables\RendererTests.cs" />
     <Compile Include="XmlSystemSettingsTests.cs" />

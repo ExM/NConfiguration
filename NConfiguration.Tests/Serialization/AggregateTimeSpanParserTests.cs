@@ -62,7 +62,7 @@ namespace NConfiguration.Serialization
 		public void WhenParserSucceeded_ThenItsResultShouldBePassedByAggregateParser()
 		{
 			const string input = "5d";
-			TimeSpan expectedResult = TimeSpan.FromDays(5);
+			var expectedResult = TimeSpan.FromDays(5);
 			TimeSpan result;
 			_parserMocks[0].Setup(p => p.TryParse(input, out result))
 				.OutCallback((string i, out TimeSpan r) => r = expectedResult).Returns(true);
