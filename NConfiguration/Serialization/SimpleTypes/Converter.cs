@@ -28,7 +28,7 @@ namespace NConfiguration.Serialization.SimpleTypes
 		}
 
 		private static readonly CultureInfo _ci = CultureInfo.InvariantCulture;
-		private static readonly IParser<TimeSpan> _timeSpanParser = new AggregateTimeSpanParser();
+		private static readonly ITimeSpanParser _timeSpanParser = new TimeSpanParser();
 
 		public static object TryCreateFunction(Type targetType)
 		{
@@ -208,12 +208,7 @@ namespace NConfiguration.Serialization.SimpleTypes
 		/// </summary>
 		public static TimeSpan ToTimeSpan(IDeserializer context, ICfgNode node)
 		{
-			TimeSpan result;
-			if (_timeSpanParser.TryParse(node.Text, out result))
-			{
-				return result;
-			}
-			throw new FormatException();
+			return _timeSpanParser.Parse(node.Text, _ci);
 		}
 
 		/// <summary>

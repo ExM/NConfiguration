@@ -107,10 +107,9 @@
     <Compile Include="Monitoring\FileCheckerTests.cs" />
     <Compile Include="Protected\XmlCryptoProvidersTests.cs" />
     <Compile Include="CombinableAppSettingsTests.cs" />
-    <Compile Include="Serialization\AggregateTimeSpanParserTests.cs" />
+    <Compile Include="Serialization\TimeSpanParserTests.cs" />
     <Compile Include="Serialization\ChildDeserializerTests.cs" />
     <Compile Include="Serialization\PlaceHolderDeserializer.cs" />
-    <Compile Include="Serialization\ShortFormatTimeSpanParserTests.cs" />
     <Compile Include="Serialization\ShortFormatTimeSpansTests.cs" />
     <Compile Include="Serialization\TestAttrClass.cs" />
     <Compile Include="Serialization\TestGenericAttrClass.cs" />

@@ -1,17 +1,21 @@
 ﻿using System;
+using System.Globalization;
 using NConfiguration.Serialization.SimpleTypes.Parsing.Time;
 using NUnit.Framework;
 
 namespace NConfiguration.Serialization
 {
 	[TestFixture]
-	public class ShortFormatTimeSpanParserTests
+	public class TimeSpanParserTests
 	{
-		private readonly ShortFormatTimeSpanParser _parser;
+		private TimeSpanParser _parser;
+		private CultureInfo _ci;
 
-		public ShortFormatTimeSpanParserTests()
+		[SetUp]
+		public void SetUp()
 		{
-			_parser = new ShortFormatTimeSpanParser();
+			_ci = CultureInfo.InvariantCulture;
+			_parser = new TimeSpanParser();
 		}
 
 		private static void CheckAreEquals(TimeSpan timeSpan, double days, double hours, double minutes, double seconds)
@@ -24,28 +28,26 @@ namespace NConfiguration.Serialization
 
 		[TestCase("13.123d", 13.123, 0, 0, 0)]
 		[TestCase("13.123d6.33h53m13s", 13.123, 6.33, 53, 13)]
+		[TestCase("-3d ", -3, 0, 0, 0)]
+		[TestCase("3:15:03", 0, 3, 15, 03)]
 		public void CorrectInputTests(string input, double days, double hours, double minutes, double seconds)
 		{
-			TimeSpan result;
-			var parsed = _parser.TryParse(input, out result);
-			Assert.AreEqual(true, parsed);
+			TimeSpan result = _parser.Parse(input, _ci);
 			CheckAreEquals(result, days, hours, minutes, seconds);
 		}
 
-		[Test]
-		public void WhenInputHasIncorrectFormat_ThenFalseShouldBeReturned()
+		[TestCase("533asdf")]
+		[TestCase("2hack")]
+		[TestCase("1,5h")]
+		public void WhenInputHasIncorrectFormat_ThenExceptionShouldBeThrown(string input)
 		{
-			TimeSpan result;
-			var parsed = _parser.TryParse("533", out result);
-			Assert.AreEqual(false, parsed);
+			Assert.Throws<FormatException>(() => _parser.Parse(input, _ci));
 		}
 
 		[TestCase("52s6h13m5d", 5, 6, 13, 52)]
 		public void OrderIndependencyTests(string input, double days, double hours, double minutes, double seconds)
 		{
-			TimeSpan result;
-			var parsed = _parser.TryParse(input, out result);
-			Assert.AreEqual(true, parsed);
+			TimeSpan result = _parser.Parse(input, _ci);
 			CheckAreEquals(result, days, hours, minutes, seconds);
 		}
 
@@ -53,9 +55,7 @@ namespace NConfiguration.Serialization
 		[TestCase("2D3h4M5s", 2, 3, 4, 5)]
 		public void CaseInsensitivityTests(string input, double days, double hours, double minutes, double seconds)
 		{
-			TimeSpan result;
-			var parsed = _parser.TryParse(input, out result);
-			Assert.AreEqual(true, parsed);
+			TimeSpan result = _parser.Parse(input, _ci);
 			CheckAreEquals(result, days, hours, minutes, seconds);
 		}
 	}
