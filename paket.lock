@@ -1,8 +1,5 @@
 RESTRICTION: || (== net40) (== net45)
 NUGET
   remote: https://www.nuget.org/api/v2
-    Castle.Core (4.3.1) - restriction: || (&& (== net40) (>= net45)) (&& (== net40) (>= netstandard1.3)) (== net45)
-    Moq (4.7)
-      Castle.Core (>= 4.0) - restriction: || (&& (== net40) (>= net45)) (&& (== net40) (>= netstandard1.3)) (== net45)
     NDesk.Options (0.2.1)
     NUnit (3.2)
