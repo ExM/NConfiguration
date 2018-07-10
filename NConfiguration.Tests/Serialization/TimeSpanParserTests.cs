@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using NConfiguration.Serialization.SimpleTypes.Parsing.Time;
+using NConfiguration.Serialization.SimpleTypes.Parsing;
 using NUnit.Framework;
 
 namespace NConfiguration.Serialization

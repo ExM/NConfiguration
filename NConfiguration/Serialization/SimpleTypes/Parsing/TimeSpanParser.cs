@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace NConfiguration.Serialization.SimpleTypes.Parsing.Time
+namespace NConfiguration.Serialization.SimpleTypes.Parsing
 {
-	public class TimeSpanParser : ITimeSpanParser
+	public class TimeSpanParser
 	{
 		private const RegexOptions RegularExpressionOptions =
 			RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled;

@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Reflection;
 using NConfiguration.Serialization.Enums;
 using NConfiguration.Serialization.SimpleTypes.Parsing;
-using NConfiguration.Serialization.SimpleTypes.Parsing.Time;
 
 namespace NConfiguration.Serialization.SimpleTypes
 {
@@ -28,7 +27,7 @@ namespace NConfiguration.Serialization.SimpleTypes
 		}
 
 		private static readonly CultureInfo _ci = CultureInfo.InvariantCulture;
-		private static readonly ITimeSpanParser _timeSpanParser = new TimeSpanParser();
+		private static readonly TimeSpanParser _timeSpanParser = new TimeSpanParser();
 
 		public static object TryCreateFunction(Type targetType)
 		{
