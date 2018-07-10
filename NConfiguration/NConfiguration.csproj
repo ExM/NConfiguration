@@ -106,6 +106,7 @@
     <Compile Include="ReflectionExt.cs" />
     <Compile Include="Serialization\DeserializerAttribute.cs" />
     <Compile Include="Serialization\IDeserializerFactory.cs" />
+    <Compile Include="Serialization\SimpleTypes\Parsing\TimeSpanParser.cs" />
     <Compile Include="Serialization\ViewPlainField.cs" />
     <Compile Include="Json\JsonFileSettings.cs" />
     <Compile Include="Json\JsonSettings.cs" />
