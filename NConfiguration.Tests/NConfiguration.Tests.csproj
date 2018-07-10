@@ -109,7 +109,7 @@
     <Compile Include="Serialization\TimeSpanParserTests.cs" />
     <Compile Include="Serialization\ChildDeserializerTests.cs" />
     <Compile Include="Serialization\PlaceHolderDeserializer.cs" />
-    <Compile Include="Serialization\ShortFormatTimeSpansTests.cs" />
+    <Compile Include="Serialization\TimeConfigParsingTests.cs" />
     <Compile Include="Serialization\TestAttrClass.cs" />
     <Compile Include="Serialization\TestGenericAttrClass.cs" />
     <Compile Include="Serialization\TestMemberAttrClass.cs" />

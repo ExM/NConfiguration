@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace NConfiguration.Serialization
 {
 	[TestFixture]
-	public class ShortFormatTimeSpansTests
+	public class TimeConfigParsingTests
 	{
 		public class TimeConfig
 		{
@@ -15,7 +15,8 @@ namespace NConfiguration.Serialization
 		{
 			new object[] {"15d", TimeSpan.FromDays(15) },
 			new object[] {"2h", TimeSpan.FromHours(2) },
-			new object[] {"2h30m", new TimeSpan(0, 2, 30, 0) }
+			new object[] {"2h30m", new TimeSpan(0, 2, 30, 0) },
+			new object[] {"3:40:50", new TimeSpan(0, 3, 40, 50) },
 		};
 
 		[TestCaseSource(nameof(CaseSets))]

@@ -39,16 +39,12 @@ namespace NConfiguration.Serialization
 		[TestCase("533asdf")]
 		[TestCase("2hack")]
 		[TestCase("1,5h")]
+		[TestCase("5h-5m")]
+		[TestCase("5h10h")]
+		[TestCase("52s6h13m5d")]
 		public void WhenInputHasIncorrectFormat_ThenExceptionShouldBeThrown(string input)
 		{
 			Assert.Throws<FormatException>(() => _parser.Parse(input, _ci));
-		}
-
-		[TestCase("52s6h13m5d", 5, 6, 13, 52)]
-		public void OrderIndependencyTests(string input, double days, double hours, double minutes, double seconds)
-		{
-			TimeSpan result = _parser.Parse(input, _ci);
-			CheckAreEquals(result, days, hours, minutes, seconds);
 		}
 
 		[TestCase("2D3H4M5S", 2, 3, 4, 5)]

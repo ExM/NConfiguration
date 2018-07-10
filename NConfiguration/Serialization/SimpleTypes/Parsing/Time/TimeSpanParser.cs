@@ -7,14 +7,17 @@ namespace NConfiguration.Serialization.SimpleTypes.Parsing.Time
 {
 	public class TimeSpanParser : ITimeSpanParser
 	{
+		private const RegexOptions RegularExpressionOptions =
+			RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled;
 		private const string PatternBase = @"(-?\d+(?:\.\d+)?)";
 
 		private static Regex GetExpression(string unitOfMeasurement)
 		{
-			return new Regex($@"{PatternBase}{unitOfMeasurement}", RegexOptions.IgnoreCase);
+			return new Regex($@"{PatternBase}{unitOfMeasurement}", RegularExpressionOptions);
 		}
 
-		private static readonly Regex _checkFormatRegex = new Regex($@"({PatternBase}[dhms])+", RegexOptions.IgnoreCase);
+		private static readonly Regex _checkFormatRegex = 
+			new Regex($@"({PatternBase}d)?({PatternBase}h)?({PatternBase}m)?({PatternBase}s)?", RegularExpressionOptions);
 
 		private readonly KeyValuePair<Regex, Func<double, TimeSpan>>[] _regexToSpans =
 		{
@@ -37,18 +40,21 @@ namespace NConfiguration.Serialization.SimpleTypes.Parsing.Time
 		private TimeSpan ParseShortFormat(string rawInput, CultureInfo cultureInfo)
 		{
 			ValidateShortFormat(rawInput);
-			bool success = false;
 			var result = TimeSpan.Zero;
+			var hasPositive = false;
+			var hasNegative = false;
 			foreach (var regexToSpan in _regexToSpans)
 			{
 				var match = regexToSpan.Key.Match(rawInput);
 				if (match.Success)
 				{
-					success = true;
-					result = result.Add(regexToSpan.Value(double.Parse(match.Groups[1].Value, cultureInfo)));
+					var number = double.Parse(match.Groups[1].Value, cultureInfo);
+					result = result.Add(regexToSpan.Value(number));
+					hasPositive |= number > 0;
+					hasNegative |= number < 0;
 				}
 			}
-			if (success)
+			if (hasPositive ^ hasNegative)
 			{
 				return result;
 			}
