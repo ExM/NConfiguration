@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>3.0.0</Version>
+    <Description>C# library for convenient operation with configurations of one or groups of applications. The library supports work with standard XML configurations and  included files in format of XML, JSON, or the INI.</Description>
+    <Company>ExM</Company>
+    <Authors>Anatoliy Koperin</Authors>
+    <Copyright>LGPLv3 Copyright © 2019 Anatoliy Koperin &lt;a.koperin@gmail.com&gt;</Copyright>
+  </PropertyGroup>
+  <Import Project="..\.paket\Paket.Restore.targets" />
+</Project>

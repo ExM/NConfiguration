@@ -1,4 +1,5 @@
 using System;
+using System.Configuration;
 using System.Xml.Linq;
 
 namespace NConfiguration.Xml
@@ -9,7 +10,7 @@ namespace NConfiguration.Xml
 		private readonly string _configPath;
 
 		public XmlSystemSettings(string sectionName, string configPath = null)
-			: base(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile)
+			: base(ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None).FilePath)
 		{
 			_sectionName = sectionName;
 			_configPath = configPath;
