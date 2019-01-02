@@ -46,7 +46,7 @@
     <GenerateDocumentation>true</GenerateDocumentation>
     <DebugSymbols>true</DebugSymbols>
     <Prefer32Bit>false</Prefer32Bit>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <DefineConstants>NET40</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
@@ -103,7 +103,6 @@
     <Compile Include="Monitoring\WatchedFileChecker.cs" />
     <Compile Include="Monitoring\PeriodicFileChecker.cs" />
     <Compile Include="Monitoring\CheckMode.cs" />
-    <Compile Include="ReflectionExt.cs" />
     <Compile Include="Serialization\DeserializerAttribute.cs" />
     <Compile Include="Serialization\IDeserializerFactory.cs" />
     <Compile Include="Serialization\ViewPlainField.cs" />

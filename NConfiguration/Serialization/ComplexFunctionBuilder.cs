@@ -131,11 +131,7 @@ namespace NConfiguration.Serialization
 			if (!pi.CanWrite || !pi.CanRead)
 				return;
 
-#if NET40
-			if (pi.GetSetMethod(true).IsPrivate && pi.GetGetMethod(true).IsPrivate)
-#else
 			if (pi.SetMethod.IsPrivate && pi.GetMethod.IsPrivate)
-#endif
 			{ // require DataMemberAttribute
 				if (pi.GetCustomAttribute<DataMemberAttribute>() == null)
 					return;

@@ -16,3 +16,4 @@ packages
 .vs/config/applicationhost.config
 /.idea
 /paket-files/
+/.vs

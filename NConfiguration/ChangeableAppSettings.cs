@@ -22,11 +22,7 @@ namespace NConfiguration
 			remove { _changeable.Changed -= value; }
 		}
 
-#if NET40
-		public IList<KeyValuePair<string, ICfgNode>> Items
-#else
 		public IReadOnlyList<KeyValuePair<string, ICfgNode>> Items
-#endif
 		{
 			get { return _source.Items; }
 		}

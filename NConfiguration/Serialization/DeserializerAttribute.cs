@@ -6,11 +6,7 @@ namespace NConfiguration.Serialization
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
 	public class DeserializerAttribute : Attribute, IDeserializerFactory
 	{
-#if NET40
-		public readonly ICollection<Type> DeserializerTypes;
-#else
 		public readonly IReadOnlyCollection<Type> DeserializerTypes;
-#endif
 
 		public DeserializerAttribute(params Type[] deserializerTypes)
 		{

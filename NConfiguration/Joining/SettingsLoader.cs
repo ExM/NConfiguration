@@ -131,15 +131,9 @@ namespace NConfiguration.Joining
 		public class Result
 		{
 			public IConfigNodeProvider Joined { get; private set; }
-#if NET40
-			public IList<IIdentifiedSource> Sources { get; private set; }
-
-			public Result(IConfigNodeProvider joined, IList<IIdentifiedSource> sources)
-#else
 			public IReadOnlyList<IIdentifiedSource> Sources { get; private set; }
 
 			public Result(IConfigNodeProvider joined, IReadOnlyList<IIdentifiedSource> sources)
-#endif
 			{
 				Joined = joined;
 				Sources = sources;
