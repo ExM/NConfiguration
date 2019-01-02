@@ -230,9 +230,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NConfiguration\NConfiguration.csproj">
+    <ProjectReference Include="..\NConfiguration\NConfiguration.Net45.csproj">
       <Project>{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}</Project>
-      <Name>NConfiguration</Name>
+      <Name>NConfiguration.Net45</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

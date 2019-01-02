@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{CC6AF470-C9F2-4645-B696-99A9F29D49B8}"
 	ProjectSection(SolutionItems) = preProject
@@ -10,51 +10,45 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{CC6AF4
 		paket.lock = paket.lock
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NConfiguration", "NConfiguration\NConfiguration.csproj", "{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NConfiguration.Net45", "NConfiguration\NConfiguration.Net45.csproj", "{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{CDD0A752-AAFC-4D9B-99A2-A23E50A62892} = {CDD0A752-AAFC-4D9B-99A2-A23E50A62892}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NConfiguration.Tests", "NConfiguration.Tests\NConfiguration.Tests.csproj", "{7DC99CFF-DEAC-4D53-B96F-37C1D2A33C8E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NConfiguration.Net45.Tests", "NConfiguration.Tests\NConfiguration.Net45.Tests.csproj", "{7DC99CFF-DEAC-4D53-B96F-37C1D2A33C8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsaToolkit", "RsaToolkit\RsaToolkit.csproj", "{CDD0A752-AAFC-4D9B-99A2-A23E50A62892}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsaToolkit.Net45", "RsaToolkit\RsaToolkit.Net45.csproj", "{CDD0A752-AAFC-4D9B-99A2-A23E50A62892}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsaToolkit.Tests", "RsaToolkit.Tests\RsaToolkit.Tests.csproj", "{1562BCA2-3F11-4577-A0BB-F0ED58A73B74}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RsaToolkit.Net45.Tests", "RsaToolkit.Tests\RsaToolkit.Net45.Tests.csproj", "{1562BCA2-3F11-4577-A0BB-F0ED58A73B74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		Release_NET40|Any CPU = Release_NET40|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}.Release_NET40|Any CPU.ActiveCfg = Release_NET40|Any CPU
-		{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}.Release_NET40|Any CPU.Build.0 = Release_NET40|Any CPU
 		{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7DC99CFF-DEAC-4D53-B96F-37C1D2A33C8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7DC99CFF-DEAC-4D53-B96F-37C1D2A33C8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7DC99CFF-DEAC-4D53-B96F-37C1D2A33C8E}.Release_NET40|Any CPU.ActiveCfg = Release_NET40|Any CPU
-		{7DC99CFF-DEAC-4D53-B96F-37C1D2A33C8E}.Release_NET40|Any CPU.Build.0 = Release_NET40|Any CPU
 		{7DC99CFF-DEAC-4D53-B96F-37C1D2A33C8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DC99CFF-DEAC-4D53-B96F-37C1D2A33C8E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CDD0A752-AAFC-4D9B-99A2-A23E50A62892}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CDD0A752-AAFC-4D9B-99A2-A23E50A62892}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CDD0A752-AAFC-4D9B-99A2-A23E50A62892}.Release_NET40|Any CPU.ActiveCfg = Release_NET40|Any CPU
-		{CDD0A752-AAFC-4D9B-99A2-A23E50A62892}.Release_NET40|Any CPU.Build.0 = Release_NET40|Any CPU
 		{CDD0A752-AAFC-4D9B-99A2-A23E50A62892}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDD0A752-AAFC-4D9B-99A2-A23E50A62892}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1562BCA2-3F11-4577-A0BB-F0ED58A73B74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1562BCA2-3F11-4577-A0BB-F0ED58A73B74}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1562BCA2-3F11-4577-A0BB-F0ED58A73B74}.Release_NET40|Any CPU.ActiveCfg = Release_NET40|Any CPU
-		{1562BCA2-3F11-4577-A0BB-F0ED58A73B74}.Release_NET40|Any CPU.Build.0 = Release_NET40|Any CPU
 		{1562BCA2-3F11-4577-A0BB-F0ED58A73B74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1562BCA2-3F11-4577-A0BB-F0ED58A73B74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3EF631C8-87BD-49DD-B96D-9E91BF03781D}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Configuration\Configuration.csproj

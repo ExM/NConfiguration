@@ -59,9 +59,9 @@
     <Compile Include="TestExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RsaToolkit\RsaToolkit.csproj">
+    <ProjectReference Include="..\RsaToolkit\RsaToolkit.Net45.csproj">
       <Project>{CDD0A752-AAFC-4D9B-99A2-A23E50A62892}</Project>
-      <Name>RsaToolkit</Name>
+      <Name>RsaToolkit.Net45</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
