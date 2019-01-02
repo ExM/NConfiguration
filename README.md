@@ -14,9 +14,6 @@ In your `web.config` or `app.config` make sure you have a custom section:
 
 ```xml
 <configuration>
-	<configSections>
-		<section name="ExtConfigure" type="NConfiguration.PlainXmlSection, NConfiguration"/>
-	</configSections>
 	<ExtConfigure>
 		<IncludeFile Path="etc\externalConfig.xml" Search="All" Include="All" Required="true"/>
 		<IncludeFile Path="etc\machineSpecific.xml" Search="All" Include="All" Required="true"/>
@@ -30,9 +27,11 @@ Tracking changed included files.
 ```c# 
 public IAppSettings LoadSettings()
 {
+	var path = ConfigurationManager.OpenExeConfiguration(Assembly.GetExecutingAssembly().Location).FilePath;
+
 	var loader = new SettingsLoader();
 	loader.XmlFileBySection();
-	var result = loader.LoadSettings(new XmlSystemSettings("ExtConfigure"));
+	var result = loader.LoadSettings(new XmlFileSettings(path, "ExtConfigure"));
 	
 	var fileCheckers = FileChecker.TryCreate(result.Sources).ToArray();
 	new FirstChange(fileCheckers).Changed += SettingsChanged;

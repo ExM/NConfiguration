@@ -1,7 +1,6 @@
 using System;
 using System.Xml;
 using System.Xml.Linq;
-using NConfiguration.Xml.Protected;
 using NConfiguration.Xml;
 using NConfiguration.Ini;
 using System.Collections.Generic;
@@ -14,7 +13,7 @@ namespace NConfiguration
 	{
 		public static ICfgNode ToXmlView(this XDocument doc)
 		{
-			return new XmlViewNode(null, doc.Root);
+			return new XmlViewNode(doc.Root);
 		}
 
 		public static string ResolveTestPath(this string relativePath)
@@ -36,13 +35,6 @@ namespace NConfiguration
 		public static List<Section> ToIniSections(this string text)
 		{
 			return Section.Parse(text);
-		}
-
-		public static IIdentifiedSource ToXmlSettings(this string text, IProviderCollection providers)
-		{
-			var settings = new XmlStringSettings(text);
-			settings.Providers = providers;
-			return settings;
 		}
 
 		public static XmlElement ToXmlElement(this string xml)

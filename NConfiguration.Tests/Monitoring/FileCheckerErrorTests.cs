@@ -61,7 +61,7 @@ namespace NConfiguration.Monitoring
 			return new TestCaseData(checkerCreator, workflow).SetName(name);
 		}
 
-		[TestCaseSource("checkerCreators")]
+		[TestCaseSource(nameof(checkerCreators))]
 		public void ExceptionInEventHandler(Func<ReadedFileInfo, IChangeable> checkerCreator, string[] workflow)
 		{
 			string file = Path.GetTempFileName();
@@ -76,6 +76,11 @@ namespace NConfiguration.Monitoring
 			{
 				unhandledException = (Exception)args.ExceptionObject;
 				wait.Set();
+				
+				// prevent the runtime from terminating
+				Thread.CurrentThread.IsBackground = true;
+				if(args.IsTerminating)
+					Thread.Sleep(-1);
 			};
 
 			AppDomain.CurrentDomain.UnhandledException += handler;

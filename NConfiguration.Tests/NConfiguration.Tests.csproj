@@ -1,277 +1,86 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{7DC99CFF-DEAC-4D53-B96F-37C1D2A33C8E}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <RootNamespace>NConfiguration</RootNamespace>
-    <AssemblyName>NConfiguration.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release_NET40|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release_NET40</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-    <Prefer32Bit>false</Prefer32Bit>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <DefineConstants>NET40</DefineConstants>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Configuration" />
+    <ProjectReference Include="..\NConfiguration\NConfiguration.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Combination\Collections\UnionCombiners.cs" />
-    <Compile Include="Combination\CombinableTestStruct.cs" />
-    <Compile Include="Combination\DefaultCombinationTests\ChildCombinerTests.cs" />
-    <Compile Include="Combination\DefaultCombinationTests\AutoCombinerTests.cs" />
-    <Compile Include="Combination\DefaultCombinationTests\CombinableTests.cs" />
-    <Compile Include="Combination\DefaultCombinationTests\JoinStringCombiner.cs" />
-    <Compile Include="Combination\DefaultCombinationTests\TestMemberAttrClass.cs" />
-    <Compile Include="Combination\DefaultCombinationTests\TestComplexClassWithoutConstructor.cs" />
-    <Compile Include="Combination\DefaultCombinationTests\TestComplexClass.cs" />
-    <Compile Include="Combination\DefaultCombinationTests\TypeAttributeCombinerTests.cs" />
-    <Compile Include="Combination\DefaultCombinationTests\SimplyTypeTests.cs" />
-    <Compile Include="Combination\DefaultCombinationTests\TestAttrStruct.cs" />
-    <Compile Include="Combination\DefaultCombinationTests\TestGenericAttrClass.cs" />
-    <Compile Include="Combination\DefaultCombinationTests\TestCombinableClass.cs" />
-    <Compile Include="Combination\DefaultCombinationTests\TestGenericCombinableClass.cs" />
-    <Compile Include="Combination\DefaultCombinationTests\TestAttrClass.cs" />
-    <Compile Include="Combination\TestAttrClass.cs" />
-    <Compile Include="Combination\CombinableTestClass.cs" />
-    <Compile Include="Combination\TestClass.cs" />
-    <Compile Include="Examples\AutoCombinableConnectionConfig.cs" />
-    <Compile Include="Examples\ChildAutoCombinableConnectionConfig.cs" />
-    <Compile Include="Examples\ExampleCombineConfig.cs" />
-    <Compile Include="Examples\ConnectionConfig.cs" />
-    <Compile Include="Examples\ConnectionSubsectionTests.cs" />
-    <Compile Include="Examples\IncludeSettingsTests.cs" />
-    <Compile Include="ExampleTypes\CombinableConfig.cs" />
-    <Compile Include="ExampleTypes\CustomCombinableConfig.cs" />
-    <Compile Include="GenericView\DataContractDeserializerTests.cs" />
-    <Compile Include="GenericView\PrivateDeserializerTests.cs" />
-    <Compile Include="GenericView\SupportInitializeTest.cs" />
-    <Compile Include="GenericView\DeserializePrimitiveTypes.cs" />
-    <Compile Include="GenericView\XmlDeserializerTests.cs" />
-    <Compile Include="GenericView\EnumParserTests.cs" />
-    <Compile Include="GenericView\GenericDeserializerTests.cs" />
-    <Compile Include="GenericView\XmlViewTests.cs" />
-    <Compile Include="Including\CycleIncludingTests.cs" />
-    <Compile Include="Ini\IniStringSettings.cs" />
-    <Compile Include="Ini\ParsingTests.cs" />
-    <Compile Include="Joining\AdditionalConfig.cs" />
-    <Compile Include="Joining\SettingsLoaderTests.cs" />
-    <Compile Include="Json\DeserializeTests.cs" />
-    <Compile Include="Json\JsonStringSettings.cs" />
-    <Compile Include="Json\ParsingTests.cs" />
-    <Compile Include="KeyManager.cs" />
-    <Compile Include="Monitoring\AppSettingChangeTests.cs" />
-    <Compile Include="Monitoring\FileCheckerCreateTests.cs" />
-    <Compile Include="Monitoring\FileCheckerErrorTests.cs" />
-    <Compile Include="Monitoring\WatchedFileCheckerTests.cs" />
-    <Compile Include="Monitoring\FileCheckerTests.cs" />
-    <Compile Include="Protected\XmlCryptoProvidersTests.cs" />
-    <Compile Include="CombinableAppSettingsTests.cs" />
-    <Compile Include="Serialization\ChildDeserializerTests.cs" />
-    <Compile Include="Serialization\PlaceHolderDeserializer.cs" />
-    <Compile Include="Serialization\TestAttrClass.cs" />
-    <Compile Include="Serialization\TestGenericAttrClass.cs" />
-    <Compile Include="Serialization\TestMemberAttrClass.cs" />
-    <Compile Include="Serialization\AttributeTests.cs" />
-    <Compile Include="StringConverterTests.cs" />
-    <Compile Include="Variables\RendererTests.cs" />
-    <Compile Include="XmlSystemSettingsTests.cs" />
-    <Compile Include="MyXmlConfig.cs" />
-    <Compile Include="XmlFileSettingsTests.cs" />
-    <Compile Include="XmlStringSettings.cs" />
-    <Compile Include="ExtensionsForTests.cs" />
-    <Compile Include="Combination\ComplexTests.cs" />
-    <Compile Include="Combination\SimplyTests.cs" />
-    <Compile Include="Combination\TestStruct.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Examples\Additional.config">
-      <SubType>Designer</SubType>
+    <None Update="Examples\AppDirectory\Additional.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\AppDirectory\Additional.json">
-      <SubType>Designer</SubType>
+    <None Update="Examples\AppDirectory\main.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\AppDirectory\autoMain.config">
-      <SubType>Designer</SubType>
+    <None Update="Examples\ExternalConfigurations\Common.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\AppDirectory\mainJson.config">
-      <SubType>Designer</SubType>
+    <None Update="Examples\AppDirectory\Additional.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\AppDirectory\secureMain.config">
-      <SubType>Designer</SubType>
+    <None Update="Examples\AppDirectory\autoMain.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Examples\ExternalConfigurations\Common.config">
-      <SubType>Designer</SubType>
+    <None Update="Examples\AppDirectory\mainJson.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Including\iniPartial_id2.ini">
-      <SubType>Designer</SubType>
+    <None Update="Examples\Additional.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Including\jsonPartial_id2.json">
-      <SubType>Designer</SubType>
+    <None Update="Including\iniPartial.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Including\iniPartial_id1.ini">
-      <SubType>Designer</SubType>
+    <None Update="Including\iniPartial_id1.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Including\jsonPartial_id1.json">
-      <SubType>Designer</SubType>
+    <None Update="Including\iniPartial_id2.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Including\iniPartial.ini">
-      <SubType>Designer</SubType>
+    <None Update="Including\jsonPartial.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Including\jsonPartial.json">
-      <SubType>Designer</SubType>
+    <None Update="Including\jsonPartial_id1.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="Including\xmlPartial_id2.xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Including\xmlPartial_id1.xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Including\xmlPartial.xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Include="Joining\AppDirectory\Additional.config">
-      <SubType>Designer</SubType>
+    <None Update="Including\jsonPartial_id2.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Joining\AppDirectory\Deeper\Additional.config">
-      <SubType>Designer</SubType>
+    <None Update="Including\xmlPartial.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Joining\AppDirectory\Deeper\BaseInclude.config">
-      <SubType>Designer</SubType>
+    <None Update="Including\xmlPartial_id1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Joining\AppDirectory\BaseUpperAdditional.config">
-      <SubType>Designer</SubType>
+    <None Update="Including\xmlPartial_id2.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Joining\AppDirectory\RelativeUpperAdditional.config">
-      <SubType>Designer</SubType>
+    <None Update="testConfig1.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Joining\AppDirectory\Deeper\RelativeInclude.config">
-      <SubType>Designer</SubType>
+    <None Update="Joining\AppDirectory\RelativeUpperAdditional.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Joining\AppDirectory\IncludeInMiddle.config">
-      <SubType>Designer</SubType>
+    <None Update="Joining\AppDirectory\IncludeInMiddle.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Monitoring\Additional.config">
-      <SubType>Designer</SubType>
+    <None Update="Joining\AppDirectory\BaseUpperAdditional.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Monitoring\main.config">
-      <SubType>Designer</SubType>
+    <None Update="Joining\AppDirectory\Additional.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="paket.references" />
-    <None Include="testConfig1.xml">
+    <None Update="Joining\AppDirectory\Deeper\BaseInclude.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\NConfiguration\NConfiguration.csproj">
-      <Project>{0FB12DA2-A8BD-4BF7-8507-9ECA5771FD3B}</Project>
-      <Name>NConfiguration</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Examples\AppDirectory\main.config">
-      <SubType>Designer</SubType>
+    <None Update="Joining\AppDirectory\Deeper\RelativeInclude.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Joining\AppDirectory\Deeper\Additional.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Examples\AppDirectory\Additional.config">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="testKey.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <Import Project="..\.paket\paket.targets" />
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.0'">
-      <ItemGroup>
-        <Reference Include="nunit.framework">
-          <HintPath>..\packages\NUnit\lib\net40\nunit.framework.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5'">
-      <ItemGroup>
-        <Reference Include="nunit.framework">
-          <HintPath>..\packages\NUnit\lib\net45\nunit.framework.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
+  <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
