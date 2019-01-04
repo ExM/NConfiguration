@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.IO;
 using System.Security.Principal;
 using System.Security.AccessControl;
+using NETCore.Encrypt.Extensions.Internal;
 
 namespace RsaToolkit.Commands
 {
@@ -46,10 +47,11 @@ namespace RsaToolkit.Commands
 				var cp = new CspParameters();
 				cp.KeyContainerName = _containerName;
 				cp.Flags = CspProviderFlags.UseMachineKeyStore;
-				cp.CryptoKeySecurity = createAccessRules();
+				//TODO
+				//cp.CryptoKeySecurity = createAccessRules(); 
 
 				rsa = new RSACryptoServiceProvider(cp);
-				rsa.FromXmlString(File.ReadAllText(_keyFile));
+				RSAKeyExtensions.FromXmlString(rsa, File.ReadAllText(_keyFile));
 				rsa.PersistKeyInCsp = true;
 				rsa.Clear();
 			}
@@ -65,8 +67,11 @@ namespace RsaToolkit.Commands
 			}
 		}
 
+		/*
 		private CryptoKeySecurity createAccessRules()
 		{
+			System.Security.AccessControl.
+
 			var defaultRules = true;
 			var result = new CryptoKeySecurity();
 
@@ -94,5 +99,6 @@ namespace RsaToolkit.Commands
 				.Select(_ => _.Trim())
 				.Where(_ => !string.IsNullOrEmpty(_));
 		}
+		*/
 	}
 }

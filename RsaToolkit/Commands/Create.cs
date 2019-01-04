@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NDesk.Options;
 using System.Security.Cryptography;
 using System.IO;
+using NETCore.Encrypt.Extensions.Internal;
 
 namespace RsaToolkit.Commands
 {
@@ -66,7 +67,7 @@ namespace RsaToolkit.Commands
 
 			var rsa = new RSACryptoServiceProvider(_keySize, cp);
 			if (_keyFile != null)
-				File.WriteAllText(_keyFile, rsa.ToXmlString(true));
+				File.WriteAllText(_keyFile, RSAKeyExtensions.ToXmlString(rsa, true));
 			rsa.PersistKeyInCsp = (_containerName != null);
 			rsa.Clear();
 		}

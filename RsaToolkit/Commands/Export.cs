@@ -2,6 +2,7 @@
 using NDesk.Options;
 using System.Security.Cryptography;
 using System.IO;
+using NETCore.Encrypt.Extensions.Internal;
 
 namespace RsaToolkit.Commands
 {
@@ -37,7 +38,7 @@ namespace RsaToolkit.Commands
 				var cp = new CspParameters();
 				cp.KeyContainerName = _containerName;
 				cp.Flags = CspProviderFlags.UseMachineKeyStore | CspProviderFlags.UseExistingKey;
-				File.WriteAllText(_keyFile, new RSACryptoServiceProvider(cp).ToXmlString(true));
+				File.WriteAllText(_keyFile, RSAKeyExtensions.ToXmlString(new RSACryptoServiceProvider(cp), true));
 			}
 			catch (CryptographicException ex)
 			{

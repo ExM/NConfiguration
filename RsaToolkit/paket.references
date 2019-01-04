@@ -1,1 +1,5 @@
 NDesk.Options
+System.Configuration.ConfigurationManager
+System.Security.Cryptography.Csp
+System.Security.Principal
+System.Security.AccessControl
