@@ -5,8 +5,10 @@ framework: auto-detect
 source https://www.nuget.org/api/v2/
 nuget System.Configuration.ConfigurationManager ~> 4.5
 nuget System.Security.Cryptography.Csp ~> 4.3
+nuget System.Security.Cryptography.Xml ~> 4.5
 nuget System.Security.Principal ~> 4.3
 nuget System.Security.AccessControl ~> 4.5
+nuget System.IO.FileSystem.AccessControl ~> 4.5
 nuget NDesk.Options 0.2.1
 nuget NUnit ~> 3.10
 nuget NUnit3TestAdapter ~> 3.10

@@ -44,16 +44,23 @@ namespace RsaToolkit.Commands
 			RSACryptoServiceProvider rsa = null;
 			try
 			{
-				var cp = new CspParameters();
-				cp.KeyContainerName = _containerName;
-				cp.Flags = CspProviderFlags.UseMachineKeyStore;
-				//TODO
-				//cp.CryptoKeySecurity = createAccessRules(); 
-
-				rsa = new RSACryptoServiceProvider(cp);
+				rsa = new RSACryptoServiceProvider(new CspParameters
+				{
+					KeyContainerName = _containerName,
+					Flags = CspProviderFlags.UseMachineKeyStore
+				});
 				RSAKeyExtensions.FromXmlString(rsa, File.ReadAllText(_keyFile));
 				rsa.PersistKeyInCsp = true;
 				rsa.Clear();
+				
+				if (_readAccess != null || _writeAccess != null)
+				{
+					var appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+					var keyFile = Path.Combine(appDataFolder, "Microsoft", "Crypto", "RSA", "MachineKeys",
+						rsa.CspKeyContainerInfo.UniqueKeyContainerName);
+					
+					setAccessRules(keyFile);
+				}
 			}
 			catch (Exception)
 			{
@@ -67,27 +74,19 @@ namespace RsaToolkit.Commands
 			}
 		}
 
-		/*
-		private CryptoKeySecurity createAccessRules()
+		private void setAccessRules(string keyFile)
 		{
-			System.Security.AccessControl.
-
-			var defaultRules = true;
-			var result = new CryptoKeySecurity();
-
+			var fi = new FileInfo(keyFile);
+			
+			var acl = fi.GetAccessControl();
+			
 			foreach(var identity in getIdentityList(_writeAccess))
-			{
-				result.AddAccessRule(new CryptoKeyAccessRule(new NTAccount(identity), CryptoKeyRights.FullControl, AccessControlType.Allow));
-				defaultRules = false;
-			}
+				acl.AddAccessRule(new FileSystemAccessRule(identity, FileSystemRights.FullControl, AccessControlType.Allow));
 
 			foreach (var identity in getIdentityList(_readAccess))
-			{
-				result.AddAccessRule(new CryptoKeyAccessRule(new NTAccount(identity), CryptoKeyRights.GenericRead, AccessControlType.Allow));
-				defaultRules = false;
-			}
+				acl.AddAccessRule(new FileSystemAccessRule(identity, FileSystemRights.ReadData, AccessControlType.Allow));
 
-			return defaultRules ? null : result;
+			fi.SetAccessControl(acl);
 		}
 
 		private IEnumerable<string> getIdentityList(string identityList)
@@ -99,6 +98,6 @@ namespace RsaToolkit.Commands
 				.Select(_ => _.Trim())
 				.Where(_ => !string.IsNullOrEmpty(_));
 		}
-		*/
+		
 	}
 }

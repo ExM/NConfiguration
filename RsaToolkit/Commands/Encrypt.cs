@@ -60,7 +60,7 @@ namespace RsaToolkit.Commands
 			prNameAttr.Value = _providerName;
 			cryptEl.Attributes.Append(prNameAttr);
 
-			var cryptData = provider.Encrypt(el);
+			var cryptData = provider.EncryptFixup(el);
 			cryptData = doc.ImportNode(cryptData, true);
 			cryptEl.AppendChild(cryptData);
 			doc.DocumentElement.ReplaceChild(cryptEl, el);

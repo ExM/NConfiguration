@@ -25,5 +25,11 @@ namespace RsaToolkit
 		{
 			Environment.CurrentDirectory = _safeCurrentDirectory;
 		}
+		
+		public static void DeleteIfExist(string fileName)
+		{
+			if(File.Exists(fileName))
+				File.Delete(fileName);
+		}
 	}
 }

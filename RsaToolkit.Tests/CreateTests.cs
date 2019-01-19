@@ -12,9 +12,9 @@ namespace RsaToolkit
 		[TestCase("3072")]
 		public void ToXmlFile_KeySize(string keySize)
 		{
-			("testKey" + keySize + ".xml").DeleteIfExist();
+			DeleteIfExist("testKey" + keySize + ".xml");
 
-			("create -f=testKey" + keySize + ".xml -s=" + keySize).SuccessRun();
+			Program.Main("create","-f=testKey" + keySize + ".xml", "-s=" + keySize).AreSuccess();
 
 			Assert.True(File.Exists("testKey" + keySize + ".xml"));
 		}
@@ -22,9 +22,9 @@ namespace RsaToolkit
 		[Test]
 		public void NoOutput()
 		{
-			"testKey.xml".DeleteIfExist();
+			DeleteIfExist("testKey.xml");
 
-			"create -s=1024".FailRun();
+			Program.Main("create", "-s=1024").AreFail();
 
 			Assert.False(File.Exists("testKey.xml"));
 		}
@@ -32,9 +32,9 @@ namespace RsaToolkit
 		[Test]
 		public void NotNumber()
 		{
-			"testKey.xml".DeleteIfExist();
+			DeleteIfExist("testKey.xml");
 
-			"create -s=ABC -f=testKey.xml".FailRun();
+			Program.Main("create", "-s=ABC", "-f=testKey.xml").AreFail();
 
 			Assert.False(File.Exists("testKey.xml"));
 		}
@@ -42,9 +42,9 @@ namespace RsaToolkit
 		[Test]
 		public void ToXmlFile()
 		{
-			"testKey.xml".DeleteIfExist();
+			DeleteIfExist("testKey.xml");
 
-			"create -f=testKey.xml".SuccessRun();
+			Program.Main("create","-f=testKey.xml").AreSuccess();;
 
 			Assert.True(File.Exists("testKey.xml"));
 		}
@@ -52,10 +52,10 @@ namespace RsaToolkit
 		[Test]
 		public void ToContainer()
 		{
-			"remove -n=TestContainer".Run();
+			Program.Main("remove", "-n=TestContainer");
 
-			"create -n=TestContainer".SuccessRun();
-			"remove -n=TestContainer".SuccessRun();
+			Program.Main("create", "-n=TestContainer").AreSuccess();
+			Program.Main("remove", "-n=TestContainer").AreSuccess();
 		}
 	}
 }

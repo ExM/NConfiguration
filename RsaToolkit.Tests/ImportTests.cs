@@ -8,37 +8,42 @@ namespace RsaToolkit
 		[Test]
 		public void NoInput()
 		{
-			"import -n=TestContainer".FailRun();
+			Program.Main("import", "-n=TestContainer").AreFail();
 		}
 
 		[Test]
 		public void NoOutput()
 		{
-			"import -f=testKey.xml".FailRun();
+			Program.Main("import", "-f=testKey.xml").AreFail();
 		}
 
 		[Test]
 		public void NoXmlFile()
 		{
-			"remove -n=TestContainer".Run();
-			"testKey.xml".DeleteIfExist();
-			"import -f=testKey.xml -n=TestContainer".FailRun();
+			Program.Main("remove", "-n=TestContainer");
+			DeleteIfExist("testKey.xml");
+			Program.Main("import", "-f=testKey.xml", "-n=TestContainer").AreFail();
 
-			"remove -n=TestContainer".FailRun(); // container not created
+			Program.Main("remove", "-n=TestContainer").AreFail(); // container not created
 		}
 
 		[Test]
 		public void ToContainer()
 		{
-			"testKey.xml".DeleteIfExist();
+			DeleteIfExist("testKey.xml");
 
-			"create -f=testKey.xml".SuccessRun();
+			Program.Main("create", "-f=testKey.xml").AreSuccess();
 
-			"import -f=testKey.xml -n=TestContainer".SuccessRun();
+			Program.Main(
+				"import"
+				,"-f=testKey.xml"
+				,"-n=TestContainer"
+				//,"-r=\"LOCAL SERVICE;NETWORK SERVICE\""
+				).AreSuccess();
 
-			"exportedKey.xml".DeleteIfExist();
+			DeleteIfExist("exportedKey.xml");
 
-			"export -n=TestContainer -f=exportedKey.xml".SuccessRun();
+			Program.Main("export", "-n=TestContainer", "-f=exportedKey.xml").AreSuccess();
 
 			FileAssert.AreEqual("testKey.xml", "exportedKey.xml");
 		}

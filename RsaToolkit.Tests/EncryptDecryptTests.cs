@@ -13,17 +13,17 @@ namespace RsaToolkit
 		{
 			File.WriteAllText("testConfig.xml", _xmlConfigContent);
 
-			"create -n=TestContainer".SuccessRun();
+			Program.Main("create", "-n=TestContainer").AreSuccess();
 
-			"create -n=TestContainer2".SuccessRun();
+			Program.Main("create", "-n=TestContainer2").AreSuccess();
 
-			"encrypt -n=TestContainer -c=testConfig.xml -s=MySecuredConnection -p=TestProvider".SuccessRun();
+			Program.Main("encrypt", "-n=TestContainer", "-c=testConfig.xml", "-s=MySecuredConnection", "-p=TestProvider").AreSuccess();
 
 			var cryptedContent = File.ReadAllText("testConfig.xml");
 
 			Assert.AreNotEqual(_xmlConfigContent, cryptedContent);
 
-			"decrypt -n=TestContainer2 -c=testConfig.xml -s=MySecuredConnection".FailRun();
+			Program.Main("decrypt", "-n=TestContainer2", "-c=testConfig.xml", "-s=MySecuredConnection").AreFail();
 
 			Assert.AreEqual(cryptedContent, File.ReadAllText("testConfig.xml"));
 		}
@@ -33,13 +33,13 @@ namespace RsaToolkit
 		{
 			File.WriteAllText("testConfig.xml", _xmlConfigContent);
 
-			"create -n=TestContainer".SuccessRun();
+			Program.Main("create", "-n=TestContainer").AreSuccess();
 
-			"encrypt -n=TestContainer -c=testConfig.xml -s=MySecuredConnection -p=TestProvider".SuccessRun();
+			Program.Main("encrypt", "-n=TestContainer", "-c=testConfig.xml", "-s=MySecuredConnection", "-p=TestProvider").AreSuccess();
 
 			Assert.AreNotEqual(_xmlConfigContent, File.ReadAllText("testConfig.xml"));
 
-			"decrypt -n=TestContainer -c=testConfig.xml -s=MySecuredConnection".SuccessRun();
+			Program.Main("decrypt", "-n=TestContainer", "-c=testConfig.xml", "-s=MySecuredConnection").AreSuccess();
 
 			Assert.AreEqual(_xmlConfigContent, File.ReadAllText("testConfig.xml"));
 		}

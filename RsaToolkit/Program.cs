@@ -7,7 +7,7 @@ namespace RsaToolkit
 {
 	public class Program
 	{
-		public static int Main(string[] args)
+		public static int Main(params string[] args)
 		{
 			bool showHelp = false;
 			bool trace = false;

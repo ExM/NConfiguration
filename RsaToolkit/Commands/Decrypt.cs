@@ -56,7 +56,7 @@ namespace RsaToolkit.Commands
 			if (cryptData == null)
 				throw new ApplicationException("crypt data not found");
 
-			var decryptedData = provider.Decrypt(cryptData);
+			var decryptedData = provider.DecryptFixup(cryptData);
 			decryptedData = doc.ImportNode(decryptedData, true);
 			doc.DocumentElement.ReplaceChild(decryptedData, el);
 

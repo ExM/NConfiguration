@@ -8,17 +8,17 @@ namespace RsaToolkit
 		[Test]
 		public void NoContainer()
 		{
-			"remove".FailRun();
+			Program.Main("remove").AreFail();
 		}
 
 		[Test]
 		public void FromContainer()
 		{
-			"create -n=TestContainer".SuccessRun();
+			Program.Main("create", "-n=TestContainer").AreSuccess();
 
-			"remove -n=TestContainer".SuccessRun();
+			Program.Main("remove", "-n=TestContainer").AreSuccess();
 
-			"export -n=TestContainer -f=testKey.xml".FailRun();
+			Program.Main("export", "-n=TestContainer", "-f=testKey.xml").AreFail();
 		}
 	}
 }

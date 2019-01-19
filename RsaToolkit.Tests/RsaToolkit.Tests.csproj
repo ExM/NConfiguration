@@ -6,8 +6,8 @@
     <OutputType>Library</OutputType>
     <StartupObject />
   </PropertyGroup>
-  <Import Project="..\.paket\Paket.Restore.targets" />
   <ItemGroup>
     <ProjectReference Include="..\RsaToolkit\RsaToolkit.csproj" />
   </ItemGroup>
+  <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
