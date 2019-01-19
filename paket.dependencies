@@ -1,10 +1,9 @@
 version 5.194.4
-
 framework: auto-detect
+storage: none
 
 source https://www.nuget.org/api/v2/
 nuget System.Configuration.ConfigurationManager ~> 4.5.0
-nuget NDesk.Options 0.2.1
 nuget NUnit ~> 3.10
 nuget NUnit3TestAdapter ~> 3.10
 nuget Microsoft.NET.Test.Sdk ~> 15.5
