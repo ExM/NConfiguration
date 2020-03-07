@@ -10,6 +10,7 @@ using NUnit.Framework.Internal;
 namespace NConfiguration.Monitoring
 {
 	[TestFixture]
+	[Explicit]
 	public class FileCheckerErrorTests
 	{
 		private static IEnumerable checkerCreators()
@@ -61,7 +62,7 @@ namespace NConfiguration.Monitoring
 			return new TestCaseData(checkerCreator, workflow).SetName(name);
 		}
 
-		[TestCaseSource("checkerCreators")]
+		[TestCaseSource(nameof(checkerCreators))]
 		public void ExceptionInEventHandler(Func<ReadedFileInfo, IChangeable> checkerCreator, string[] workflow)
 		{
 			string file = Path.GetTempFileName();
