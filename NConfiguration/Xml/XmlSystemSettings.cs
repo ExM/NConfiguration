@@ -1,5 +1,6 @@
 using System;
 using System.Configuration;
+using System.Reflection;
 using System.Xml.Linq;
 
 namespace NConfiguration.Xml
@@ -7,13 +8,11 @@ namespace NConfiguration.Xml
 	public sealed class XmlSystemSettings : XmlFileSettings
 	{
 		private readonly string _sectionName;
-		private readonly string _configPath;
 
-		public XmlSystemSettings(string sectionName, string configPath = null)
-			: base(ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None).FilePath)
+		public XmlSystemSettings(string configPath, string sectionName)
+			: base(configPath)
 		{
 			_sectionName = sectionName;
-			_configPath = configPath;
 		}
 
 		/// <summary>
@@ -25,17 +24,9 @@ namespace NConfiguration.Xml
 			{
 				var root = base.Root.Element(XName.Get(_sectionName));
 				if (root == null)
-					throw new FormatException(string.Format("section '{0}' not found ", _sectionName));
+					throw new FormatException($"section '{_sectionName}' not found ");
 
 				return root;
-			}
-		}
-
-		public override string Path
-		{
-			get
-			{
-				return _configPath ?? base.Path;
 			}
 		}
 	}

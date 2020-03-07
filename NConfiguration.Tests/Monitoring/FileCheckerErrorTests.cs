@@ -10,7 +10,6 @@ using NUnit.Framework.Internal;
 namespace NConfiguration.Monitoring
 {
 	[TestFixture]
-	[Explicit]
 	public class FileCheckerErrorTests
 	{
 		private static IEnumerable checkerCreators()
@@ -77,6 +76,11 @@ namespace NConfiguration.Monitoring
 			{
 				unhandledException = (Exception)args.ExceptionObject;
 				wait.Set();
+				
+				// prevent the runtime from terminating
+				Thread.CurrentThread.IsBackground = true;
+				if(args.IsTerminating)
+					Thread.Sleep(-1);
 			};
 
 			AppDomain.CurrentDomain.UnhandledException += handler;
