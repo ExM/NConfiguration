@@ -2,7 +2,6 @@ using System;
 using NUnit.Framework;
 using NConfiguration.Xml;
 using NConfiguration.Joining;
-using NConfiguration.Xml.Protected;
 using NConfiguration.Json;
 
 namespace NConfiguration.Examples
