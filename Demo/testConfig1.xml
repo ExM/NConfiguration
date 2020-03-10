@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Config>
+	<WatchFile Mode="Auto" />
+	<MyXmlCfg AttrField="attr field text">
+		<ElemField>elem field text</ElemField>
+	</MyXmlCfg>
+	<MyCfg2 AttrField="2" />
+</Config>

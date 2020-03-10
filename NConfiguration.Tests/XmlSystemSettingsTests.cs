@@ -14,7 +14,7 @@ namespace NConfiguration
 		{
 			var path = ConfigurationManager.OpenExeConfiguration(Assembly.GetExecutingAssembly().Location).FilePath;
 		
-			var systemSettings = new XmlSystemSettings(path, "ExtConfigure");
+			var systemSettings = new XmlFileSettings(path, "ExtConfigure");
 			var appSettings = systemSettings.ToAppSettings();
 			var cfg = appSettings.First<MyXmlConfig>();
 
@@ -29,7 +29,7 @@ namespace NConfiguration
 
 			var loader = new SettingsLoader();
 			loader.XmlFileByExtension();
-			var systemSettings = new XmlSystemSettings(path, "ExtConfigure");
+			var systemSettings = new XmlFileSettings(path, "ExtConfigure");
 			var settings = loader.LoadSettings(systemSettings).Joined.ToAppSettings();
 
 			var cfg = settings.Get<MyXmlConfig>("MyCfg2");

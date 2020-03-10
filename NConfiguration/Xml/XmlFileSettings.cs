@@ -9,6 +9,8 @@ namespace NConfiguration.Xml
 	/// </summary>
 	public class XmlFileSettings : XmlSettings, IFilePathOwner, IIdentifiedSource, ILoadedFromFile
 	{
+		private readonly string _sectionName;
+
 		public static XmlFileSettings Create(string fileName)
 		{
 			return new XmlFileSettings(fileName);
@@ -21,53 +23,49 @@ namespace NConfiguration.Xml
 		/// settings loaded from a file
 		/// </summary>
 		/// <param name="fileName">file name</param>
-		public XmlFileSettings(string fileName)
+		/// <param name="sectionName">if not null - read only selected section</param>
+		public XmlFileSettings(string fileName, string sectionName = null)
 		{
+			_sectionName = sectionName;
 			try
 			{
 				_fileInfo = ReadedFileInfo.Create(fileName,
-					stream => { _root = XDocument.Load(stream).Root; });
+					stream =>
+					{
+						_root = XDocument.Load(stream).Root;
+						if (_root == null)
+							throw new FormatException($"XML content not found ");
+						
+						if (_sectionName != null)
+						{
+							_root = _root.Element(XName.Get(_sectionName));
+							if (_root == null)
+								throw new FormatException($"section '{_sectionName}' not found ");
+						}
+					});
 			}
 			catch(SystemException ex)
 			{
-				throw new ApplicationException(string.Format("Unable to load file `{0}'", fileName), ex);
+				throw new ApplicationException($"Unable to load file `{fileName}'", ex);
 			}
 		}
 
 		/// <summary>
 		/// XML root element that contains all the configuration section
 		/// </summary>
-		protected override XElement Root
-		{
-			get
-			{
-				return _root;
-			}
-		}
+		protected override XElement Root => _root;
 
 		/// <summary>
 		/// source identifier the application settings
 		/// </summary>
-		public virtual string Identity
-		{
-			get
-			{
-				return this.GetIdentitySource(_fileInfo.FullName);
-			}
-		}
+		public virtual string Identity => this.GetIdentitySource(_fileInfo.FullName);
 
 		/// <summary>
 		/// Directory containing the configuration file
 		/// </summary>
-		public virtual string Path
-		{
-			get { return System.IO.Path.GetDirectoryName(_fileInfo.FullName); }
-		}
+		public virtual string Path => System.IO.Path.GetDirectoryName(_fileInfo.FullName);
 
-		public virtual ReadedFileInfo FileInfo
-		{
-			get { return _fileInfo; }
-		}
+		public virtual ReadedFileInfo FileInfo => _fileInfo;
 	}
 }
 

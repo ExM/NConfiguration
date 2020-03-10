@@ -13,5 +13,11 @@
     <RepositoryUrl>https://github.com/ExM/NConfiguration</RepositoryUrl>
     <PackageTags>configuration config admin reload</PackageTags>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DocumentationFile>bin\Debug\NConfiguration.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DocumentationFile>bin\Release\NConfiguration.xml</DocumentationFile>
+  </PropertyGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
